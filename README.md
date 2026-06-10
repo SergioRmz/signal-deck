@@ -92,7 +92,7 @@ This first foundation includes:
 - a **formal briefing contract** for the final briefing artifact
 - a **visual composition contract** between editorial output and final page rendering
 - a **dark-theme single-page briefing prototype**
-- a **static renderer** that reads briefing content from a local JSON file
+- a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
@@ -125,6 +125,7 @@ python3 scripts/validate_signal_input.py
 python3 scripts/generate_briefing.py
 python3 scripts/validate_briefing.py
 python3 scripts/validate_visual_composition.py
+node --test tests/briefing-page.test.mjs
 cd apps/briefing-page
 python3 -m http.server 4173
 ```
@@ -137,10 +138,9 @@ http://localhost:4173
 
 ## Near-term roadmap
 
-1. Build a composition-aware renderer that consumes visual-composition payloads
-2. Strengthen the transformation heuristics from ingestion packets to briefing payloads
-3. Prepare external deployment through Cloudflare Pages
-4. Introduce briefing history and recurring publication workflows
+1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
+2. Prepare external deployment through Cloudflare Pages
+3. Introduce briefing history and recurring publication workflows
 
 ## Project status
 
