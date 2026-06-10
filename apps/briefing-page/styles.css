@@ -95,6 +95,35 @@ body[data-visual-tone='electric'] {
   gap: 8px;
 }
 
+.reading-dock {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.reading-dock__meta,
+.reading-dock__controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.progress-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(141, 240, 211, 0.22);
+  background: rgba(141, 240, 211, 0.09);
+  color: var(--text);
+  font-weight: 700;
+}
+
 .grid {
   display: grid;
   gap: 20px;
@@ -278,6 +307,10 @@ li {
   font-weight: 600;
 }
 
+.button--ghost {
+  background: rgba(255, 255, 255, 0.04);
+}
+
 @media (max-width: 960px) {
   .hero__content,
   .grid--2,
@@ -286,7 +319,8 @@ li {
     grid-template-columns: 1fr;
   }
 
-  .section-heading {
+  .section-heading,
+  .reading-dock {
     display: grid;
     align-items: start;
   }

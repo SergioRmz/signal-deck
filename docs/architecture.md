@@ -42,6 +42,7 @@ Responsible for:
 - rendering the briefing as a single page
 - maintaining a sober and readable design system
 - transforming structured editorial + composition artifacts into a premium reading experience
+- giving the page a guided interaction model with progress and section sequencing
 
 In the current prototype, presentation is a static HTML/CSS/JS page with no framework, but it now consumes both a briefing payload and a visual-composition payload.
 
