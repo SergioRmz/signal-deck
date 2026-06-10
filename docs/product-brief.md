@@ -1,52 +1,77 @@
-# Product brief
+# Product Brief
 
-## Tesis
+## Thesis
 
-`signal-deck` busca convertir ruido informativo en una lectura ejecutiva con ventaja competitiva.
+`signal-deck` is designed to turn informational noise into an executive read that creates competitive advantage.
 
-No está pensado para producir un digest genérico, sino una pieza que ayude a responder:
+It is not meant to become a generic digest. It should help answer questions such as:
 
-- qué importa de verdad
-- qué cambió en la estructura del mercado
-- quién gana, quién pierde y por qué
-- qué efectos de segundo orden conviene anticipar
+- what actually matters
+- what changed structurally in the market
+- who is gaining leverage, who is losing it, and why
+- which second-order effects deserve attention before they become obvious
 
-## Usuario objetivo
+## Target user
 
-Ejecutivos, operadores, fundadores o profesionales ambiciosos que necesitan:
+The target reader is an executive, operator, founder, or ambitious professional who needs:
 
-- velocidad de lectura
-- densidad conceptual
-- claridad estratégica
-- buen gusto editorial
+- reading speed
+- conceptual density
+- strategic clarity
+- strong editorial taste
 
-## Primera entrega del producto
+## First product artifact
 
-Una **single page** con secciones claras para un briefing diario o temático:
+The first deliverable is a **single page** with clear sections for a daily or thematic briefing:
 
-1. **Top line**
-   - la tesis del día
-2. **Radar**
-   - señales relevantes, ordenadas por importancia
-3. **Deep dives**
-   - desarrollos con más contexto
-4. **Market map**
-   - actores, incentivos, consecuencias
-5. **What to watch**
-   - preguntas y riesgos a monitorear
+1. **Hero**
+   - the framing promise of the edition
+2. **Top line**
+   - the thesis of the day
+3. **Radar**
+   - relevant signals, ordered for scanning
+4. **Deep dives**
+   - developments that deserve more context
+5. **Market map**
+   - actors, incentives, and strategic consequences
+6. **What to watch**
+   - questions, risks, and monitoring checkpoints
 
-## Restricciones explícitas
+## Explicit constraints
 
-- dark theme únicamente
-- delivery accesible externamente
-- stack simple y fácil de mantener
-- estructura de repo limpia, lógica y escalable
+- dark theme only
+- externally accessible delivery
+- simple, maintainable stack
+- clean, logical, scalable repository structure
 
-## Criterios de calidad
+## Quality bar
 
-La salida debe sentirse:
+The output should feel:
 
-- aguda, no burocrática
-- informada, no inflada
-- reusable, no anecdótica
-- visualmente sobria, no recargada
+- sharp, not bureaucratic
+- informed, not inflated
+- reusable, not anecdotal
+- visually restrained, not overloaded
+
+## Editorial contract
+
+The current repository now treats the briefing itself as a structured artifact.
+
+The canonical v1 contract is documented in:
+
+- `docs/briefing-contract-v1.md`
+- `apps/briefing-page/data/briefing.schema.json`
+
+That contract is the bridge between editorial intelligence and presentation.
+
+## Why this matters
+
+The long-term value of the project is not only in visual polish or automation.
+It is in building a system that can repeatedly transform scattered developments into a strategic briefing with a clear point of view.
+
+That means the product must preserve a strong distinction between:
+
+- raw inputs
+- structured briefing content
+- rendered experience
+- external distribution
