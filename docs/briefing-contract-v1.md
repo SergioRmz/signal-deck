@@ -255,4 +255,9 @@ The formal machine-readable schema for this contract lives at:
 
 Human-readable guidance lives in this document.
 
-Both should evolve together.
+For lightweight local checks without external dependencies, use:
+
+- `python3 scripts/validate_briefing.py`
+- `python3 scripts/validate_briefing.py apps/briefing-page/data/briefing.sample.json`
+
+Both the schema and the validator should evolve together with this document.
