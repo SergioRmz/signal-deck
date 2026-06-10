@@ -11,14 +11,11 @@ function escapeHtml(value) {
 }
 
 function renderBriefing(data) {
-  document.getElementById('heroTitle').textContent = data.meta.heroTitle;
-  document.getElementById('heroLede').textContent = data.meta.heroLede;
+  document.getElementById('heroTitle').textContent = data.hero.title;
+  document.getElementById('heroLede').textContent = data.hero.lede;
   document.getElementById('editionDate').textContent = data.meta.editionDate;
-  document.getElementById('editionMode').textContent = data.meta.mode;
-  document.getElementById('editionFormat').textContent = data.meta.format;
-  document.getElementById('footerNote').textContent = data.meta.footerNote;
 
-  const radarItems = data.radar
+  const radarItems = data.radar.items
     .map(
       (item) =>
         `<li><strong>${escapeHtml(item.label)}:</strong> ${escapeHtml(item.text)}</li>`
@@ -43,7 +40,7 @@ function renderBriefing(data) {
     .join('');
 
   const watchItems = data.watchlist.items
-    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .map((item) => `<li>${escapeHtml(item.text)}</li>`)
     .join('');
 
   app.innerHTML = `
@@ -56,6 +53,7 @@ function renderBriefing(data) {
 
       <article class="card signal-list">
         <span class="kicker">Radar</span>
+        <h2>${escapeHtml(data.radar.title)}</h2>
         <ul>${radarItems}</ul>
       </article>
     </section>
@@ -63,7 +61,7 @@ function renderBriefing(data) {
     <section class="section-heading">
       <div>
         <span class="kicker">Deep dives</span>
-        <h2>${escapeHtml(data.deepDives.heading)}</h2>
+        <h2>${escapeHtml(data.deepDives.title)}</h2>
       </div>
     </section>
 
@@ -99,8 +97,8 @@ async function bootstrap() {
     app.innerHTML = `
       <section class="card">
         <span class="kicker">Error</span>
-        <h2>No se pudo cargar el briefing.</h2>
-        <p>Revisa <code>data/briefing.sample.json</code> y vuelve a intentar.</p>
+        <h2>Could not load the briefing.</h2>
+        <p>Check <code>data/briefing.sample.json</code> and try again.</p>
       </section>
     `;
     console.error(error);
@@ -109,7 +107,7 @@ async function bootstrap() {
 
 if (button) {
   button.addEventListener('click', () => {
-    button.textContent = 'Diseñado para briefings sobrios, densos y externos';
+    button.textContent = 'Designed for sober, dense, externally shareable briefings';
     button.disabled = true;
   });
 }
