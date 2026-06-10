@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "editionDate": "10 Jun 2026",
+    "mode": "Dark only",
+    "format": "Single page",
+    "heroTitle": "Briefings ejecutivos con tesis, contexto y consecuencias.",
+    "heroLede": "Una base visual sobria para convertir señales de tecnología, IA y economía en una lectura compacta, estratégica y reusable.",
+    "footerNote": "Base inicial de signal-deck. Pensada para evolucionar hacia briefings conectados a datos reales."
+  },
+  "topLine": {
+    "title": "La capa de distribución se está volviendo tan importante como el modelo.",
+    "body": "La ventaja ya no vive solo en entrenar o acceder a mejores modelos, sino en controlar interfaz, workflow, datos y canal. Quien empaquete mejor la inteligencia captura la relación con el usuario y, con ella, el margen."
+  },
+  "radar": [
+    {
+      "label": "Modelos",
+      "text": "El diferencial bruto se estrecha; la distribución pesa más."
+    },
+    {
+      "label": "Producto",
+      "text": "Las suites integradas ganan frente a herramientas sueltas."
+    },
+    {
+      "label": "Mercado",
+      "text": "La presión va hacia bundles, no hacia features aisladas."
+    },
+    {
+      "label": "Trabajo",
+      "text": "Saber orquestar sistemas importa más que usar un solo modelo."
+    }
+  ],
+  "deepDives": {
+    "heading": "Tres ángulos para leer la señal",
+    "items": [
+      {
+        "title": "1. El frente competitivo cambia",
+        "body": "Cuando el modelo se comoditiza relativamente, el frente competitivo migra hacia el producto, la integración y la frecuencia de uso. Eso redistribuye poder desde el laboratorio puro hacia el operador que controla el flujo de trabajo."
+      },
+      {
+        "title": "2. El valor se concentra en el contexto",
+        "body": "El activo escaso deja de ser solo la inferencia y pasa a ser el contexto bien estructurado: memoria, datos propietarios, hábitos del usuario y embedding dentro de sistemas reales."
+      },
+      {
+        "title": "3. La interfaz define captura",
+        "body": "La interfaz no es cosmética: define qué se mide, qué se repite, qué se recuerda y qué se monetiza. La capa de presentación termina moldeando la economía del producto."
+      }
+    ]
+  },
+  "marketMap": {
+    "title": "Quién gana si esta tesis es correcta",
+    "items": [
+      {
+        "label": "Ganadores",
+        "text": "Plataformas con distribución, datos y superficie de uso diaria."
+      },
+      {
+        "label": "Presionados",
+        "text": "Vendors cuyo moat era solo el acceso a un modelo mejor."
+      },
+      {
+        "label": "Oportunidad",
+        "text": "Productos verticales que convierten IA en workflow concreto."
+      }
+    ]
+  },
+  "watchlist": {
+    "title": "Preguntas para monitorear",
+    "items": [
+      "¿Qué capa captura la relación recurrente con el usuario?",
+      "¿Dónde se acumula el contexto más valioso y menos portable?",
+      "¿Qué productos convierten uso ocasional en dependencia operacional?"
+    ]
+  }
+}

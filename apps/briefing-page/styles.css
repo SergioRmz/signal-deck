@@ -1,0 +1,172 @@
+:root {
+  --bg: #07111f;
+  --bg-soft: rgba(17, 28, 46, 0.82);
+  --panel: rgba(12, 22, 38, 0.92);
+  --panel-border: rgba(120, 164, 255, 0.14);
+  --text: #e9eef8;
+  --muted: #95a6c6;
+  --accent: #78a4ff;
+  --accent-2: #8df0d3;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(120, 164, 255, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(141, 240, 211, 0.12), transparent 22%),
+    linear-gradient(180deg, #050b14 0%, #091321 52%, #07111f 100%);
+  color: var(--text);
+}
+
+.shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0 64px;
+}
+
+.hero {
+  margin-bottom: 32px;
+}
+
+.hero__eyebrow,
+.kicker,
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: var(--accent-2);
+}
+
+.hero__content {
+  margin-top: 14px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.75fr);
+  align-items: stretch;
+}
+
+.hero h1 {
+  margin: 0;
+  max-width: 10ch;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 0.96;
+}
+
+.hero__lede {
+  margin: 20px 0 0;
+  max-width: 58ch;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(13, 24, 41, 0.96), rgba(10, 18, 31, 0.92));
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.hero__meta {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.thesis h2,
+.market-section h2,
+.section-heading h2 {
+  margin: 12px 0 14px;
+  font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+  line-height: 1.08;
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+p,
+li {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.signal-list ul,
+.watch-list {
+  margin: 16px 0 0;
+  padding-left: 18px;
+}
+
+.section-heading {
+  margin: 44px 0 18px;
+}
+
+.stack > p {
+  margin: 0 0 12px;
+}
+
+.market-section {
+  margin-top: 20px;
+}
+
+.footer {
+  margin-top: 34px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid rgba(120, 164, 255, 0.3);
+  background: rgba(120, 164, 255, 0.1);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .hero__content,
+  .grid--2,
+  .grid--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    max-width: 12ch;
+  }
+
+  .footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
