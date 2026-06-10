@@ -42,7 +42,7 @@ Responsible for:
 - rendering the briefing as a single page
 - maintaining a sober and readable design system
 - transforming structured editorial + composition artifacts into a premium reading experience
-- giving the page a guided interaction model with progress and section sequencing
+- giving the page a guided interaction model with progress, section sequencing, and direct jump navigation
 - choreographing active focus so module emphasis and reading cues move together
 - syncing reading state back from viewport intersections so the page responds to actual scroll position
 

@@ -114,6 +114,48 @@ body[data-visual-tone='electric'] {
   flex-wrap: wrap;
 }
 
+.jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  flex: 1 1 320px;
+}
+
+.jump-nav__button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 164, 255, 0.16);
+  background: rgba(120, 164, 255, 0.06);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.jump-nav__button.is-active {
+  border-color: rgba(141, 240, 211, 0.32);
+  background: rgba(141, 240, 211, 0.12);
+}
+
+.jump-nav__button.is-resting {
+  opacity: 0.86;
+}
+
+.jump-nav__index {
+  color: var(--accent-2);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+}
+
+.jump-nav__label {
+  color: var(--text);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
 .progress-pill {
   display: inline-flex;
   align-items: center;
