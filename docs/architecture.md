@@ -43,7 +43,7 @@ Responsible for:
 - maintaining a sober and readable design system
 - transforming structured editorial + composition artifacts into a premium reading experience
 
-In the current prototype, presentation is a static HTML/CSS/JS page with no framework.
+In the current prototype, presentation is a static HTML/CSS/JS page with no framework, but it now consumes both a briefing payload and a visual-composition payload.
 
 The presentation layer should consume the briefing and composition contracts, not invent them.
 
@@ -116,6 +116,7 @@ The prototype uses a static page because it:
 - stable briefing schema
 - explicit transformation from input packets to briefing payloads
 - real briefing content injected into the page
+- composition-aware rendering driven by visual-composition payloads
 
 ### Phase 3
 
