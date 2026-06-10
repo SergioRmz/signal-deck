@@ -229,7 +229,8 @@ This layer proves that the repository now has an explicit editorial path:
 1. structured ingestion packet
 2. deterministic transformation
 3. validated briefing payload
-4. presentation layer that consumes the validated payload
+4. a clean handoff into the visual composition layer
+5. presentation that can render from structured inputs rather than ad hoc assumptions
 
 That is the minimum viable backbone for turning agent-collected material into a repeatable editorial artifact.
 

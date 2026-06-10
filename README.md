@@ -64,9 +64,12 @@ signal-deck/
 │           ├── briefing.sample.json
 │           ├── briefing.schema.json
 │           ├── signal-input.sample.json
-│           └── signal-input.schema.json
+│           ├── signal-input.schema.json
+│           ├── visual-composition.sample.json
+│           └── visual-composition.schema.json
 ├── scripts/
 │   ├── validate_briefing.py
+│   ├── validate_visual_composition.py
 │   ├── validate_signal_input.py
 │   └── generate_briefing.py
 └── docs/
@@ -74,6 +77,7 @@ signal-deck/
 │   ├── briefing-contract-v1.md
 │   ├── briefing-ingestion-v1.md
 │   ├── briefing-transformation-v1.md
+│   ├── visual-composition-contract-v1.md
 │   ├── product-brief.md
 │   └── deployment/
 │       └── cloudflare-pages.md
@@ -86,10 +90,12 @@ This first foundation includes:
 - a **formal ingestion contract** for upstream editorial packets
 - an **explicit transformation layer** from ingestion packets to briefing payloads
 - a **formal briefing contract** for the final briefing artifact
+- a **visual composition contract** between editorial output and final page rendering
 - a **dark-theme single-page briefing prototype**
 - a **static renderer** that reads briefing content from a local JSON file
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
+- a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a deterministic generator that turns a validated input packet into a validated briefing payload
 - initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
@@ -103,6 +109,7 @@ It is building a system that can consistently transform scattered developments i
 That requires a workflow where:
 
 - the editorial layer can evolve independently
+- the composition layer can decide how each edition should feel and flow
 - the presentation layer stays polished and reusable
 - deployment remains friction-light
 - the output can eventually support recurring publication and external distribution
@@ -117,6 +124,7 @@ From the repository root:
 python3 scripts/validate_signal_input.py
 python3 scripts/generate_briefing.py
 python3 scripts/validate_briefing.py
+python3 scripts/validate_visual_composition.py
 cd apps/briefing-page
 python3 -m http.server 4173
 ```
@@ -129,8 +137,8 @@ http://localhost:4173
 
 ## Near-term roadmap
 
-1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
-2. Connect the page to generated or real briefing artifacts more systematically
+1. Build a composition-aware renderer that consumes visual-composition payloads
+2. Strengthen the transformation heuristics from ingestion packets to briefing payloads
 3. Prepare external deployment through Cloudflare Pages
 4. Introduce briefing history and recurring publication workflows
 
