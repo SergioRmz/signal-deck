@@ -101,6 +101,9 @@ body[data-visual-tone='electric'] {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  position: sticky;
+  top: 16px;
+  z-index: 10;
 }
 
 .reading-dock__meta,
@@ -122,6 +125,20 @@ body[data-visual-tone='electric'] {
   background: rgba(141, 240, 211, 0.09);
   color: var(--text);
   font-weight: 700;
+}
+
+.viewport-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 132px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 164, 255, 0.18);
+  background: rgba(120, 164, 255, 0.08);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 .focus-cue {
@@ -192,10 +209,17 @@ li {
   border-color: rgba(141, 240, 211, 0.34);
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(141, 240, 211, 0.1);
   transform: translateY(-2px);
+  scroll-margin-top: 160px;
 }
 
 [data-focus-state='resting'] {
   opacity: 0.9;
+}
+
+body[data-viewport-sync='observer'] .viewport-pill {
+  border-color: rgba(141, 240, 211, 0.28);
+  background: rgba(141, 240, 211, 0.12);
+  color: var(--accent-2);
 }
 
 .hero-panel {
