@@ -121,11 +121,30 @@ async function loadApp() {
     }));
   }
 
+  function parseJumpNavButtons() {
+    const nav = elements.get('jumpNav');
+    const html = nav?.innerHTML || '';
+    const matches = [...html.matchAll(/<button[^>]*id="([^"]+)"[^>]*data-module-id="([^"]+)"[^>]*data-jump-state="([^"]+)"[^>]*>([\s\S]*?)<\/button>/g)];
+    return matches.map(([, id, moduleId, jumpState, textContent]) => {
+      const existing = elements.get(id) || createElement(id);
+      existing.dataset = { moduleId, jumpState };
+      existing.textContent = textContent.replace(/<[^>]+>/g, '').trim();
+      elements.set(id, existing);
+      return existing;
+    });
+  }
+
   const getElementById = (id) => {
     if (!elements.has(id)) {
       const renderedModule = parseRenderedModules().find((item) => item.id === id);
       if (renderedModule) {
+        elements.set(id, renderedModule);
         return renderedModule;
+      }
+      const jumpNavButton = parseJumpNavButtons().find((item) => item.id === id);
+      if (jumpNavButton) {
+        elements.set(id, jumpNavButton);
+        return jumpNavButton;
       }
       elements.set(id, createElement(id));
     }
@@ -166,6 +185,9 @@ async function loadApp() {
       querySelectorAll(selector) {
         if (selector === '[data-module-id]') {
           return parseRenderedModules();
+        }
+        if (selector === '[data-jump-nav-button]') {
+          return parseJumpNavButtons();
         }
         return [];
       },
@@ -291,4 +313,38 @@ test('viewport observer updates the active module from real section intersection
   assert.equal(elements.get('focusCue').textContent, 'Shift from explanation to posture.');
   assert.equal(context.document.body.dataset.activeModule, 'mod-market-map');
   assert.equal(context.document.body.dataset.activeModuleIndex, '4');
+});
+
+test('jump nav exposes every module and highlights the active stop', async () => {
+  const { elements } = await loadApp();
+  const jumpNav = elements.get('jumpNav');
+
+  assert.match(jumpNav.innerHTML, /Opening thesis/);
+  assert.match(jumpNav.innerHTML, /What to watch/);
+  assert.match(jumpNav.innerHTML, /data-jump-state="active"[^>]*data-module-id="mod-hero"|data-module-id="mod-hero"[^>]*data-jump-state="active"/);
+});
+
+test('jump nav can move reading focus directly to a chosen module', async () => {
+  const { context, elements, scrollCalls } = await loadApp();
+
+  context.document.getElementById('jumpNav-mod-market-map').click();
+
+  assert.equal(elements.get('readingProgress').textContent, '5 / 6');
+  assert.equal(context.document.body.dataset.activeModule, 'mod-market-map');
+  assert.equal(scrollCalls.at(-1)?.id, 'mod-market-map');
+});
+
+test('jump nav re-syncs its active marker after viewport-driven updates', async () => {
+  const { elements, intersectionObservers } = await loadApp();
+  const jumpNav = elements.get('jumpNav');
+
+  intersectionObservers[0].trigger([
+    {
+      isIntersecting: true,
+      intersectionRatio: 0.9,
+      target: { dataset: { moduleId: 'mod-watchlist' } }
+    }
+  ]);
+
+  assert.match(jumpNav.innerHTML, /data-jump-state="active"[^>]*data-module-id="mod-watchlist"|data-module-id="mod-watchlist"[^>]*data-jump-state="active"/);
 });

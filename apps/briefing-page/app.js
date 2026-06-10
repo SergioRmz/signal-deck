@@ -8,6 +8,7 @@ const nextSectionButton = document.getElementById('nextSectionButton');
 const prevSectionButton = document.getElementById('prevSectionButton');
 const focusCue = document.getElementById('focusCue');
 const viewportStatus = document.getElementById('viewportStatus');
+const jumpNav = document.getElementById('jumpNav');
 
 let readingState = {
   moduleOrder: [],
@@ -52,6 +53,10 @@ function activeModuleId() {
 }
 
 function focusStateFor(moduleId) {
+  return activeModuleId() === moduleId ? 'active' : 'resting';
+}
+
+function jumpStateFor(moduleId) {
   return activeModuleId() === moduleId ? 'active' : 'resting';
 }
 
@@ -248,6 +253,40 @@ function renderCurrentView() {
   `;
 }
 
+function renderJumpNav() {
+  if (!jumpNav) {
+    return;
+  }
+
+  const buttons = readingState.moduleOrder
+    .map((moduleId, index) => {
+      const module = readingState.modules.get(moduleId);
+      const label = sectionLabelForModule(moduleId, module);
+      const jumpState = jumpStateFor(moduleId);
+      return `
+        <button
+          id="jumpNav-${escapeHtml(moduleId)}"
+          class="jump-nav__button ${jumpState === 'active' ? 'is-active' : 'is-resting'}"
+          type="button"
+          data-jump-nav-button
+          data-module-id="${escapeHtml(moduleId)}"
+          data-jump-state="${jumpState}"
+        >
+          <span class="jump-nav__index">0${index + 1}</span>
+          <span class="jump-nav__label">${escapeHtml(label)}</span>
+        </button>
+      `;
+    })
+    .join('');
+
+  jumpNav.innerHTML = buttons;
+
+  const jumpButtons = document.querySelectorAll('[data-jump-nav-button]');
+  jumpButtons.forEach((jumpButton) => {
+    jumpButton.addEventListener('click', () => moveReadingFocusTo(jumpButton.dataset.moduleId));
+  });
+}
+
 function updateReadingDock() {
   const total = readingState.moduleOrder.length;
   if (!total) return;
@@ -287,6 +326,8 @@ function updateReadingDock() {
   if (prevSectionButton) {
     prevSectionButton.textContent = `Back: ${prevLabel}`;
   }
+
+  renderJumpNav();
 }
 
 function scrollModuleIntoView(moduleId) {
@@ -340,14 +381,26 @@ function bindViewportObserver() {
   updateReadingDock();
 }
 
+function syncReadingState() {
+  renderCurrentView();
+  updateReadingDock();
+  bindViewportObserver();
+}
+
 function moveReadingFocus(step) {
   const total = readingState.moduleOrder.length;
   if (!total) return;
   readingState.activeIndex = (readingState.activeIndex + step + total) % total;
-  renderCurrentView();
-  updateReadingDock();
+  syncReadingState();
   scrollModuleIntoView(activeModuleId());
-  bindViewportObserver();
+}
+
+function moveReadingFocusTo(moduleId) {
+  const targetIndex = readingState.moduleOrder.indexOf(moduleId);
+  if (targetIndex < 0) return;
+  readingState.activeIndex = targetIndex;
+  syncReadingState();
+  scrollModuleIntoView(moduleId);
 }
 
 function initializeReadingPattern(briefing, composition) {
@@ -359,9 +412,7 @@ function initializeReadingPattern(briefing, composition) {
     briefing,
     composition
   };
-  renderCurrentView();
-  updateReadingDock();
-  bindViewportObserver();
+  syncReadingState();
 }
 
 function applyCompositionMetadata(composition) {
