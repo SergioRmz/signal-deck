@@ -94,6 +94,7 @@ This first foundation includes:
 - a **dark-theme single-page briefing prototype**
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
 - an **interaction layer** with guided reading progress and section-to-section navigation
+- a **scroll choreography base** that keeps active focus, cue text, and module emphasis in sync
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing

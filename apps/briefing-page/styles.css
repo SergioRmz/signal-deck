@@ -124,6 +124,13 @@ body[data-visual-tone='electric'] {
   font-weight: 700;
 }
 
+.focus-cue {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--text);
+  opacity: 0.88;
+}
+
 .grid {
   display: grid;
   gap: 20px;
@@ -179,6 +186,16 @@ li {
   color: var(--text);
   opacity: 0.82;
   font-size: 0.96rem;
+}
+
+[data-focus-state='active'] {
+  border-color: rgba(141, 240, 211, 0.34);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(141, 240, 211, 0.1);
+  transform: translateY(-2px);
+}
+
+[data-focus-state='resting'] {
+  opacity: 0.9;
 }
 
 .hero-panel {

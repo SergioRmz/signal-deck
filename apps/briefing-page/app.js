@@ -6,11 +6,14 @@ const activeSectionLabel = document.getElementById('activeSectionLabel');
 const pathSummary = document.getElementById('pathSummary');
 const nextSectionButton = document.getElementById('nextSectionButton');
 const prevSectionButton = document.getElementById('prevSectionButton');
+const focusCue = document.getElementById('focusCue');
 
 let readingState = {
   moduleOrder: [],
   modules: new Map(),
-  activeIndex: 0
+  activeIndex: 0,
+  briefing: null,
+  composition: null
 };
 
 function escapeHtml(value) {
@@ -41,13 +44,17 @@ function sectionLabelForModule(moduleId, module) {
     : fallback[moduleId] || 'Section';
 }
 
+function focusStateFor(moduleId) {
+  return readingState.moduleOrder[readingState.activeIndex] === moduleId ? 'active' : 'resting';
+}
+
 function renderHeroModule(data, module) {
   const cue = module?.interactionCue
     ? `<p class="module-cue">${escapeHtml(module.interactionCue)}</p>`
     : '';
 
   return `
-    <section id="mod-hero" data-module-id="mod-hero" class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-hero" data-module-id="mod-hero" data-focus-state="${focusStateFor('mod-hero')}" class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-hero') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="hero-panel__copy">
         <span class="kicker">Opening thesis</span>
         <h2>${escapeHtml(module?.headline || data.hero.title)}</h2>
@@ -60,7 +67,7 @@ function renderHeroModule(data, module) {
 
 function renderToplineModule(data, module) {
   return `
-    <section id="mod-topline" data-module-id="mod-topline" class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-topline" data-module-id="mod-topline" data-focus-state="${focusStateFor('mod-topline')}" class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-topline') === 'active' ? 'is-active' : 'is-resting'}">
       <span class="kicker">Top line</span>
       <h2>${escapeHtml(data.topLine.title)}</h2>
       <p>${escapeHtml(data.topLine.body)}</p>
@@ -82,7 +89,7 @@ function renderRadarModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-radar" data-module-id="mod-radar" class="card signal-radar signal-radar--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-radar" data-module-id="mod-radar" data-focus-state="${focusStateFor('mod-radar')}" class="card signal-radar signal-radar--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-radar') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">Radar</span>
@@ -109,7 +116,7 @@ function renderDeepDivesModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-deep-dives" data-module-id="mod-deep-dives" class="module-group module-group--deep-dives">
+    <section id="mod-deep-dives" data-module-id="mod-deep-dives" data-focus-state="${focusStateFor('mod-deep-dives')}" class="module-group module-group--deep-dives ${focusStateFor('mod-deep-dives') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading">
         <div>
           <span class="kicker">Deep dives</span>
@@ -135,7 +142,7 @@ function renderMarketMapModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-market-map" data-module-id="mod-market-map" class="card market-map market-map--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-market-map" data-module-id="mod-market-map" data-focus-state="${focusStateFor('mod-market-map')}" class="card market-map market-map--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-market-map') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">Market map</span>
@@ -161,7 +168,7 @@ function renderWatchlistModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-watchlist" data-module-id="mod-watchlist" class="card watchlist-card watchlist-card--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-watchlist" data-module-id="mod-watchlist" data-focus-state="${focusStateFor('mod-watchlist')}" class="card watchlist-card watchlist-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-watchlist') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">What to watch</span>
@@ -220,6 +227,20 @@ function renderModuleById(data, composition, id) {
   }
 }
 
+function renderCurrentView() {
+  if (!readingState.briefing || !readingState.composition) {
+    return;
+  }
+
+  const moduleOrder = readingState.composition.page?.moduleOrder || [];
+  const modulesHtml = moduleOrder.map((id) => renderModuleById(readingState.briefing, readingState.composition, id)).join('');
+
+  app.innerHTML = `
+    ${modulesHtml}
+    ${renderExperienceRail(readingState.composition)}
+  `;
+}
+
 function updateReadingDock() {
   const total = readingState.moduleOrder.length;
   if (!total) return;
@@ -231,8 +252,11 @@ function updateReadingDock() {
   const prevId = readingState.moduleOrder[(readingState.activeIndex - 1 + total) % total];
   const nextLabel = sectionLabelForModule(nextId, readingState.modules.get(nextId));
   const prevLabel = sectionLabelForModule(prevId, readingState.modules.get(prevId));
+  const scrollMood = readingState.composition?.page?.scrollMood || 'steady';
 
   document.body.dataset.activeModule = activeId;
+  document.body.dataset.activeModuleIndex = String(readingState.activeIndex);
+  document.body.dataset.scrollMood = scrollMood;
 
   if (readingProgress) {
     readingProgress.textContent = `${readingState.activeIndex + 1} / ${total}`;
@@ -242,6 +266,9 @@ function updateReadingDock() {
   }
   if (pathSummary) {
     pathSummary.textContent = `${total}-stop reading path · ${activeLabel}`;
+  }
+  if (focusCue) {
+    focusCue.textContent = activeModule?.interactionCue || 'Follow the guided reading path.';
   }
   if (nextSectionButton) {
     nextSectionButton.textContent = `Next: ${nextLabel}`;
@@ -255,16 +282,20 @@ function moveReadingFocus(step) {
   const total = readingState.moduleOrder.length;
   if (!total) return;
   readingState.activeIndex = (readingState.activeIndex + step + total) % total;
+  renderCurrentView();
   updateReadingDock();
 }
 
-function initializeReadingPattern(composition) {
+function initializeReadingPattern(briefing, composition) {
   const order = composition.page?.moduleOrder || [];
   readingState = {
     moduleOrder: order,
     modules: moduleMap(composition),
-    activeIndex: 0
+    activeIndex: 0,
+    briefing,
+    composition
   };
+  renderCurrentView();
   updateReadingDock();
 }
 
@@ -303,16 +334,6 @@ function applyCompositionMetadata(composition) {
   if (button) button.textContent = `${theme} theme · ${interactionModel} reading`;
 }
 
-function renderBriefing(data, composition) {
-  const moduleOrder = composition.page?.moduleOrder || [];
-  const modulesHtml = moduleOrder.map((id) => renderModuleById(data, composition, id)).join('');
-
-  app.innerHTML = `
-    ${modulesHtml}
-    ${renderExperienceRail(composition)}
-  `;
-}
-
 async function bootstrap() {
   try {
     const [briefingResponse, compositionResponse] = await Promise.all([
@@ -334,8 +355,7 @@ async function bootstrap() {
     ]);
 
     applyCompositionMetadata(composition);
-    renderBriefing(briefing, composition);
-    initializeReadingPattern(composition);
+    initializeReadingPattern(briefing, composition);
   } catch (error) {
     app.innerHTML = `
       <section class="card">
