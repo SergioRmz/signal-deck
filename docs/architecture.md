@@ -1,78 +1,103 @@
 # Architecture
 
-## Objetivo de esta fase
+## Goal of this phase
 
-Separar con claridad tres capas para no mezclar producto, contenido y despliegue desde el día uno.
+Establish a clean separation between product thinking, editorial content, and deployment from day one.
 
-## Capas
+The immediate purpose of this phase is to make the repository legible enough that future automation can plug into it without rewriting the visual layer every time the content shape changes.
 
-### 1. Contenido / inteligencia editorial
-Responsable de:
+## Layers
 
-- recibir insumos
-- priorizar señales
-- construir tesis
-- producir artefactos estructurados
+### 1. Editorial intelligence
 
-En una fase posterior, esta capa puede emitir JSON, Markdown o ambos.
+Responsible for:
 
-En esta base inicial, el contrato entre contenido y presentación es un archivo JSON local:
+- receiving inputs
+- prioritizing signals
+- forming a thesis
+- producing structured briefing artifacts
 
-- `apps/briefing-page/data/briefing.sample.json`
+At this layer, the important output is not HTML. It is a content artifact with a stable contract.
 
-### 2. Presentación
-Responsable de:
+The current v1 contract is defined in:
 
-- renderizar el briefing como single page
-- mantener un diseño sobrio y legible
-- transformar artefactos estructurados en una lectura premium
+- `docs/briefing-contract-v1.md`
+- `apps/briefing-page/data/briefing.schema.json`
 
-En esta base inicial, la presentación es una página estática hecha con HTML/CSS/JS sin framework.
+### 2. Presentation
 
-### 3. Distribución
-Responsable de:
+Responsible for:
 
-- publicar externamente
-- versionar entregas
-- enlazar desde Telegram u otros canales
+- rendering the briefing as a single page
+- maintaining a sober and readable design system
+- transforming a structured artifact into a premium reading experience
 
-Cloudflare Pages encaja bien aquí por simplicidad, costo y mantenimiento.
+In the current prototype, presentation is a static HTML/CSS/JS page with no framework.
 
-## Decisión técnica inicial
+The presentation layer should consume the contract, not invent it.
 
-Para la primera iteración usamos una página estática porque:
+### 3. Distribution
 
-- reduce complejidad innecesaria
-- acelera el feedback editorial
-- evita decidir demasiado pronto un framework
-- deja abierta la migración futura a un renderer más sofisticado
+Responsible for:
 
-## Evolución prevista
+- publishing externally
+- versioning releases
+- linking the artifact from Telegram or other channels
 
-### Fase 1
-- página estática de referencia
-- contenido mock
-- deploy simple
+Cloudflare Pages remains a strong fit here because of its simplicity, low maintenance burden, and static hosting model.
 
-### Fase 2
-- esquema de datos estable para el briefing
-- generación automática de contenido intermedio
-- inyección de contenido real en la página
+## Current contract boundary
 
-### Fase 3
-- histórico de briefings
-- vistas temáticas
-- métricas de lectura o navegación
+The current repository boundary is:
 
-## Carpetas
+- **input to presentation**: `apps/briefing-page/data/briefing.sample.json`
+- **machine-readable schema**: `apps/briefing-page/data/briefing.schema.json`
+- **human-readable contract**: `docs/briefing-contract-v1.md`
 
-- `apps/briefing-page/`: artefacto visual principal
-- `docs/`: decisiones, visión y operación
+This is the most important architectural decision in the current phase.
 
-## Convención
+It means the renderer can evolve without redefining the briefing shape, and the editorial pipeline can evolve without coupling itself to page markup.
 
-El repo debe privilegiar:
+## Initial technical decision
 
-- nombres obvios
-- pocos niveles de anidación
-- separación clara entre contenido, app y despliegue
+The prototype uses a static page because it:
+
+- reduces unnecessary complexity
+- accelerates editorial feedback loops
+- avoids choosing a framework too early
+- leaves room to migrate later to a more sophisticated renderer if needed
+
+## Planned evolution
+
+### Phase 1
+
+- reference single page
+- mock content
+- simple external deployment
+
+### Phase 2
+
+- stable briefing schema
+- automatically generated intermediate artifacts
+- real briefing content injected into the page
+
+### Phase 3
+
+- briefing history
+- thematic views
+- navigation or reading metrics if they prove useful
+
+## Repository structure
+
+- `apps/briefing-page/`: main visual artifact
+- `apps/briefing-page/data/`: briefing payloads and schema
+- `docs/`: vision, decisions, contracts, and operations
+
+## Conventions
+
+The repository should continue to prefer:
+
+- obvious names
+- few nesting levels
+- clear separation between content, app, and deployment
+- contracts that are explicit before they become automated

@@ -1,74 +1,88 @@
 {
   "meta": {
-    "editionDate": "10 Jun 2026",
-    "mode": "Dark only",
-    "format": "Single page",
-    "heroTitle": "Briefings ejecutivos con tesis, contexto y consecuencias.",
-    "heroLede": "Una base visual sobria para convertir señales de tecnología, IA y economía en una lectura compacta, estratégica y reusable.",
-    "footerNote": "Base inicial de signal-deck. Pensada para evolucionar hacia briefings conectados a datos reales."
+    "schemaVersion": "1.0",
+    "briefingId": "2026-06-10-distribution-as-moat",
+    "editionDate": "2026-06-10",
+    "publishedAt": "2026-06-10T07:00:00Z",
+    "slug": "distribution-as-moat",
+    "language": "en",
+    "topics": ["ai", "distribution", "product-strategy"]
+  },
+  "hero": {
+    "title": "Executive briefings with thesis, context, and consequences.",
+    "lede": "A sober visual base for turning signals from technology, AI, and the economy into a compact strategic read."
   },
   "topLine": {
-    "title": "La capa de distribución se está volviendo tan importante como el modelo.",
-    "body": "La ventaja ya no vive solo en entrenar o acceder a mejores modelos, sino en controlar interfaz, workflow, datos y canal. Quien empaquete mejor la inteligencia captura la relación con el usuario y, con ella, el margen."
+    "title": "Distribution is becoming as important as the model.",
+    "body": "Advantage no longer lives only in training or accessing better models. It increasingly lives in controlling interface, workflow, user context, and distribution. Whoever packages intelligence best captures the user relationship and, with it, the margin."
   },
-  "radar": [
-    {
-      "label": "Modelos",
-      "text": "El diferencial bruto se estrecha; la distribución pesa más."
-    },
-    {
-      "label": "Producto",
-      "text": "Las suites integradas ganan frente a herramientas sueltas."
-    },
-    {
-      "label": "Mercado",
-      "text": "La presión va hacia bundles, no hacia features aisladas."
-    },
-    {
-      "label": "Trabajo",
-      "text": "Saber orquestar sistemas importa más que usar un solo modelo."
-    }
-  ],
-  "deepDives": {
-    "heading": "Tres ángulos para leer la señal",
+  "radar": {
+    "title": "Radar",
     "items": [
       {
-        "title": "1. El frente competitivo cambia",
-        "body": "Cuando el modelo se comoditiza relativamente, el frente competitivo migra hacia el producto, la integración y la frecuencia de uso. Eso redistribuye poder desde el laboratorio puro hacia el operador que controla el flujo de trabajo."
+        "label": "Models",
+        "text": "Raw model differentiation is narrowing; distribution matters more."
       },
       {
-        "title": "2. El valor se concentra en el contexto",
-        "body": "El activo escaso deja de ser solo la inferencia y pasa a ser el contexto bien estructurado: memoria, datos propietarios, hábitos del usuario y embedding dentro de sistemas reales."
+        "label": "Product",
+        "text": "Integrated suites are gaining ground against standalone tools."
       },
       {
-        "title": "3. La interfaz define captura",
-        "body": "La interfaz no es cosmética: define qué se mide, qué se repite, qué se recuerda y qué se monetiza. La capa de presentación termina moldeando la economía del producto."
+        "label": "Market",
+        "text": "Pressure is moving toward bundles rather than isolated features."
+      },
+      {
+        "label": "Work",
+        "text": "System orchestration matters more than proficiency with a single model."
+      }
+    ]
+  },
+  "deepDives": {
+    "title": "Three angles for reading the shift",
+    "items": [
+      {
+        "title": "1. The battleground is moving",
+        "body": "As models become relatively more commoditized, competition shifts toward product integration, workflow control, and usage frequency. That redistributes power away from the pure lab and toward the operator who owns the working surface."
+      },
+      {
+        "title": "2. Value is concentrating in context",
+        "body": "The scarce asset is no longer inference alone. It is structured context: memory, proprietary data, user habits, and embedding inside real operating systems for work."
+      },
+      {
+        "title": "3. Interface determines capture",
+        "body": "Interface is not cosmetic. It shapes what gets measured, repeated, remembered, and monetized. The presentation layer ends up influencing the economics of the product itself."
       }
     ]
   },
   "marketMap": {
-    "title": "Quién gana si esta tesis es correcta",
+    "title": "Who benefits if this thesis is right",
     "items": [
       {
-        "label": "Ganadores",
-        "text": "Plataformas con distribución, datos y superficie de uso diaria."
+        "label": "Winners",
+        "text": "Platforms with distribution, data, and daily user surface area."
       },
       {
-        "label": "Presionados",
-        "text": "Vendors cuyo moat era solo el acceso a un modelo mejor."
+        "label": "Pressured",
+        "text": "Vendors whose moat depended mainly on access to a better model."
       },
       {
-        "label": "Oportunidad",
-        "text": "Productos verticales que convierten IA en workflow concreto."
+        "label": "Opportunity",
+        "text": "Vertical products that turn AI into concrete workflow."
       }
     ]
   },
   "watchlist": {
-    "title": "Preguntas para monitorear",
+    "title": "What to watch",
     "items": [
-      "¿Qué capa captura la relación recurrente con el usuario?",
-      "¿Dónde se acumula el contexto más valioso y menos portable?",
-      "¿Qué productos convierten uso ocasional en dependencia operacional?"
+      {
+        "text": "Which layer captures the recurring user relationship?"
+      },
+      {
+        "text": "Where does the most valuable and least portable context accumulate?"
+      },
+      {
+        "text": "Which products turn occasional use into operational dependency?"
+      }
     ]
   }
 }
