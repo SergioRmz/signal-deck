@@ -14,16 +14,20 @@ At its best, signal-deck should help answer questions like:
 
 ## What this repository is building
 
-The repository starts with two tightly connected layers:
+The repository currently distinguishes three tightly connected layers:
 
 1. **Editorial intelligence**
+   - collecting and structuring inputs
    - selecting relevant signals
    - synthesizing them into a coherent thesis
    - structuring context, implications, and follow-up questions
 
-2. **Delivery**
-   - presenting the briefing as a high-clarity, dark-theme single page
-   - keeping the output externally accessible
+2. **Presentation**
+   - rendering the briefing as a high-clarity, dark-theme single page
+   - keeping the output legible, premium, and reusable
+
+3. **Delivery**
+   - keeping the final artifact externally accessible
    - staying simple enough to deploy and maintain without unnecessary overhead
 
 The goal is not complexity for its own sake. The goal is a system that can produce premium insight with operational discipline.
@@ -57,22 +61,33 @@ signal-deck/
 │       ├── styles.css
 │       ├── app.js
 │       └── data/
-│           └── briefing.sample.json
+│           ├── briefing.sample.json
+│           ├── briefing.schema.json
+│           ├── signal-input.sample.json
+│           └── signal-input.schema.json
+├── scripts/
+│   ├── validate_briefing.py
+│   └── validate_signal_input.py
 └── docs/
-    ├── architecture.md
-    ├── product-brief.md
-    └── deployment/
-        └── cloudflare-pages.md
+│   ├── architecture.md
+│   ├── briefing-contract-v1.md
+│   ├── briefing-ingestion-v1.md
+│   ├── product-brief.md
+│   └── deployment/
+│       └── cloudflare-pages.md
 ```
 
 ## What is already in place
 
 This first foundation includes:
 
+- a **formal ingestion contract** for upstream editorial packets
+- a **formal briefing contract** for the final briefing artifact
 - a **dark-theme single-page briefing prototype**
 - a **static renderer** that reads briefing content from a local JSON file
 - a **clean separation** between content structure and presentation
-- initial documentation for **product direction**, **architecture**, and **deployment**
+- lightweight local validators for both input packets and briefing payloads
+- initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
 That may sound modest, but it is an important strategic choice: the project is starting from a lean, legible base rather than prematurely committing to framework complexity.
 
@@ -107,11 +122,10 @@ http://localhost:4173
 
 ## Near-term roadmap
 
-1. Define a stable editorial input/output schema
-2. Formalize the structure of a briefing as a reusable content contract
-3. Connect the page to generated or real briefing artifacts
-4. Prepare external deployment through Cloudflare Pages
-5. Move from a static prototype toward a repeatable publishing workflow
+1. Define the transformation layer from ingestion packets to briefing payloads
+2. Connect the page to generated or real briefing artifacts
+3. Prepare external deployment through Cloudflare Pages
+4. Introduce briefing history and recurring publication workflows
 
 ## Project status
 
@@ -122,4 +136,4 @@ The repository is now initialized with a deliberate first version:
 - opinionated enough to feel like the beginning of a real product
 
 The next step is not to add complexity blindly.
-It is to make the editorial contract strong enough that the rest of the system can be built around it.
+It is to make the transformation between upstream signals and final briefings strong enough that the rest of the system can be built around it.

@@ -17,12 +17,16 @@ Responsible for:
 - forming a thesis
 - producing structured briefing artifacts
 
-At this layer, the important output is not HTML. It is a content artifact with a stable contract.
+At this layer, the important output is not HTML. It is a sequence of structured editorial artifacts with stable contracts.
 
-The current v1 contract is defined in:
+The current contracts are:
 
-- `docs/briefing-contract-v1.md`
-- `apps/briefing-page/data/briefing.schema.json`
+- **ingestion contract v1**
+  - `docs/briefing-ingestion-v1.md`
+  - `apps/briefing-page/data/signal-input.schema.json`
+- **briefing contract v1**
+  - `docs/briefing-contract-v1.md`
+  - `apps/briefing-page/data/briefing.schema.json`
 
 ### 2. Presentation
 
@@ -34,7 +38,7 @@ Responsible for:
 
 In the current prototype, presentation is a static HTML/CSS/JS page with no framework.
 
-The presentation layer should consume the contract, not invent it.
+The presentation layer should consume the briefing contract, not invent it.
 
 ### 3. Distribution
 
@@ -50,13 +54,32 @@ Cloudflare Pages remains a strong fit here because of its simplicity, low mainte
 
 The current repository boundary is:
 
+- **input packet to editorial layer**: `apps/briefing-page/data/signal-input.sample.json`
+- **machine-readable ingestion schema**: `apps/briefing-page/data/signal-input.schema.json`
+- **human-readable ingestion contract**: `docs/briefing-ingestion-v1.md`
 - **input to presentation**: `apps/briefing-page/data/briefing.sample.json`
-- **machine-readable schema**: `apps/briefing-page/data/briefing.schema.json`
-- **human-readable contract**: `docs/briefing-contract-v1.md`
+- **machine-readable briefing schema**: `apps/briefing-page/data/briefing.schema.json`
+- **human-readable briefing contract**: `docs/briefing-contract-v1.md`
 
 This is the most important architectural decision in the current phase.
 
-It means the renderer can evolve without redefining the briefing shape, and the editorial pipeline can evolve without coupling itself to page markup.
+It means:
+
+- upstream collection can evolve without rewriting the final page
+- transformation logic can become explicit instead of remaining invisible editorial intuition
+- the renderer can evolve without redefining the briefing shape
+
+## Editorial flow
+
+The intended flow is now:
+
+1. collect and normalize source material into an ingestion packet
+2. derive prioritized signals and a working thesis
+3. record editorial decisions that map input material toward the output artifact
+4. emit a briefing payload that matches the briefing contract
+5. render and distribute the final page
+
+The system is still early, but the contracts now define the intended path.
 
 ## Initial technical decision
 
@@ -77,8 +100,9 @@ The prototype uses a static page because it:
 
 ### Phase 2
 
+- stable ingestion schema
 - stable briefing schema
-- automatically generated intermediate artifacts
+- explicit transformation from input packets to briefing payloads
 - real briefing content injected into the page
 
 ### Phase 3
@@ -86,12 +110,14 @@ The prototype uses a static page because it:
 - briefing history
 - thematic views
 - navigation or reading metrics if they prove useful
+- recurring delivery workflows
 
 ## Repository structure
 
 - `apps/briefing-page/`: main visual artifact
-- `apps/briefing-page/data/`: briefing payloads and schema
+- `apps/briefing-page/data/`: briefing payloads, ingestion payloads, and schemas
 - `docs/`: vision, decisions, contracts, and operations
+- `scripts/`: lightweight local validators and future utilities
 
 ## Conventions
 
@@ -101,3 +127,4 @@ The repository should continue to prefer:
 - few nesting levels
 - clear separation between content, app, and deployment
 - contracts that are explicit before they become automated
+- transform steps that are inspectable instead of hidden inside prompts
