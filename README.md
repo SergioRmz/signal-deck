@@ -98,6 +98,7 @@ This first foundation includes:
 - a **viewport-aware choreography layer** that scrolls between modules and re-syncs focus from real section intersections
 - a **sticky reading dock** that keeps navigation state visible while the briefing moves
 - a **jump navigation strip** that lets the reader move directly to any module in the composition path
+- an **entrance choreography layer** that stages modules with per-section motion metadata and smoother queued → entered → active transitions
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing

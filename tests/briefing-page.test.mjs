@@ -101,6 +101,11 @@ function createElement(id) {
   };
 }
 
+function parseModuleMarkup(html, moduleId) {
+  const pattern = new RegExp(`<section[^>]*data-module-id="${moduleId}"[^>]*>`, 'i');
+  return html.match(pattern)?.[0] || '';
+}
+
 async function loadApp() {
   const source = await fs.readFile(new URL('../apps/briefing-page/app.js', import.meta.url), 'utf8');
   const elements = new Map();
@@ -347,4 +352,32 @@ test('jump nav re-syncs its active marker after viewport-driven updates', async 
   ]);
 
   assert.match(jumpNav.innerHTML, /data-jump-state="active"[^>]*data-module-id="mod-watchlist"|data-module-id="mod-watchlist"[^>]*data-jump-state="active"/);
+});
+
+test('entrance choreography exposes staged motion metadata and per-module stagger indices', async () => {
+  const { context, elements } = await loadApp();
+  const app = elements.get('app');
+  const heroMarkup = parseModuleMarkup(app.innerHTML, 'mod-hero');
+  const radarMarkup = parseModuleMarkup(app.innerHTML, 'mod-radar');
+
+  assert.equal(context.document.body.dataset.entranceChoreography, 'staged');
+  assert.equal(context.document.body.dataset.motionProfile, 'punctuated');
+  assert.match(heroMarkup, /data-entrance-state="active"/);
+  assert.match(heroMarkup, /style="[^"]*--entrance-index:\s*0[;"]/);
+  assert.match(radarMarkup, /style="[^"]*--entrance-index:\s*2[;"]/);
+});
+
+test('entrance choreography promotes visited modules from queued to entered as reading focus advances', async () => {
+  const { elements } = await loadApp();
+  const app = elements.get('app');
+
+  elements.get('nextSectionButton').click();
+
+  const heroMarkup = parseModuleMarkup(app.innerHTML, 'mod-hero');
+  const toplineMarkup = parseModuleMarkup(app.innerHTML, 'mod-topline');
+  const radarMarkup = parseModuleMarkup(app.innerHTML, 'mod-radar');
+
+  assert.match(heroMarkup, /data-entrance-state="entered"/);
+  assert.match(toplineMarkup, /data-entrance-state="active"/);
+  assert.match(radarMarkup, /data-entrance-state="queued"/);
 });

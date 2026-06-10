@@ -60,13 +60,33 @@ function jumpStateFor(moduleId) {
   return activeModuleId() === moduleId ? 'active' : 'resting';
 }
 
+function entranceIndexFor(moduleId) {
+  return Math.max(readingState.moduleOrder.indexOf(moduleId), 0);
+}
+
+function entranceStateFor(moduleId) {
+  if (activeModuleId() === moduleId) {
+    return 'active';
+  }
+
+  return entranceIndexFor(moduleId) < readingState.activeIndex ? 'entered' : 'queued';
+}
+
+function moduleStateAttributes(moduleId) {
+  return [
+    `data-focus-state="${focusStateFor(moduleId)}"`,
+    `data-entrance-state="${entranceStateFor(moduleId)}"`,
+    `style="--entrance-index: ${entranceIndexFor(moduleId)};"`
+  ].join(' ');
+}
+
 function renderHeroModule(data, module) {
   const cue = module?.interactionCue
     ? `<p class="module-cue">${escapeHtml(module.interactionCue)}</p>`
     : '';
 
   return `
-    <section id="mod-hero" data-module-id="mod-hero" data-focus-state="${focusStateFor('mod-hero')}" class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-hero') === 'active' ? 'is-active' : 'is-resting'}">
+    <section id="mod-hero" data-module-id="mod-hero" ${moduleStateAttributes('mod-hero')} class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-hero') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="hero-panel__copy">
         <span class="kicker">Opening thesis</span>
         <h2>${escapeHtml(module?.headline || data.hero.title)}</h2>
@@ -79,7 +99,7 @@ function renderHeroModule(data, module) {
 
 function renderToplineModule(data, module) {
   return `
-    <section id="mod-topline" data-module-id="mod-topline" data-focus-state="${focusStateFor('mod-topline')}" class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-topline') === 'active' ? 'is-active' : 'is-resting'}">
+    <section id="mod-topline" data-module-id="mod-topline" ${moduleStateAttributes('mod-topline')} class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-topline') === 'active' ? 'is-active' : 'is-resting'}">
       <span class="kicker">Top line</span>
       <h2>${escapeHtml(data.topLine.title)}</h2>
       <p>${escapeHtml(data.topLine.body)}</p>
@@ -101,7 +121,7 @@ function renderRadarModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-radar" data-module-id="mod-radar" data-focus-state="${focusStateFor('mod-radar')}" class="card signal-radar signal-radar--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-radar') === 'active' ? 'is-active' : 'is-resting'}">
+    <section id="mod-radar" data-module-id="mod-radar" ${moduleStateAttributes('mod-radar')} class="card signal-radar signal-radar--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-radar') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">Radar</span>
@@ -128,7 +148,7 @@ function renderDeepDivesModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-deep-dives" data-module-id="mod-deep-dives" data-focus-state="${focusStateFor('mod-deep-dives')}" class="module-group module-group--deep-dives ${focusStateFor('mod-deep-dives') === 'active' ? 'is-active' : 'is-resting'}">
+    <section id="mod-deep-dives" data-module-id="mod-deep-dives" ${moduleStateAttributes('mod-deep-dives')} class="module-group module-group--deep-dives ${focusStateFor('mod-deep-dives') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading">
         <div>
           <span class="kicker">Deep dives</span>
@@ -154,7 +174,7 @@ function renderMarketMapModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-market-map" data-module-id="mod-market-map" data-focus-state="${focusStateFor('mod-market-map')}" class="card market-map market-map--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-market-map') === 'active' ? 'is-active' : 'is-resting'}">
+    <section id="mod-market-map" data-module-id="mod-market-map" ${moduleStateAttributes('mod-market-map')} class="card market-map market-map--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-market-map') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">Market map</span>
@@ -180,7 +200,7 @@ function renderWatchlistModule(data, module) {
     .join('');
 
   return `
-    <section id="mod-watchlist" data-module-id="mod-watchlist" data-focus-state="${focusStateFor('mod-watchlist')}" class="card watchlist-card watchlist-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-watchlist') === 'active' ? 'is-active' : 'is-resting'}">
+    <section id="mod-watchlist" data-module-id="mod-watchlist" ${moduleStateAttributes('mod-watchlist')} class="card watchlist-card watchlist-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-watchlist') === 'active' ? 'is-active' : 'is-resting'}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">What to watch</span>
@@ -304,6 +324,8 @@ function updateReadingDock() {
   document.body.dataset.activeModule = activeId;
   document.body.dataset.activeModuleIndex = String(readingState.activeIndex);
   document.body.dataset.scrollMood = scrollMood;
+  document.body.dataset.entranceChoreography = readingState.composition?.page?.rhythm || 'steady';
+  document.body.dataset.motionProfile = scrollMood;
 
   if (readingProgress) {
     readingProgress.textContent = `${readingState.activeIndex + 1} / ${total}`;
