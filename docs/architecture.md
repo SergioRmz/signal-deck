@@ -24,6 +24,9 @@ The current contracts are:
 - **ingestion contract v1**
   - `docs/briefing-ingestion-v1.md`
   - `apps/briefing-page/data/signal-input.schema.json`
+- **transformation layer v1**
+  - `docs/briefing-transformation-v1.md`
+  - `scripts/generate_briefing.py`
 - **briefing contract v1**
   - `docs/briefing-contract-v1.md`
   - `apps/briefing-page/data/briefing.schema.json`
@@ -57,6 +60,8 @@ The current repository boundary is:
 - **input packet to editorial layer**: `apps/briefing-page/data/signal-input.sample.json`
 - **machine-readable ingestion schema**: `apps/briefing-page/data/signal-input.schema.json`
 - **human-readable ingestion contract**: `docs/briefing-ingestion-v1.md`
+- **deterministic transformation entry point**: `scripts/generate_briefing.py`
+- **human-readable transformation rules**: `docs/briefing-transformation-v1.md`
 - **input to presentation**: `apps/briefing-page/data/briefing.sample.json`
 - **machine-readable briefing schema**: `apps/briefing-page/data/briefing.schema.json`
 - **human-readable briefing contract**: `docs/briefing-contract-v1.md`
@@ -76,7 +81,7 @@ The intended flow is now:
 1. collect and normalize source material into an ingestion packet
 2. derive prioritized signals and a working thesis
 3. record editorial decisions that map input material toward the output artifact
-4. emit a briefing payload that matches the briefing contract
+4. transform the packet into a validated briefing payload
 5. render and distribute the final page
 
 The system is still early, but the contracts now define the intended path.

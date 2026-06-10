@@ -67,11 +67,13 @@ signal-deck/
 │           └── signal-input.schema.json
 ├── scripts/
 │   ├── validate_briefing.py
-│   └── validate_signal_input.py
+│   ├── validate_signal_input.py
+│   └── generate_briefing.py
 └── docs/
 │   ├── architecture.md
 │   ├── briefing-contract-v1.md
 │   ├── briefing-ingestion-v1.md
+│   ├── briefing-transformation-v1.md
 │   ├── product-brief.md
 │   └── deployment/
 │       └── cloudflare-pages.md
@@ -82,11 +84,13 @@ signal-deck/
 This first foundation includes:
 
 - a **formal ingestion contract** for upstream editorial packets
+- an **explicit transformation layer** from ingestion packets to briefing payloads
 - a **formal briefing contract** for the final briefing artifact
 - a **dark-theme single-page briefing prototype**
 - a **static renderer** that reads briefing content from a local JSON file
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
+- a deterministic generator that turns a validated input packet into a validated briefing payload
 - initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
 That may sound modest, but it is an important strategic choice: the project is starting from a lean, legible base rather than prematurely committing to framework complexity.
@@ -110,6 +114,9 @@ This repository is the beginning of that system.
 From the repository root:
 
 ```bash
+python3 scripts/validate_signal_input.py
+python3 scripts/generate_briefing.py
+python3 scripts/validate_briefing.py
 cd apps/briefing-page
 python3 -m http.server 4173
 ```
@@ -122,8 +129,8 @@ http://localhost:4173
 
 ## Near-term roadmap
 
-1. Define the transformation layer from ingestion packets to briefing payloads
-2. Connect the page to generated or real briefing artifacts
+1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
+2. Connect the page to generated or real briefing artifacts more systematically
 3. Prepare external deployment through Cloudflare Pages
 4. Introduce briefing history and recurring publication workflows
 
