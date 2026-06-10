@@ -247,15 +247,39 @@ li {
   font-size: 0.96rem;
 }
 
+[data-module-id] {
+  transition:
+    opacity 320ms ease,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 320ms ease,
+    border-color 320ms ease;
+  transition-delay: calc(var(--entrance-index, 0) * 42ms);
+  will-change: transform, opacity;
+}
+
 [data-focus-state='active'] {
   border-color: rgba(141, 240, 211, 0.34);
   box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(141, 240, 211, 0.1);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.005);
   scroll-margin-top: 160px;
 }
 
 [data-focus-state='resting'] {
   opacity: 0.9;
+}
+
+[data-entrance-state='queued'] {
+  opacity: 0.72;
+  transform: translateY(18px) scale(0.985);
+}
+
+[data-entrance-state='entered'] {
+  opacity: 0.94;
+  transform: translateY(0) scale(1);
+}
+
+[data-entrance-state='active'] {
+  opacity: 1;
 }
 
 body[data-viewport-sync='observer'] .viewport-pill {

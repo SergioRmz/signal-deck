@@ -45,6 +45,7 @@ Responsible for:
 - giving the page a guided interaction model with progress, section sequencing, and direct jump navigation
 - choreographing active focus so module emphasis and reading cues move together
 - syncing reading state back from viewport intersections so the page responds to actual scroll position
+- staging module entrances with composition-derived rhythm, stagger order, and smoother queued → entered → active state transitions
 
 In the current prototype, presentation is a static HTML/CSS/JS page with no framework, but it now consumes both a briefing payload and a visual-composition payload.
 
