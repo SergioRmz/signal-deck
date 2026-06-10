@@ -179,3 +179,25 @@ test('next section control advances the guided reading state', async () => {
   assert.equal(context.document.body.dataset.activeModule, 'mod-topline');
   assert.match(elements.get('nextSectionButton').textContent, /Radar/);
 });
+
+test('scroll choreography marks the focused module and exposes a focus cue', async () => {
+  const { context, elements } = await loadApp();
+  const app = elements.get('app');
+
+  assert.equal(elements.get('focusCue').textContent, 'Land fast and create curiosity.');
+  assert.equal(context.document.body.dataset.scrollMood, 'punctuated');
+  assert.equal(context.document.body.dataset.activeModuleIndex, '0');
+  assert.match(app.innerHTML, /data-focus-state="active"[^>]*data-module-id="mod-hero"|data-module-id="mod-hero"[^>]*data-focus-state="active"/);
+});
+
+test('scroll choreography re-renders focus when advancing to the next module', async () => {
+  const { context, elements } = await loadApp();
+  const app = elements.get('app');
+
+  elements.get('nextSectionButton').click();
+
+  assert.equal(elements.get('focusCue').textContent, 'Invite the user to pause on the claim.');
+  assert.equal(context.document.body.dataset.activeModuleIndex, '1');
+  assert.match(app.innerHTML, /data-focus-state="active"[^>]*data-module-id="mod-topline"|data-module-id="mod-topline"[^>]*data-focus-state="active"/);
+  assert.match(app.innerHTML, /data-focus-state="resting"[^>]*data-module-id="mod-hero"|data-module-id="mod-hero"[^>]*data-focus-state="resting"/);
+});
