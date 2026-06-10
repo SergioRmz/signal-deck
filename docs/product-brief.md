@@ -53,16 +53,21 @@ The output should feel:
 - reusable, not anecdotal
 - visually restrained, not overloaded
 
-## Editorial contract
+## Editorial contracts
 
-The current repository now treats the briefing itself as a structured artifact.
+The repository now treats both the input side and the output side of the briefing as structured artifacts.
 
-The canonical v1 contract is documented in:
+### Ingestion side
+
+- `docs/briefing-ingestion-v1.md`
+- `apps/briefing-page/data/signal-input.schema.json`
+
+### Briefing side
 
 - `docs/briefing-contract-v1.md`
 - `apps/briefing-page/data/briefing.schema.json`
 
-That contract is the bridge between editorial intelligence and presentation.
+Together, those contracts define the current editorial surface of the product.
 
 ## Why this matters
 
@@ -72,6 +77,7 @@ It is in building a system that can repeatedly transform scattered developments 
 That means the product must preserve a strong distinction between:
 
 - raw inputs
+- structured editorial packets
 - structured briefing content
 - rendered experience
 - external distribution
