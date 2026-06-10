@@ -95,6 +95,8 @@ This first foundation includes:
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
 - an **interaction layer** with guided reading progress and section-to-section navigation
 - a **scroll choreography base** that keeps active focus, cue text, and module emphasis in sync
+- a **viewport-aware choreography layer** that scrolls between modules and re-syncs focus from real section intersections
+- a **sticky reading dock** that keeps navigation state visible while the briefing moves
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing

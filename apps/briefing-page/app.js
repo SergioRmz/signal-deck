@@ -7,6 +7,7 @@ const pathSummary = document.getElementById('pathSummary');
 const nextSectionButton = document.getElementById('nextSectionButton');
 const prevSectionButton = document.getElementById('prevSectionButton');
 const focusCue = document.getElementById('focusCue');
+const viewportStatus = document.getElementById('viewportStatus');
 
 let readingState = {
   moduleOrder: [],
@@ -15,6 +16,8 @@ let readingState = {
   briefing: null,
   composition: null
 };
+
+let viewportObserver = null;
 
 function escapeHtml(value) {
   return String(value)
@@ -44,8 +47,12 @@ function sectionLabelForModule(moduleId, module) {
     : fallback[moduleId] || 'Section';
 }
 
+function activeModuleId() {
+  return readingState.moduleOrder[readingState.activeIndex];
+}
+
 function focusStateFor(moduleId) {
-  return readingState.moduleOrder[readingState.activeIndex] === moduleId ? 'active' : 'resting';
+  return activeModuleId() === moduleId ? 'active' : 'resting';
 }
 
 function renderHeroModule(data, module) {
@@ -206,7 +213,7 @@ function renderExperienceRail(composition) {
 }
 
 function renderModuleById(data, composition, id) {
-  const modules = moduleMap(composition);
+  const modules = readingState.modules.size ? readingState.modules : moduleMap(composition);
   const module = modules.get(id);
 
   switch (id) {
@@ -245,7 +252,7 @@ function updateReadingDock() {
   const total = readingState.moduleOrder.length;
   if (!total) return;
 
-  const activeId = readingState.moduleOrder[readingState.activeIndex];
+  const activeId = activeModuleId();
   const activeModule = readingState.modules.get(activeId);
   const activeLabel = sectionLabelForModule(activeId, activeModule);
   const nextId = readingState.moduleOrder[(readingState.activeIndex + 1) % total];
@@ -253,6 +260,7 @@ function updateReadingDock() {
   const nextLabel = sectionLabelForModule(nextId, readingState.modules.get(nextId));
   const prevLabel = sectionLabelForModule(prevId, readingState.modules.get(prevId));
   const scrollMood = readingState.composition?.page?.scrollMood || 'steady';
+  const viewportSync = document.body.dataset.viewportSync || 'guided';
 
   document.body.dataset.activeModule = activeId;
   document.body.dataset.activeModuleIndex = String(readingState.activeIndex);
@@ -270,6 +278,9 @@ function updateReadingDock() {
   if (focusCue) {
     focusCue.textContent = activeModule?.interactionCue || 'Follow the guided reading path.';
   }
+  if (viewportStatus) {
+    viewportStatus.textContent = viewportSync === 'observer' ? 'Viewport synced' : 'Guided mode';
+  }
   if (nextSectionButton) {
     nextSectionButton.textContent = `Next: ${nextLabel}`;
   }
@@ -278,12 +289,65 @@ function updateReadingDock() {
   }
 }
 
+function scrollModuleIntoView(moduleId) {
+  const target = document.getElementById(moduleId);
+  if (target?.scrollIntoView) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function bindViewportObserver() {
+  if (!document.body) {
+    return;
+  }
+
+  if (typeof IntersectionObserver !== 'function') {
+    document.body.dataset.viewportSync = 'guided';
+    updateReadingDock();
+    return;
+  }
+
+  if (viewportObserver) {
+    viewportObserver.disconnect();
+  }
+
+  viewportObserver = new IntersectionObserver(
+    (entries) => {
+      const visibleEntry = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+
+      const visibleId = visibleEntry?.target?.dataset?.moduleId;
+      const visibleIndex = readingState.moduleOrder.indexOf(visibleId);
+
+      if (visibleIndex >= 0 && visibleIndex !== readingState.activeIndex) {
+        readingState.activeIndex = visibleIndex;
+        renderCurrentView();
+        document.body.dataset.viewportSync = 'observer';
+        updateReadingDock();
+        bindViewportObserver();
+      }
+    },
+    {
+      threshold: [0.55, 0.8],
+      rootMargin: '-10% 0px -35% 0px'
+    }
+  );
+
+  const sections = document.querySelectorAll('[data-module-id]');
+  sections.forEach((section) => viewportObserver.observe(section));
+  document.body.dataset.viewportSync = sections.length ? 'observer' : 'guided';
+  updateReadingDock();
+}
+
 function moveReadingFocus(step) {
   const total = readingState.moduleOrder.length;
   if (!total) return;
   readingState.activeIndex = (readingState.activeIndex + step + total) % total;
   renderCurrentView();
   updateReadingDock();
+  scrollModuleIntoView(activeModuleId());
+  bindViewportObserver();
 }
 
 function initializeReadingPattern(briefing, composition) {
@@ -297,6 +361,7 @@ function initializeReadingPattern(briefing, composition) {
   };
   renderCurrentView();
   updateReadingDock();
+  bindViewportObserver();
 }
 
 function applyCompositionMetadata(composition) {
