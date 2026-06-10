@@ -94,6 +94,9 @@ function createElement(id) {
     listeners: {},
     addEventListener(type, handler) {
       this.listeners[type] = handler;
+    },
+    click() {
+      if (this.listeners.click) this.listeners.click({ currentTarget: this });
     }
   };
 }
@@ -155,4 +158,24 @@ test('renderer exposes composition-driven cues in the rendered page', async () =
   assert.equal(context.document.body.dataset.visualTone, 'electric');
   assert.equal(context.document.body.dataset.heroVariant, 'thesis-wall');
   assert.match(button.textContent, /layered/i);
+});
+
+test('interaction controls expose initial section progress and active module state', async () => {
+  const { context, elements } = await loadApp();
+
+  assert.equal(elements.get('readingProgress').textContent, '1 / 6');
+  assert.equal(elements.get('activeSectionLabel').textContent, 'Opening thesis');
+  assert.equal(context.document.body.dataset.activeModule, 'mod-hero');
+  assert.match(elements.get('pathSummary').textContent, /6-stop reading path/i);
+});
+
+test('next section control advances the guided reading state', async () => {
+  const { context, elements } = await loadApp();
+
+  elements.get('nextSectionButton').click();
+
+  assert.equal(elements.get('readingProgress').textContent, '2 / 6');
+  assert.equal(elements.get('activeSectionLabel').textContent, 'Top line');
+  assert.equal(context.document.body.dataset.activeModule, 'mod-topline');
+  assert.match(elements.get('nextSectionButton').textContent, /Radar/);
 });

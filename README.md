@@ -93,6 +93,7 @@ This first foundation includes:
 - a **visual composition contract** between editorial output and final page rendering
 - a **dark-theme single-page briefing prototype**
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
+- an **interaction layer** with guided reading progress and section-to-section navigation
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing

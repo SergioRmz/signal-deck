@@ -1,6 +1,17 @@
 const app = document.getElementById('app');
 const button = document.getElementById('themeNote');
 const footerNote = document.getElementById('footerNote');
+const readingProgress = document.getElementById('readingProgress');
+const activeSectionLabel = document.getElementById('activeSectionLabel');
+const pathSummary = document.getElementById('pathSummary');
+const nextSectionButton = document.getElementById('nextSectionButton');
+const prevSectionButton = document.getElementById('prevSectionButton');
+
+let readingState = {
+  moduleOrder: [],
+  modules: new Map(),
+  activeIndex: 0
+};
 
 function escapeHtml(value) {
   return String(value)
@@ -15,13 +26,28 @@ function moduleMap(composition) {
   return new Map((composition.modules || []).map((module) => [module.moduleId, module]));
 }
 
+function sectionLabelForModule(moduleId, module) {
+  const fallback = {
+    'mod-hero': 'Opening thesis',
+    'mod-topline': 'Top line',
+    'mod-radar': 'Radar',
+    'mod-deep-dives': 'Deep dives',
+    'mod-market-map': 'Market map',
+    'mod-watchlist': 'What to watch'
+  };
+
+  return module?.kind
+    ? fallback[moduleId] || module.kind.replaceAll('-', ' ')
+    : fallback[moduleId] || 'Section';
+}
+
 function renderHeroModule(data, module) {
   const cue = module?.interactionCue
     ? `<p class="module-cue">${escapeHtml(module.interactionCue)}</p>`
     : '';
 
   return `
-    <section class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-hero" data-module-id="mod-hero" class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')}">
       <div class="hero-panel__copy">
         <span class="kicker">Opening thesis</span>
         <h2>${escapeHtml(module?.headline || data.hero.title)}</h2>
@@ -34,7 +60,7 @@ function renderHeroModule(data, module) {
 
 function renderToplineModule(data, module) {
   return `
-    <section class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-topline" data-module-id="mod-topline" class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')}">
       <span class="kicker">Top line</span>
       <h2>${escapeHtml(data.topLine.title)}</h2>
       <p>${escapeHtml(data.topLine.body)}</p>
@@ -56,7 +82,7 @@ function renderRadarModule(data, module) {
     .join('');
 
   return `
-    <section class="card signal-radar signal-radar--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-radar" data-module-id="mod-radar" class="card signal-radar signal-radar--${escapeHtml(module?.variant || 'default')}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">Radar</span>
@@ -83,7 +109,7 @@ function renderDeepDivesModule(data, module) {
     .join('');
 
   return `
-    <section class="module-group module-group--deep-dives">
+    <section id="mod-deep-dives" data-module-id="mod-deep-dives" class="module-group module-group--deep-dives">
       <div class="section-heading">
         <div>
           <span class="kicker">Deep dives</span>
@@ -109,7 +135,7 @@ function renderMarketMapModule(data, module) {
     .join('');
 
   return `
-    <section class="card market-map market-map--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-market-map" data-module-id="mod-market-map" class="card market-map market-map--${escapeHtml(module?.variant || 'default')}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">Market map</span>
@@ -135,7 +161,7 @@ function renderWatchlistModule(data, module) {
     .join('');
 
   return `
-    <section class="card watchlist-card watchlist-card--${escapeHtml(module?.variant || 'default')}">
+    <section id="mod-watchlist" data-module-id="mod-watchlist" class="card watchlist-card watchlist-card--${escapeHtml(module?.variant || 'default')}">
       <div class="section-heading section-heading--compact">
         <div>
           <span class="kicker">What to watch</span>
@@ -192,6 +218,54 @@ function renderModuleById(data, composition, id) {
     default:
       return '';
   }
+}
+
+function updateReadingDock() {
+  const total = readingState.moduleOrder.length;
+  if (!total) return;
+
+  const activeId = readingState.moduleOrder[readingState.activeIndex];
+  const activeModule = readingState.modules.get(activeId);
+  const activeLabel = sectionLabelForModule(activeId, activeModule);
+  const nextId = readingState.moduleOrder[(readingState.activeIndex + 1) % total];
+  const prevId = readingState.moduleOrder[(readingState.activeIndex - 1 + total) % total];
+  const nextLabel = sectionLabelForModule(nextId, readingState.modules.get(nextId));
+  const prevLabel = sectionLabelForModule(prevId, readingState.modules.get(prevId));
+
+  document.body.dataset.activeModule = activeId;
+
+  if (readingProgress) {
+    readingProgress.textContent = `${readingState.activeIndex + 1} / ${total}`;
+  }
+  if (activeSectionLabel) {
+    activeSectionLabel.textContent = activeLabel;
+  }
+  if (pathSummary) {
+    pathSummary.textContent = `${total}-stop reading path · ${activeLabel}`;
+  }
+  if (nextSectionButton) {
+    nextSectionButton.textContent = `Next: ${nextLabel}`;
+  }
+  if (prevSectionButton) {
+    prevSectionButton.textContent = `Back: ${prevLabel}`;
+  }
+}
+
+function moveReadingFocus(step) {
+  const total = readingState.moduleOrder.length;
+  if (!total) return;
+  readingState.activeIndex = (readingState.activeIndex + step + total) % total;
+  updateReadingDock();
+}
+
+function initializeReadingPattern(composition) {
+  const order = composition.page?.moduleOrder || [];
+  readingState = {
+    moduleOrder: order,
+    modules: moduleMap(composition),
+    activeIndex: 0
+  };
+  updateReadingDock();
 }
 
 function applyCompositionMetadata(composition) {
@@ -261,6 +335,7 @@ async function bootstrap() {
 
     applyCompositionMetadata(composition);
     renderBriefing(briefing, composition);
+    initializeReadingPattern(composition);
   } catch (error) {
     app.innerHTML = `
       <section class="card">
@@ -278,6 +353,14 @@ if (button) {
     button.textContent = 'Dark theme · layered reading';
     button.disabled = true;
   });
+}
+
+if (nextSectionButton) {
+  nextSectionButton.addEventListener('click', () => moveReadingFocus(1));
+}
+
+if (prevSectionButton) {
+  prevSectionButton.addEventListener('click', () => moveReadingFocus(-1));
 }
 
 bootstrap();
