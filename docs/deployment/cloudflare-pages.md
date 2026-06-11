@@ -15,6 +15,13 @@ Eso permite desplegarla como sitio estático sin build complejo.
 - **Framework preset**: None
 - **Build command**: dejar vacío
 - **Build output directory**: `apps/briefing-page`
+- **Opcional pero recomendable en el repo**: guardar `wrangler.toml` en la raíz con:
+
+```toml
+pages_build_output_dir = "./apps/briefing-page"
+```
+
+Eso deja la intención de despliegue codificada dentro del repositorio, en lugar de depender solo de una configuración manual en el dashboard.
 
 ## Flujo básico
 
