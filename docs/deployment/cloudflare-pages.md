@@ -15,6 +15,18 @@ Eso permite desplegarla como sitio estático sin build complejo.
 - **Framework preset**: None
 - **Build command**: dejar vacío
 - **Build output directory**: `apps/briefing-page`
+- **Si Cloudflare ya te lo está tratando como un proyecto de Workers Builds**: deja además un `wrangler.toml` en la raíz para fijar explícitamente el directorio estático:
+
+```toml
+"$schema" = "./node_modules/wrangler/config-schema.json"
+name = "signal-deck"
+compatibility_date = "2026-06-10"
+
+[assets]
+directory = "./apps/briefing-page"
+```
+
+Eso reduce la dependencia de configuración manual en dashboard y le dice a Cloudflare cuál es el asset root real del producto.
 
 ## Flujo básico
 
