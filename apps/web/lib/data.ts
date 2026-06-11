@@ -26,6 +26,25 @@ export type BriefingData = {
     body: string;
     stakes?: string;
   };
+  radar?: {
+    title: string;
+    items: Array<{
+      label: string;
+      text: string;
+      role?: string;
+    }>;
+  };
+  deepDives?: {
+    title: string;
+    items: Array<{
+      title: string;
+      body: string;
+      mechanism?: string;
+      claim?: string;
+      explanation?: string;
+      implication?: string;
+    }>;
+  };
 };
 
 export type CompositionModule = {
@@ -35,6 +54,8 @@ export type CompositionModule = {
   headline?: string;
   interactionCue?: string;
   accentMode?: string;
+  priority?: string;
+  layoutHints?: string[];
 };
 
 export type VisualComposition = {
