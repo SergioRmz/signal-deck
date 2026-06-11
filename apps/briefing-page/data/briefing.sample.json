@@ -6,12 +6,12 @@
     "publishedAt": "2026-06-11T09:00:00Z",
     "slug": "distribution-is-becoming-as-important-as-the-model",
     "language": "en",
-    "topics": [
-      "ai",
-      "distribution",
-      "workflow",
-      "product-strategy"
-    ]
+    "topics": ["ai", "distribution", "product-strategy"],
+    "readerContext": {
+      "roles": ["software-engineer", "founder", "operator"],
+      "interests": ["ai", "workflow", "career-positioning"],
+      "desiredUpgrade": "Understand where leverage moves when core capabilities commoditize."
+    }
   },
   "hero": {
     "title": "The strategic fight is shifting from who has the best model to who owns the workflow around it.",

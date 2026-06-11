@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "schemaVersion": "1.0",
+    "compositionId": "2026-06-11-distribution-composition",
+    "createdAt": "2026-06-11T09:05:00Z",
+    "language": "en",
+    "tags": ["ai", "distribution", "workflow", "product-strategy"]
+  },
+  "sourceBriefing": {
+    "briefingId": "2026-06-11-distribution-is-becoming-as-important-as-the-model",
+    "editionDate": "2026-06-11",
+    "slug": "distribution-is-becoming-as-important-as-the-model",
+    "topics": ["ai", "distribution", "workflow", "product-strategy"]
+  },
+  "experience": {
+    "visualTone": "electric",
+    "readingMode": "mixed",
+    "engagementGoal": "Make the briefing feel like a strategic object you want to explore, not just a memo you finish.",
+    "interactionModel": "layered",
+    "hooks": [
+      "Land with a large thesis wall that instantly frames the edition.",
+      "Turn the radar into a quick-grab surface instead of a buried list.",
+      "Make the deep dives feel collectible rather than dutiful."
+    ],
+    "learningPrompts": [
+      "Touch the thesis first, then test it against the radar.",
+      "Compare deep dives to see where the moat is actually forming.",
+      "Use the watchlist as a next-questions engine, not a passive footer."
+    ]
+  },
+  "designSystem": {
+    "theme": "dark",
+    "palette": {
+      "base": "#07111f",
+      "surface": "#0f1d33",
+      "text": "#e9eef8",
+      "accent": "#78a4ff",
+      "accentStrong": "#8df0d3"
+    },
+    "density": "medium",
+    "cornerStyle": "rounded",
+    "shadowStyle": "glow",
+    "texture": "glowfield",
+    "componentFamily": "strategic-cards"
+  },
+  "page": {
+    "heroVariant": "thesis-wall",
+    "rhythm": "staged",
+    "emphasis": "topline",
+    "moduleOrder": [
+      "mod-hero",
+      "mod-topline",
+      "mod-radar",
+      "mod-deep-dives",
+      "mod-market-map",
+      "mod-watchlist"
+    ],
+    "stickyElements": ["edition-date", "reading-progress"],
+    "scrollMood": "punctuated"
+  },
+  "modules": [
+    {
+      "moduleId": "mod-hero",
+      "kind": "hero",
+      "variant": "thesis-wall-glow",
+      "sourceKey": "hero",
+      "priority": "primary",
+      "headline": "Own the workflow, own the margin.",
+      "body": "The opening surface should feel immediate, bold, and worth touching before the user settles into reading.",
+      "layoutHints": ["oversized-headline", "offset-meta-panel", "accent-halo"],
+      "interactionCue": "Land fast, create curiosity, and set a premium visual mood.",
+      "accentMode": "contrast",
+      "dataRefs": ["hero.title", "hero.lede"]
+    },
+    {
+      "moduleId": "mod-topline",
+      "kind": "topline",
+      "variant": "spotlight-card",
+      "sourceKey": "topLine",
+      "priority": "primary",
+      "headline": "Make the thesis feel like the collectible core of the edition.",
+      "layoutHints": ["high-contrast-panel", "short-copy", "single-claim-focus"],
+      "interactionCue": "Invite the user to pause on the claim before moving into evidence.",
+      "accentMode": "accent",
+      "dataRefs": ["topLine.title", "topLine.body"]
+    },
+    {
+      "moduleId": "mod-radar",
+      "kind": "radar",
+      "variant": "signal-ribbons",
+      "sourceKey": "radar",
+      "priority": "secondary",
+      "headline": "Turn signals into a scan-and-grab strip.",
+      "layoutHints": ["horizontal-rhythm", "tight-density", "label-first"],
+      "interactionCue": "Let the reader skim quickly, then jump back into the deeper argument.",
+      "accentMode": "base",
+      "dataRefs": ["radar.title", "radar.items"]
+    },
+    {
+      "moduleId": "mod-deep-dives",
+      "kind": "deep-dive-grid",
+      "variant": "collectible-triptych",
+      "sourceKey": "deepDives",
+      "priority": "primary",
+      "headline": "Make each argument feel like a card worth opening mentally.",
+      "layoutHints": ["three-up-grid", "varied-card-heights", "numbered-subtheses"],
+      "interactionCue": "Encourage compare-and-contrast reading, not only linear reading.",
+      "accentMode": "accent",
+      "dataRefs": ["deepDives.title", "deepDives.items"]
+    },
+    {
+      "moduleId": "mod-market-map",
+      "kind": "market-map",
+      "variant": "pressure-ladder",
+      "sourceKey": "marketMap",
+      "priority": "secondary",
+      "headline": "Translate thesis into positioning pressure and opportunity.",
+      "layoutHints": ["stacked-bands", "directional-labels", "tight-summary"],
+      "interactionCue": "Help the user shift from explanation to strategic posture.",
+      "accentMode": "heat",
+      "dataRefs": ["marketMap.title", "marketMap.items"]
+    },
+    {
+      "moduleId": "mod-watchlist",
+      "kind": "watchlist",
+      "variant": "question-steps",
+      "sourceKey": "watchlist",
+      "priority": "supporting",
+      "headline": "End with active questions, not passive leftovers.",
+      "layoutHints": ["numbered-steps", "breathing-room", "exit-hook"],
+      "interactionCue": "Make the user want to return tomorrow with better answers.",
+      "accentMode": "contrast",
+      "dataRefs": ["watchlist.title", "watchlist.items"]
+    }
+  ]
+}

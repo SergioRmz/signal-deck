@@ -17,7 +17,19 @@
       "Prefer strategic interpretation over generic recap.",
       "Surface second-order effects early.",
       "Keep output useful under time pressure."
-    ]
+    ],
+    "readerProfile": {
+      "roles": ["software-engineer", "founder", "operator"],
+      "interests": ["ai", "workflow", "product-strategy"],
+      "advantageTargets": ["career-positioning", "market-interpretation"],
+      "depthPreference": "deep",
+      "pedagogicalPreference": "thesis-first",
+      "roleWeights": {
+        "software-engineer": 0.5,
+        "founder": 0.3,
+        "operator": 0.2
+      }
+    }
   },
   "sources": [
     {
@@ -115,6 +127,8 @@
       "Which layer captures the recurring user relationship?",
       "What kinds of context become least portable over time?",
       "Which products turn occasional use into operational dependency?"
-    ]
+    ],
+    "dominantPedagogicalFunction": "strategy-lesson",
+    "readerTranslationLenses": ["software-engineer", "founder", "operator"]
   }
 }

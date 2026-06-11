@@ -30,18 +30,27 @@ The current contracts are:
 - **briefing contract v1**
   - `docs/briefing-contract-v1.md`
   - `apps/briefing-page/data/briefing.schema.json`
+- **visual composition contract v1**
+  - `docs/visual-composition-contract-v1.md`
+  - `apps/briefing-page/data/visual-composition.schema.json`
 
 ### 2. Presentation
 
 Responsible for:
 
+- translating composition intent into a concrete page layout
 - rendering the briefing as a single page
 - maintaining a sober and readable design system
-- transforming a structured artifact into a premium reading experience
+- transforming structured editorial + composition artifacts into a premium reading experience
+- giving the page a guided interaction model with progress, section sequencing, and direct jump navigation
+- choreographing active focus so module emphasis and reading cues move together
+- syncing reading state back from viewport intersections so the page responds to actual scroll position
+- staging module entrances with composition-derived rhythm, stagger order, and smoother queued → entered → active state transitions
+- exposing module-depth metadata so each section carries visible priority, accent mode, variant, and layout-hint context
 
-In the current prototype, presentation is a static HTML/CSS/JS page with no framework.
+In the current prototype, presentation is a static HTML/CSS/JS page with no framework, but it now consumes both a briefing payload and a visual-composition payload.
 
-The presentation layer should consume the briefing contract, not invent it.
+The presentation layer should consume the briefing and composition contracts, not invent them.
 
 ### 3. Distribution
 
@@ -62,7 +71,9 @@ The current repository boundary is:
 - **human-readable ingestion contract**: `docs/briefing-ingestion-v1.md`
 - **deterministic transformation entry point**: `scripts/generate_briefing.py`
 - **human-readable transformation rules**: `docs/briefing-transformation-v1.md`
-- **input to presentation**: `apps/briefing-page/data/briefing.sample.json`
+- **machine-readable visual composition schema**: `apps/briefing-page/data/visual-composition.schema.json`
+- **human-readable visual composition contract**: `docs/visual-composition-contract-v1.md`
+- **input to presentation**: `apps/briefing-page/data/visual-composition.sample.json`
 - **machine-readable briefing schema**: `apps/briefing-page/data/briefing.schema.json`
 - **human-readable briefing contract**: `docs/briefing-contract-v1.md`
 
@@ -72,7 +83,7 @@ It means:
 
 - upstream collection can evolve without rewriting the final page
 - transformation logic can become explicit instead of remaining invisible editorial intuition
-- the renderer can evolve without redefining the briefing shape
+- the renderer can evolve without redefining either the briefing shape or the composition language
 
 ## Editorial flow
 
@@ -82,7 +93,8 @@ The intended flow is now:
 2. derive prioritized signals and a working thesis
 3. record editorial decisions that map input material toward the output artifact
 4. transform the packet into a validated briefing payload
-5. render and distribute the final page
+5. stage the briefing through a validated visual composition payload
+6. render and distribute the final page
 
 The system is still early, but the contracts now define the intended path.
 
@@ -109,6 +121,7 @@ The prototype uses a static page because it:
 - stable briefing schema
 - explicit transformation from input packets to briefing payloads
 - real briefing content injected into the page
+- composition-aware rendering driven by visual-composition payloads
 
 ### Phase 3
 
