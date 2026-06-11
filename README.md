@@ -22,13 +22,14 @@ The repository currently distinguishes three tightly connected layers:
    - synthesizing them into a coherent thesis
    - structuring context, implications, and follow-up questions
 
-2. **Presentation**
+2. **Transformation**
+   - converting validated ingestion packets into validated briefing payloads
+   - keeping editorial logic inspectable and deterministic
+   - preserving a visible path from signals to thesis to final artifact
+
+3. **Presentation**
    - rendering the briefing as a high-clarity, dark-theme single page
    - keeping the output legible, premium, and reusable
-
-3. **Delivery**
-   - keeping the final artifact externally accessible
-   - staying simple enough to deploy and maintain without unnecessary overhead
 
 The goal is not complexity for its own sake. The goal is a system that can produce premium insight with operational discipline.
 
@@ -40,8 +41,8 @@ The goal is not complexity for its own sake. The goal is a system that can produ
 - **Thesis-driven output**  
   Every strong briefing should do more than summarize. It should make an argument.
 
-- **Executive readability**  
-  The final artifact should feel fast to scan, dense with meaning, and useful under time pressure.
+- **Pedagogy over recap**  
+  The output should leave the reader with a sharper model, not just a fresher memory.
 
 - **Operational simplicity**  
   Fewer moving parts, lower maintenance burden, cleaner iteration loops.
@@ -86,6 +87,7 @@ This first foundation includes:
 - a **formal ingestion contract** for upstream editorial packets
 - an **explicit transformation layer** from ingestion packets to briefing payloads
 - a **formal briefing contract** for the final briefing artifact
+- a briefing contract that supports richer pedagogical fields and optional learning modules
 - a **dark-theme single-page briefing prototype**
 - a **static renderer** that reads briefing content from a local JSON file
 - a **clean separation** between content structure and presentation
@@ -103,8 +105,8 @@ It is building a system that can consistently transform scattered developments i
 That requires a workflow where:
 
 - the editorial layer can evolve independently
+- the transformation layer stays inspectable
 - the presentation layer stays polished and reusable
-- deployment remains friction-light
 - the output can eventually support recurring publication and external distribution
 
 This repository is the beginning of that system.
@@ -127,12 +129,24 @@ Then open:
 http://localhost:4173
 ```
 
+## Key contract documents
+
+- `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
+- `apps/briefing-page/data/signal-input.schema.json` — ingestion schema
+- `docs/briefing-contract-v1.md` — editorial contract for final briefings
+- `apps/briefing-page/data/briefing.schema.json` — briefing schema
+- `docs/briefing-transformation-v1.md` — deterministic mapping rules from ingestion to briefing
+- `scripts/validate_signal_input.py` — ingestion validator
+- `scripts/validate_briefing.py` — briefing validator
+- `scripts/generate_briefing.py` — briefing generator
+
 ## Near-term roadmap
 
 1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
 2. Connect the page to generated or real briefing artifacts more systematically
 3. Prepare external deployment through Cloudflare Pages
 4. Introduce briefing history and recurring publication workflows
+5. Migrate the frontend to a component system that better matches the editorial engine
 
 ## Project status
 

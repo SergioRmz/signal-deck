@@ -15,80 +15,118 @@
   },
   "hero": {
     "title": "The strategic fight is shifting from who has the best model to who owns the workflow around it.",
-    "lede": "Assess where strategic value is concentrating as model quality converges. As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution."
+    "lede": "Assess where strategic value is concentrating as model quality converges. As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution.",
+    "signal": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
+    "thesis": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution.",
+    "promise": "This briefing helps executives and operators understand where leverage is moving and why it matters.",
+    "tension": "Some categories will still reward raw model leadership more than distribution depth."
   },
   "topLine": {
     "title": "Distribution is becoming as important as the model.",
-    "body": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution. Owning the user relationship becomes economically more important. Memory and workflow embedding can become part of the moat."
+    "body": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution. Owning the user relationship becomes economically more important. Memory and workflow embedding can become part of the moat.",
+    "stakes": "Owning the user relationship becomes economically more important."
   },
   "radar": {
-    "title": "Radar",
+    "title": "Evidence radar",
     "items": [
       {
         "label": "Distribution",
-        "text": "Distribution is carrying more strategic weight as raw model differentiation narrows."
+        "text": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
+        "role": "supports-thesis"
       },
       {
         "label": "Workflow",
-        "text": "Context capture is emerging as the scarcer asset than inference alone."
+        "text": "Context capture is emerging as the scarcer asset than inference alone.",
+        "role": "supports-thesis"
       },
       {
         "label": "Product",
-        "text": "Interface design is increasingly shaping product economics, not just usability."
+        "text": "Interface design is increasingly shaping product economics, not just usability.",
+        "role": "monitor"
       }
     ]
   },
   "deepDives": {
-    "title": "3 angles for reading the shift",
+    "title": "Mechanism breakdown",
     "items": [
       {
         "title": "1. Distribution is carrying more strategic weight as raw model differentiation narrows",
-        "body": "Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access. Owning the user relationship becomes economically more important. Go-to-market strength can compound technical capability rather than merely follow it. Counterpoint: Frontier model gaps can still matter in narrow, high-stakes domains."
+        "body": "Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access. Owning the user relationship becomes economically more important. Go-to-market strength can compound technical capability rather than merely follow it. Counterpoint: Frontier model gaps can still matter in narrow, high-stakes domains.",
+        "mechanism": "Distribution",
+        "claim": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
+        "explanation": "Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access.",
+        "implication": "Owning the user relationship becomes economically more important."
       },
       {
         "title": "2. Context capture is emerging as the scarcer asset than inference alone",
-        "body": "Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts. Memory and workflow embedding can become part of the moat. Switching costs may rise at the interface layer rather than the model layer."
+        "body": "Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts. Memory and workflow embedding can become part of the moat. Switching costs may rise at the interface layer rather than the model layer.",
+        "mechanism": "Workflow",
+        "claim": "Context capture is emerging as the scarcer asset than inference alone.",
+        "explanation": "Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts.",
+        "implication": "Memory and workflow embedding can become part of the moat."
       },
       {
         "title": "3. Interface design is increasingly shaping product economics, not just usability",
-        "body": "The interface determines what gets repeated, measured, remembered, and eventually monetized. The presentation surface influences retention and monetization. UI decisions can determine where strategic capture lands."
+        "body": "The interface determines what gets repeated, measured, remembered, and eventually monetized. The presentation surface influences retention and monetization. UI decisions can determine where strategic capture lands.",
+        "mechanism": "Product",
+        "claim": "Interface design is increasingly shaping product economics, not just usability.",
+        "explanation": "The interface determines what gets repeated, measured, remembered, and eventually monetized.",
+        "implication": "The presentation surface influences retention and monetization."
       }
     ]
   },
   "marketMap": {
-    "title": "Who benefits if this thesis is right",
+    "title": "Where leverage is moving",
     "items": [
       {
         "label": "Winners",
-        "text": "Platforms and products that own distribution, recurring workflow, and durable user context."
+        "text": "Platforms and products that own distribution, recurring workflow, and durable user context.",
+        "powerShift": "Leverage compounds where workflow and context accumulate."
       },
       {
         "label": "Pressured",
-        "text": "Vendors whose differentiation depends mainly on standalone access to a better model."
+        "text": "Vendors whose differentiation depends mainly on standalone access to a better model.",
+        "powerShift": "Feature-level advantage erodes faster when access broadens."
       },
       {
         "label": "Opportunity",
-        "text": "Vertical operators that can turn AI into embedded workflow and capture non-portable context over time."
+        "text": "Vertical operators that can turn AI into embedded workflow and capture non-portable context over time.",
+        "powerShift": "Specialization wins when it becomes part of daily operating behavior."
       }
     ]
   },
+  "reusableLesson": {
+    "title": "Reusable lesson",
+    "pattern": "When a base capability commoditizes, value often migrates toward the layer that owns workflow, distribution, or non-portable context.",
+    "applyWhen": [
+      "distribution is becoming a moat.",
+      "workflow control is a strategic surface.",
+      "context accumulates where users return daily."
+    ],
+    "takeaway": "Owning the user relationship becomes economically more important."
+  },
   "watchlist": {
-    "title": "What to watch",
+    "title": "Watch framework",
     "items": [
       {
-        "text": "Which layer captures the recurring user relationship?"
+        "text": "Which layer captures the recurring user relationship?",
+        "type": "question"
       },
       {
-        "text": "What kinds of context become least portable over time?"
+        "text": "What kinds of context become least portable over time?",
+        "type": "question"
       },
       {
-        "text": "Which products turn occasional use into operational dependency?"
+        "text": "Which products turn occasional use into operational dependency?",
+        "type": "question"
       },
       {
-        "text": "Which layer keeps the recurring user relationship as model access broadens?"
+        "text": "Which layer keeps the recurring user relationship as model access broadens?",
+        "type": "question"
       },
       {
-        "text": "Where will the most valuable non-portable context accumulate?"
+        "text": "Where will the most valuable non-portable context accumulate?",
+        "type": "question"
       }
     ]
   }
