@@ -101,6 +101,7 @@ This first foundation includes:
 - a **dark-theme single-page briefing prototype**
 - a **Next.js + shadcn/ui foundation** for the future component renderer
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
+- a **ported Radar + Deep Dives layer** in Next.js that already renders real evidence signals and mechanism cards from the briefing payload
 - environment-based data paths for the Next.js app so payload locations are not hardcoded into the renderer
 - an **interaction layer** with guided reading progress and section-to-section navigation
 - a **scroll choreography base** that keeps active focus, cue text, and module emphasis in sync
@@ -239,7 +240,7 @@ Both paths are resolved relative to `apps/web/`.
 
 1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
 2. Connect the page to generated or real briefing artifacts more systematically
-3. Port more briefing modules into the Next.js component renderer
+3. Port the remaining briefing modules into the Next.js component renderer beyond Hero, Top Line, Radar, and Deep Dives
 4. Prepare external deployment through Cloudflare Pages
 5. Introduce briefing history and recurring publication workflows
 6. Move the remaining renderer configuration behind explicit environment variables before the full migration cutover
