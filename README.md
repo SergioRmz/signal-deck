@@ -99,6 +99,7 @@ This first foundation includes:
 - a **sticky reading dock** that keeps navigation state visible while the briefing moves
 - a **jump navigation strip** that lets the reader move directly to any module in the composition path
 - an **entrance choreography layer** that stages modules with per-section motion metadata and smoother queued → entered → active transitions
+- a **module-depth layer** that surfaces composition metadata like priority, accent mode, variant, and layout hints inside each section
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
@@ -121,6 +122,55 @@ That requires a workflow where:
 - the output can eventually support recurring publication and external distribution
 
 This repository is the beginning of that system.
+
+## Built with Hermes Agent
+
+This repository is also intentionally a visible example of **agent-native product development**.
+
+The current implementation work is being advanced with **Hermes Agent** as a real execution layer, not as a marketing label added after the fact.
+In practice, Hermes is being used to:
+
+- inspect the codebase and architecture
+- patch application files directly
+- run validators and renderer tests
+- manage branch-by-branch iteration
+- push changes and open pull requests
+
+That matters for two reasons:
+
+1. **signal-deck** is a product prototype
+2. **signal-deck** is also evidence of an emerging workflow where software, editorial systems, and agent orchestration are developed together
+
+For potential employers, that means this repository is not only showing frontend or content-structure decisions.
+It is also showing how the project is being executed with an agentic delivery loop.
+
+### Hermes-relevant workflows already visible in this repo
+
+- **Primary implementation agent**  
+  Hermes Agent is driving the live repo iteration loop: inspect → patch → validate → commit → push → PR.
+
+- **Test-and-validation loop**  
+  The repo is structured so Hermes can run deterministic checks repeatedly while the presentation system evolves:
+  - `python3 scripts/validate_signal_input.py`
+  - `python3 scripts/generate_briefing.py`
+  - `python3 scripts/validate_briefing.py`
+  - `python3 scripts/validate_visual_composition.py`
+  - `node --test tests/briefing-page.test.mjs`
+
+- **Agent-friendly repository shape**  
+  The project is being kept legible on purpose: explicit contracts, predictable folders, and a renderer that can be evolved safely by an autonomous coding agent.
+
+### Hermes workflows relevant to the roadmap
+
+Hermes Agent is especially relevant to where this repository is going next, because the platform supports patterns that map directly onto the product ambition:
+
+- **delegated specialist agents** for parallel subtasks and research workflows
+- **scheduled cron jobs** for recurring briefing generation and monitoring
+- **messaging/gateway delivery** for distribution into channels like Telegram
+- **persistent skills and memory** for evolving repeatable editorial + engineering workflows over time
+
+In other words, Hermes is not incidental to this project.
+It is part of the operational thesis behind how a system like **signal-deck** can eventually move from prototype to recurring high-value editorial production.
 
 ## Running the prototype locally
 
