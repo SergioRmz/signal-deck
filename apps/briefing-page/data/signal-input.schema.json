@@ -83,6 +83,53 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "readerProfile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["roles"],
+          "properties": {
+            "roles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "interests": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "advantageTargets": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "depthPreference": {
+              "type": "string",
+              "enum": ["compact", "standard", "deep"]
+            },
+            "pedagogicalPreference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "roleWeights": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          }
         }
       }
     },
@@ -286,6 +333,18 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "dominantPedagogicalFunction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "readerTranslationLenses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
         }
       }
     }

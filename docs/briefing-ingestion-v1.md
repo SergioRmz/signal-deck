@@ -86,6 +86,29 @@ Optional fields:
 
 - `deliverable`: expected artifact, for example `"executive briefing"`
 - `constraints`: array of explicit editorial constraints
+- `readerProfile`: structured personalization input for the target reader
+
+#### `readerProfile`
+
+When present, `readerProfile` makes personalization explicit upstream instead of forcing later layers to guess.
+
+Required fields:
+
+- `roles`: non-empty array of reader roles; supports mixed identities such as engineer + founder + operator
+
+Optional fields:
+
+- `interests`: domains or beats to overweight
+- `advantageTargets`: what kind of edge the reader wants from the briefing
+- `depthPreference`: one of `"compact"`, `"standard"`, or `"deep"`
+- `pedagogicalPreference`: preferred teaching surface such as `"thesis-first"` or `"comparative"`
+- `roleWeights`: positive numeric weights keyed by role name when some roles matter more than others
+
+Notes:
+
+- `audience` remains useful as a high-level editorial label
+- `readerProfile` is where multi-role personalization becomes explicit
+- if `roleWeights` is present, every key should also appear in `roles`
 
 ### `sources`
 
@@ -166,20 +189,29 @@ Required fields:
 - `marketMapFrames`: non-empty array of labels likely to structure the market map
 - `watchlistSeeds`: non-empty array of monitorable questions or risks
 
+Optional fields:
+
+- `dominantPedagogicalFunction`: the main teaching mode for this piece, such as market map, strategy lesson, or career translation
+- `readerTranslationLenses`: ordered array of reader roles or lenses to emphasize downstream
+
 Notes:
 
 - this object is intentionally output-adjacent
 - it records the editorial path from packet to artifact without yet writing the final artifact itself
+- `readerTranslationLenses` is especially useful when the final artifact should translate one thesis differently for multiple reader roles
 
 ## Mapping from ingestion to briefing v1
 
 The expected transformation is:
 
 - `brief.topic`, `brief.objective`, and `synthesis.workingThesis` help inform `hero`
+- `brief.readerProfile` can inform reader-specific translation and personalization downstream
 - `editorialDecisions.topLineThesis` becomes the basis for `topLine`
 - `editorialDecisions.radarOrder` determines which `signals` feed `radar.items`
 - `editorialDecisions.deepDiveSignalIds` indicate which `signals` and themes should expand into `deepDives.items`
 - `editorialDecisions.marketMapFrames` guide the framing of `marketMap.items`
+- `editorialDecisions.dominantPedagogicalFunction` can guide the final teaching surface or composition choice
+- `editorialDecisions.readerTranslationLenses` helps determine which reader roles get explicit translation blocks
 - `synthesis.openQuestions` and `editorialDecisions.watchlistSeeds` feed `watchlist.items`
 
 This contract does **not** require a one-to-one field copy. It requires a traceable editorial path.
@@ -208,7 +240,11 @@ Across the packet:
     "topic": "AI distribution and product capture",
     "objective": "Assess where value is concentrating as model quality converges.",
     "audience": "executives and operators",
-    "timeHorizon": "structural"
+    "timeHorizon": "structural",
+    "readerProfile": {
+      "roles": ["software-engineer", "founder"],
+      "depthPreference": "deep"
+    }
   },
   "sources": [
     {
@@ -243,7 +279,9 @@ Across the packet:
     "radarOrder": ["sig-1"],
     "deepDiveSignalIds": ["sig-1"],
     "marketMapFrames": ["Winners", "Pressured", "Opportunity"],
-    "watchlistSeeds": ["Which layer owns the recurring user relationship?"]
+    "watchlistSeeds": ["Which layer owns the recurring user relationship?"],
+    "dominantPedagogicalFunction": "strategy-lesson",
+    "readerTranslationLenses": ["software-engineer", "founder"]
   }
 }
 ```
