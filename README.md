@@ -57,9 +57,17 @@ signal-deck/
 │       ├── styles.css
 │       ├── app.js
 │       └── data/
-│           └── briefing.sample.json
+│           ├── briefing.sample.json
+│           ├── briefing.schema.json
+│           ├── signal-input.sample.json
+│           └── signal-input.schema.json
+├── scripts/
+│   ├── validate_briefing.py
+│   └── validate_signal_input.py
 └── docs/
     ├── architecture.md
+    ├── briefing-contract-v1.md
+    ├── briefing-ingestion-v1.md
     ├── product-brief.md
     └── deployment/
         └── cloudflare-pages.md
@@ -69,10 +77,15 @@ signal-deck/
 
 This first foundation includes:
 
+- a **formal ingestion contract** for upstream editorial packets
+- explicit support in ingestion for **reader modeling** and **multi-role personalization**
+- a **formal briefing contract** for the final briefing artifact
+- a briefing contract that can now carry **reader translation** and **reusable lesson** blocks
 - a **dark-theme single-page briefing prototype**
 - a **static renderer** that reads briefing content from a local JSON file
 - a **clean separation** between content structure and presentation
-- initial documentation for **product direction**, **architecture**, and **deployment**
+- lightweight local validators for both input packets and briefing payloads
+- initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
 That may sound modest, but it is an important strategic choice: the project is starting from a lean, legible base rather than prematurely committing to framework complexity.
 
@@ -104,6 +117,15 @@ Then open:
 ```text
 http://localhost:4173
 ```
+
+## Key contract documents
+
+- `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
+- `apps/briefing-page/data/signal-input.schema.json` — ingestion schema
+- `docs/briefing-contract-v1.md` — editorial contract for final briefings
+- `apps/briefing-page/data/briefing.schema.json` — briefing schema
+- `scripts/validate_signal_input.py` — ingestion validator
+- `scripts/validate_briefing.py` — briefing validator
 
 ## Near-term roadmap
 

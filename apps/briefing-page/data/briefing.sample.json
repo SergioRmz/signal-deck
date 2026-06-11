@@ -6,82 +6,151 @@
     "publishedAt": "2026-06-10T07:00:00Z",
     "slug": "distribution-as-moat",
     "language": "en",
-    "topics": ["ai", "distribution", "product-strategy"]
+    "topics": ["ai", "distribution", "product-strategy"],
+    "readerContext": {
+      "roles": ["software-engineer", "founder", "operator"],
+      "interests": ["ai", "workflow", "career-positioning"],
+      "desiredUpgrade": "Understand where leverage moves when core capabilities commoditize."
+    }
   },
   "hero": {
-    "title": "Executive briefings with thesis, context, and consequences.",
-    "lede": "A sober visual base for turning signals from technology, AI, and the economy into a compact strategic read."
+    "title": "Workflow ownership is becoming the real AI moat.",
+    "lede": "A compact strategic read on how distribution, context, and interface control are capturing more value as raw model access spreads.",
+    "signal": "AI capability is diffusing faster than durable workflow ownership.",
+    "thesis": "As model quality converges, margin and defensibility migrate toward whoever owns recurring workflow and context.",
+    "tension": "The market still talks about models, but value capture is moving up the stack.",
+    "promise": "Read this to understand where power is actually shifting and how to position against it."
   },
   "topLine": {
     "title": "Distribution is becoming as important as the model.",
-    "body": "Advantage no longer lives only in training or accessing better models. It increasingly lives in controlling interface, workflow, user context, and distribution. Whoever packages intelligence best captures the user relationship and, with it, the margin."
+    "body": "Advantage no longer lives only in training or accessing better models. It increasingly lives in controlling interface, workflow, user context, and distribution. Whoever packages intelligence best captures the user relationship and, with it, the margin.",
+    "stakes": "This changes how to evaluate products, careers, and moats in the AI stack."
   },
   "radar": {
-    "title": "Radar",
+    "title": "Evidence radar",
     "items": [
       {
         "label": "Models",
-        "text": "Raw model differentiation is narrowing; distribution matters more."
+        "text": "Raw model differentiation is narrowing; workflow control matters more.",
+        "role": "supports-thesis"
       },
       {
         "label": "Product",
-        "text": "Integrated suites are gaining ground against standalone tools."
+        "text": "Integrated suites are gaining ground against standalone tools.",
+        "role": "supports-thesis"
       },
       {
-        "label": "Market",
-        "text": "Pressure is moving toward bundles rather than isolated features."
+        "label": "Counter-signal",
+        "text": "In narrow, high-stakes workflows, frontier performance still changes buying decisions.",
+        "role": "complicates-thesis"
       },
       {
         "label": "Work",
-        "text": "System orchestration matters more than proficiency with a single model."
+        "text": "System orchestration matters more than proficiency with a single model.",
+        "role": "monitor"
       }
     ]
   },
   "deepDives": {
-    "title": "Three angles for reading the shift",
+    "title": "Mechanism breakdown",
     "items": [
       {
         "title": "1. The battleground is moving",
-        "body": "As models become relatively more commoditized, competition shifts toward product integration, workflow control, and usage frequency. That redistributes power away from the pure lab and toward the operator who owns the working surface."
+        "body": "As models commoditize, competition shifts toward product integration, workflow control, and usage frequency.",
+        "mechanism": "Bundling",
+        "claim": "Integrated distribution compresses standalone feature advantage faster than many teams expect.",
+        "explanation": "Incumbents can fold AI into surfaces they already own, reducing the value of isolated feature superiority.",
+        "implication": "Products need workflow depth, not just model access."
       },
       {
         "title": "2. Value is concentrating in context",
-        "body": "The scarce asset is no longer inference alone. It is structured context: memory, proprietary data, user habits, and embedding inside real operating systems for work."
+        "body": "The scarce asset is no longer inference alone. It is structured context: memory, proprietary data, user habits, and embedding inside real operating systems for work.",
+        "mechanism": "Context capture",
+        "claim": "Persistent context becomes harder to replace than raw inference.",
+        "explanation": "Systems that accumulate non-portable usage context gain switching cost over time.",
+        "implication": "Memory and integration create defensibility."
       },
       {
         "title": "3. Interface determines capture",
-        "body": "Interface is not cosmetic. It shapes what gets measured, repeated, remembered, and monetized. The presentation layer ends up influencing the economics of the product itself."
+        "body": "Interface is not cosmetic. It shapes what gets measured, repeated, remembered, and monetized.",
+        "mechanism": "Surface ownership",
+        "claim": "The working surface often decides who captures the economic relationship.",
+        "explanation": "The layer where work actually happens governs repetition, context accumulation, and monetization rights.",
+        "implication": "Owning the daily surface can matter more than owning the core model."
       }
     ]
   },
   "marketMap": {
-    "title": "Who benefits if this thesis is right",
+    "title": "Where leverage is moving",
     "items": [
       {
-        "label": "Winners",
-        "text": "Platforms with distribution, data, and daily user surface area."
+        "label": "Power gaining",
+        "text": "Platforms with distribution, data, and daily user surface area.",
+        "powerShift": "Leverage compounds where workflow and context accumulate."
       },
       {
-        "label": "Pressured",
-        "text": "Vendors whose moat depended mainly on access to a better model."
+        "label": "Power losing",
+        "text": "Vendors whose moat depended mainly on access to a better model.",
+        "powerShift": "Feature-level differentiation erodes when access broadens."
       },
       {
         "label": "Opportunity",
-        "text": "Vertical products that turn AI into concrete workflow."
+        "text": "Vertical products that turn AI into concrete workflow.",
+        "powerShift": "Specialization wins when it embeds into recurring behavior."
       }
     ]
   },
-  "watchlist": {
-    "title": "What to watch",
+  "readerTranslation": {
+    "title": "What this changes for you",
     "items": [
       {
-        "text": "Which layer captures the recurring user relationship?"
+        "role": "software-engineer",
+        "headline": "Build where context compounds",
+        "body": "Skills tied to orchestration, memory, and workflow embedding gain leverage as model access broadens.",
+        "weight": 0.5
       },
       {
-        "text": "Where does the most valuable and least portable context accumulate?"
+        "role": "founder",
+        "headline": "Feature AI is fragile",
+        "body": "If the wedge is only model access, bundling pressure will arrive faster than expected.",
+        "weight": 0.3
       },
       {
-        "text": "Which products turn occasional use into operational dependency?"
+        "role": "operator",
+        "headline": "Watch where dependency forms",
+        "body": "Expect durable vendor power where workflow, compliance, and context become hard to unwind.",
+        "weight": 0.2
+      }
+    ]
+  },
+  "reusableLesson": {
+    "title": "Reusable lesson",
+    "pattern": "When a base capability commoditizes, value often migrates to the layer that owns workflow, distribution, or switching cost.",
+    "applyWhen": [
+      "A new capability becomes broadly accessible",
+      "Incumbents can bundle it into existing channels",
+      "Users create non-portable context over repeated use"
+    ],
+    "takeaway": "Do not evaluate advantage only at the capability layer; check where repetition, context, and distribution accumulate."
+  },
+  "watchlist": {
+    "title": "Watch framework",
+    "items": [
+      {
+        "text": "Do enterprise suites keep bundling AI into default workflow surfaces?",
+        "type": "confirmation"
+      },
+      {
+        "text": "Do standalone model leaders retain pricing power despite broad access?",
+        "type": "invalidation"
+      },
+      {
+        "text": "Does retention correlate more with context depth than raw model quality?",
+        "type": "metric"
+      },
+      {
+        "text": "Which products turn occasional use into operational dependency?",
+        "type": "question"
       }
     ]
   }
