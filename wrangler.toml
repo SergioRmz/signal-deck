@@ -1,1 +1,6 @@
-pages_build_output_dir = "./apps/briefing-page"
+"$schema" = "./node_modules/wrangler/config-schema.json"
+name = "signal-deck"
+compatibility_date = "2026-06-10"
+
+[assets]
+directory = "./apps/briefing-page"
