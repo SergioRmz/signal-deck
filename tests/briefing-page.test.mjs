@@ -73,12 +73,67 @@ const compositionFixture = {
     emphasis: 'topline'
   },
   modules: [
-    { moduleId: 'mod-hero', kind: 'hero', variant: 'thesis-wall-glow', sourceKey: 'hero', interactionCue: 'Land fast and create curiosity.' },
-    { moduleId: 'mod-topline', kind: 'topline', variant: 'spotlight-card', sourceKey: 'topLine', interactionCue: 'Invite the user to pause on the claim.' },
-    { moduleId: 'mod-radar', kind: 'radar', variant: 'signal-ribbons', sourceKey: 'radar', interactionCue: 'Let the reader skim quickly.' },
-    { moduleId: 'mod-deep-dives', kind: 'deep-dive-grid', variant: 'collectible-triptych', sourceKey: 'deepDives', interactionCue: 'Encourage compare-and-contrast reading.' },
-    { moduleId: 'mod-market-map', kind: 'market-map', variant: 'pressure-ladder', sourceKey: 'marketMap', interactionCue: 'Shift from explanation to posture.' },
-    { moduleId: 'mod-watchlist', kind: 'watchlist', variant: 'question-steps', sourceKey: 'watchlist', interactionCue: 'Make the user want to return tomorrow.' }
+    {
+      moduleId: 'mod-hero',
+      kind: 'hero',
+      variant: 'thesis-wall-glow',
+      sourceKey: 'hero',
+      priority: 'primary',
+      headline: 'Own the workflow, own the margin.',
+      layoutHints: ['oversized-headline', 'offset-meta-panel', 'accent-halo'],
+      interactionCue: 'Land fast and create curiosity.',
+      accentMode: 'contrast'
+    },
+    {
+      moduleId: 'mod-topline',
+      kind: 'topline',
+      variant: 'spotlight-card',
+      sourceKey: 'topLine',
+      priority: 'primary',
+      layoutHints: ['high-contrast-panel', 'short-copy', 'single-claim-focus'],
+      interactionCue: 'Invite the user to pause on the claim.',
+      accentMode: 'accent'
+    },
+    {
+      moduleId: 'mod-radar',
+      kind: 'radar',
+      variant: 'signal-ribbons',
+      sourceKey: 'radar',
+      priority: 'secondary',
+      layoutHints: ['horizontal-rhythm', 'tight-density', 'label-first'],
+      interactionCue: 'Let the reader skim quickly.',
+      accentMode: 'base'
+    },
+    {
+      moduleId: 'mod-deep-dives',
+      kind: 'deep-dive-grid',
+      variant: 'collectible-triptych',
+      sourceKey: 'deepDives',
+      priority: 'primary',
+      layoutHints: ['three-up-grid', 'varied-card-heights', 'numbered-subtheses'],
+      interactionCue: 'Encourage compare-and-contrast reading.',
+      accentMode: 'accent'
+    },
+    {
+      moduleId: 'mod-market-map',
+      kind: 'market-map',
+      variant: 'pressure-ladder',
+      sourceKey: 'marketMap',
+      priority: 'secondary',
+      layoutHints: ['stacked-bands', 'directional-labels', 'tight-summary'],
+      interactionCue: 'Shift from explanation to posture.',
+      accentMode: 'heat'
+    },
+    {
+      moduleId: 'mod-watchlist',
+      kind: 'watchlist',
+      variant: 'question-steps',
+      sourceKey: 'watchlist',
+      priority: 'supporting',
+      layoutHints: ['numbered-steps', 'breathing-room', 'exit-hook'],
+      interactionCue: 'Make the user want to return tomorrow.',
+      accentMode: 'contrast'
+    }
   ]
 };
 
@@ -380,4 +435,29 @@ test('entrance choreography promotes visited modules from queued to entered as r
   assert.match(heroMarkup, /data-entrance-state="entered"/);
   assert.match(toplineMarkup, /data-entrance-state="active"/);
   assert.match(radarMarkup, /data-entrance-state="queued"/);
+});
+
+test('module depth renders composition-derived metadata rails for premium modules', async () => {
+  const { elements } = await loadApp();
+  const app = elements.get('app');
+
+  assert.match(app.innerHTML, /module-depth-rail/);
+  assert.match(app.innerHTML, /Priority<\/span>\s*<strong>primary<\/strong>/i);
+  assert.match(app.innerHTML, /Accent<\/span>\s*<strong>contrast<\/strong>/i);
+  assert.match(app.innerHTML, /oversized-headline/);
+});
+
+test('module depth keeps active priority and accent mode in sync with reading focus', async () => {
+  const { context, elements } = await loadApp();
+
+  assert.equal(context.document.body.dataset.activePriority, 'primary');
+  assert.equal(context.document.body.dataset.activeAccentMode, 'contrast');
+
+  elements.get('nextSectionButton').click();
+  assert.equal(context.document.body.dataset.activePriority, 'primary');
+  assert.equal(context.document.body.dataset.activeAccentMode, 'accent');
+
+  context.document.getElementById('jumpNav-mod-market-map').click();
+  assert.equal(context.document.body.dataset.activePriority, 'secondary');
+  assert.equal(context.document.body.dataset.activeAccentMode, 'heat');
 });

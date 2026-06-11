@@ -80,10 +80,39 @@ function moduleStateAttributes(moduleId) {
   ].join(' ');
 }
 
+function renderModuleDepthRail(module) {
+  if (!module) {
+    return '';
+  }
+
+  const layoutHints = (module.layoutHints || [])
+    .map((hint) => `<li class="module-depth-chip">${escapeHtml(hint)}</li>`)
+    .join('');
+
+  return `
+    <div class="module-depth-rail">
+      <div class="module-depth-stat">
+        <span>Priority</span>
+        <strong>${escapeHtml(module.priority || 'standard')}</strong>
+      </div>
+      <div class="module-depth-stat">
+        <span>Accent</span>
+        <strong>${escapeHtml(module.accentMode || 'base')}</strong>
+      </div>
+      <div class="module-depth-stat">
+        <span>Variant</span>
+        <strong>${escapeHtml(module.variant || 'default')}</strong>
+      </div>
+      <ul class="module-depth-chip-list">${layoutHints}</ul>
+    </div>
+  `;
+}
+
 function renderHeroModule(data, module) {
   const cue = module?.interactionCue
     ? `<p class="module-cue">${escapeHtml(module.interactionCue)}</p>`
     : '';
+  const depthRail = renderModuleDepthRail(module);
 
   return `
     <section id="mod-hero" data-module-id="mod-hero" ${moduleStateAttributes('mod-hero')} class="hero-panel card hero-panel--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-hero') === 'active' ? 'is-active' : 'is-resting'}">
@@ -92,23 +121,27 @@ function renderHeroModule(data, module) {
         <h2>${escapeHtml(module?.headline || data.hero.title)}</h2>
         <p class="hero-panel__body">${escapeHtml(data.hero.lede)}</p>
         ${cue}
+        ${depthRail}
       </div>
     </section>
   `;
 }
 
 function renderToplineModule(data, module) {
+  const depthRail = renderModuleDepthRail(module);
   return `
     <section id="mod-topline" data-module-id="mod-topline" ${moduleStateAttributes('mod-topline')} class="card spotlight-card spotlight-card--${escapeHtml(module?.variant || 'default')} ${focusStateFor('mod-topline') === 'active' ? 'is-active' : 'is-resting'}">
       <span class="kicker">Top line</span>
       <h2>${escapeHtml(data.topLine.title)}</h2>
       <p>${escapeHtml(data.topLine.body)}</p>
       <p class="module-cue">${escapeHtml(module?.interactionCue || '')}</p>
+      ${depthRail}
     </section>
   `;
 }
 
 function renderRadarModule(data, module) {
+  const depthRail = renderModuleDepthRail(module);
   const items = data.radar.items
     .map(
       (item) => `
@@ -129,12 +162,14 @@ function renderRadarModule(data, module) {
         </div>
         <p class="module-cue">${escapeHtml(module?.interactionCue || '')}</p>
       </div>
+      ${depthRail}
       <ul class="signal-pill-list">${items}</ul>
     </section>
   `;
 }
 
 function renderDeepDivesModule(data, module) {
+  const depthRail = renderModuleDepthRail(module);
   const items = data.deepDives.items
     .map(
       (item, index) => `
@@ -156,12 +191,14 @@ function renderDeepDivesModule(data, module) {
         </div>
         <p class="module-cue">${escapeHtml(module?.interactionCue || '')}</p>
       </div>
+      ${depthRail}
       <div class="grid grid--3">${items}</div>
     </section>
   `;
 }
 
 function renderMarketMapModule(data, module) {
+  const depthRail = renderModuleDepthRail(module);
   const items = data.marketMap.items
     .map(
       (item) => `
@@ -182,12 +219,14 @@ function renderMarketMapModule(data, module) {
         </div>
         <p class="module-cue">${escapeHtml(module?.interactionCue || '')}</p>
       </div>
+      ${depthRail}
       <ul class="pressure-band-list">${items}</ul>
     </section>
   `;
 }
 
 function renderWatchlistModule(data, module) {
+  const depthRail = renderModuleDepthRail(module);
   const items = data.watchlist.items
     .map(
       (item, index) => `
@@ -208,6 +247,7 @@ function renderWatchlistModule(data, module) {
         </div>
         <p class="module-cue">${escapeHtml(module?.interactionCue || '')}</p>
       </div>
+      ${depthRail}
       <ol class="watch-list watch-list--stepped">${items}</ol>
     </section>
   `;
@@ -326,6 +366,8 @@ function updateReadingDock() {
   document.body.dataset.scrollMood = scrollMood;
   document.body.dataset.entranceChoreography = readingState.composition?.page?.rhythm || 'steady';
   document.body.dataset.motionProfile = scrollMood;
+  document.body.dataset.activePriority = activeModule?.priority || 'standard';
+  document.body.dataset.activeAccentMode = activeModule?.accentMode || 'base';
 
   if (readingProgress) {
     readingProgress.textContent = `${readingState.activeIndex + 1} / ${total}`;
