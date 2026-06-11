@@ -47,8 +47,14 @@ Responsible for:
 - syncing reading state back from viewport intersections so the page responds to actual scroll position
 - staging module entrances with composition-derived rhythm, stagger order, and smoother queued → entered → active state transitions
 - exposing module-depth metadata so each section carries visible priority, accent mode, variant, and layout-hint context
+- preparing a component-driven renderer that can map contracts into reusable UI primitives
 
-In the current prototype, presentation is a static HTML/CSS/JS page with no framework, but it now consumes both a briefing payload and a visual-composition payload.
+The presentation layer now has two implementations in the repo:
+
+- a static HTML/CSS/JS prototype in `apps/briefing-page/`
+- a new Next.js + shadcn/ui foundation in `apps/web/`
+
+The static prototype remains the richer interaction surface today, while the Next.js app is the new migration path for componentized rendering and future deployment ergonomics.
 
 The presentation layer should consume the briefing and composition contracts, not invent them.
 
@@ -125,14 +131,17 @@ The prototype uses a static page because it:
 
 ### Phase 3
 
+- Next.js renderer foundation with shadcn/ui-compatible primitives
 - briefing history
 - thematic views
 - navigation or reading metrics if they prove useful
 - recurring delivery workflows
+- migration of hardcoded renderer paths into explicit environment variables
 
 ## Repository structure
 
-- `apps/briefing-page/`: main visual artifact
+- `apps/briefing-page/`: static visual artifact and interaction prototype
+- `apps/web/`: Next.js + shadcn/ui foundation for the future component renderer
 - `apps/briefing-page/data/`: briefing payloads, ingestion payloads, and schemas
 - `docs/`: vision, decisions, contracts, and operations
 - `scripts/`: lightweight local validators and future utilities
