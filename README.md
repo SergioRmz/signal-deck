@@ -82,6 +82,7 @@ signal-deck/
 This first foundation includes:
 
 - a **formal ingestion contract** for upstream editorial packets
+- explicit support in ingestion for **reader modeling** and **multi-role personalization**
 - a **formal briefing contract** for the final briefing artifact
 - a **dark-theme single-page briefing prototype**
 - a **static renderer** that reads briefing content from a local JSON file
@@ -95,6 +96,8 @@ That may sound modest, but it is an important strategic choice: the project is s
 
 The hard part of a product like this is not just page design or automation.
 It is building a system that can consistently transform scattered developments into a readable strategic artifact.
+
+That upstream structure now includes not only the signal packet itself, but also enough context to shape the eventual read for a specific kind of reader: role mix, interests, desired edge, and pedagogical depth.
 
 That requires a workflow where:
 
@@ -119,6 +122,13 @@ Then open:
 ```text
 http://localhost:4173
 ```
+
+## Key ingestion contract documents
+
+- `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
+- `apps/briefing-page/data/signal-input.schema.json` — machine-readable schema
+- `apps/briefing-page/data/signal-input.sample.json` — canonical sample packet
+- `scripts/validate_signal_input.py` — lightweight validator for local verification
 
 ## Near-term roadmap
 
