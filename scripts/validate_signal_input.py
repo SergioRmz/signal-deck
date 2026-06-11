@@ -78,6 +78,34 @@ def validate_brief(brief: dict[str, Any]) -> None:
     if "constraints" in brief:
         for index, value in enumerate(expect_non_empty_list(brief["constraints"], "brief.constraints"), start=1):
             expect_non_empty_string(value, f"brief.constraints[{index}]")
+    if "readerProfile" in brief:
+        validate_reader_profile(expect_dict(brief["readerProfile"], "brief.readerProfile"))
+
+
+def validate_reader_profile(profile: dict[str, Any]) -> None:
+    roles = expect_unique_strings(
+        expect_non_empty_list(profile.get("roles"), "brief.readerProfile.roles"),
+        "brief.readerProfile.roles",
+    )
+    for label in ["interests", "advantageTargets"]:
+        if label in profile:
+            expect_unique_strings(
+                expect_non_empty_list(profile[label], f"brief.readerProfile.{label}"),
+                f"brief.readerProfile.{label}",
+            )
+    if "depthPreference" in profile:
+        depth = expect_non_empty_string(profile["depthPreference"], "brief.readerProfile.depthPreference")
+        if depth not in {"compact", "standard", "deep"}:
+            fail("brief.readerProfile.depthPreference must be one of ['compact', 'deep', 'standard']")
+    if "pedagogicalPreference" in profile:
+        expect_non_empty_string(profile["pedagogicalPreference"], "brief.readerProfile.pedagogicalPreference")
+    if "roleWeights" in profile:
+        role_weights = expect_dict(profile["roleWeights"], "brief.readerProfile.roleWeights")
+        for role, weight in role_weights.items():
+            if role not in roles:
+                fail(f"brief.readerProfile.roleWeights references unknown role: {role}")
+            if not isinstance(weight, (int, float)) or weight <= 0:
+                fail(f"brief.readerProfile.roleWeights.{role} must be a positive number")
 
 
 def validate_sources(sources: list[Any]) -> set[str]:
@@ -151,6 +179,19 @@ def validate_editorial_decisions(editorial: dict[str, Any], signal_ids: set[str]
     for label in ["marketMapFrames", "watchlistSeeds"]:
         for index, value in enumerate(expect_non_empty_list(editorial.get(label), f"editorialDecisions.{label}"), start=1):
             expect_non_empty_string(value, f"editorialDecisions.{label}[{index}]")
+    if "dominantPedagogicalFunction" in editorial:
+        expect_non_empty_string(
+            editorial.get("dominantPedagogicalFunction"),
+            "editorialDecisions.dominantPedagogicalFunction",
+        )
+    if "readerTranslationLenses" in editorial:
+        expect_unique_strings(
+            expect_non_empty_list(
+                editorial.get("readerTranslationLenses"),
+                "editorialDecisions.readerTranslationLenses",
+            ),
+            "editorialDecisions.readerTranslationLenses",
+        )
 
 
 def validate_input_packet(data: dict[str, Any]) -> None:
