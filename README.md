@@ -192,6 +192,15 @@ Then open:
 http://localhost:4173
 ```
 
+## Key contract documents
+
+- `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
+- `apps/briefing-page/data/signal-input.schema.json` — ingestion schema
+- `docs/briefing-contract-v1.md` — editorial contract for final briefings
+- `apps/briefing-page/data/briefing.schema.json` — briefing schema
+- `scripts/validate_signal_input.py` — ingestion validator
+- `scripts/validate_briefing.py` — briefing validator
+
 ## Near-term roadmap
 
 1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
