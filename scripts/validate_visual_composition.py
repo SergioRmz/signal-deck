@@ -35,6 +35,7 @@ VALID_MODULE_KINDS = {
     "deep-dive-grid",
     "deep-dive-stack",
     "market-map",
+    "reusable-lesson",
     "watchlist",
     "quote-band",
     "signal-strip",

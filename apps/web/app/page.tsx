@@ -1,4 +1,4 @@
-import { ArrowRight, Orbit, Sparkles, Telescope } from 'lucide-react';
+import { ArrowRight, Compass, Orbit, Sparkles, Telescope } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,14 +24,32 @@ function moduleMeta(module?: CompositionModule) {
   return [module.priority, module.variant, module.accentMode].filter(Boolean) as string[];
 }
 
+function watchTypeLabel(type?: string) {
+  if (!type) {
+    return 'watch';
+  }
+
+  return type.replaceAll('-', ' ');
+}
+
 export default async function HomePage() {
   const [briefing, composition] = await Promise.all([loadBriefing(), loadComposition()]);
   const heroModule = composition.modules?.find((module) => module.moduleId === 'mod-hero');
   const topLineModule = composition.modules?.find((module) => module.moduleId === 'mod-topline');
   const radarModule = composition.modules?.find((module) => module.moduleId === 'mod-radar');
   const deepDivesModule = composition.modules?.find((module) => module.moduleId === 'mod-deep-dives');
+  const marketMapModule = composition.modules?.find((module) => module.moduleId === 'mod-market-map');
+  const reusableLessonModule = composition.modules?.find(
+    (module) => module.moduleId === 'mod-reusable-lesson' || module.sourceKey === 'reusableLesson',
+  );
+  const watchlistModule = composition.modules?.find((module) => module.moduleId === 'mod-watchlist');
   const radarItems = briefing.radar?.items || [];
   const deepDiveItems = briefing.deepDives?.items || [];
+  const marketMapItems = briefing.marketMap?.items || [];
+  const watchlistItems = briefing.watchlist?.items || [];
+  const moduleOrder = composition.page?.moduleOrder || [];
+  const readerUpgrade =
+    briefing.meta.readerContext?.desiredUpgrade || briefing.readerTranslation?.items?.[0]?.body || briefing.topLine.stakes;
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8 px-6 py-8 md:px-10 lg:px-12">
@@ -39,7 +57,7 @@ export default async function HomePage() {
         <Card className="overflow-hidden bg-signal-grid">
           <CardHeader className="gap-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / next foundation</Badge>
+              <Badge>signal-deck / next renderer</Badge>
               <Badge variant="muted">{briefing.meta.editionDate}</Badge>
               <Badge variant="accent">{composition.experience?.visualTone || 'dark tone'}</Badge>
             </div>
@@ -100,7 +118,7 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="rounded-2xl border border-border/80 bg-background/40 p-4 leading-7 text-foreground/85">
-              {briefing.meta.readerContext?.desiredUpgrade}
+              {readerUpgrade}
             </div>
           </CardContent>
         </Card>
@@ -129,7 +147,7 @@ export default async function HomePage() {
         <Card>
           <CardHeader>
             <CardDescription>Composition signal</CardDescription>
-            <CardTitle className="text-2xl">What this foundation already externalizes</CardTitle>
+            <CardTitle className="text-2xl">How the Next renderer is sequencing the reading path</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-2xl border border-border/80 bg-background/40 p-4">
@@ -137,7 +155,7 @@ export default async function HomePage() {
               <p className="text-sm leading-7 text-foreground/85">{composition.experience?.engagementGoal}</p>
             </div>
             <ul className="space-y-3">
-              {(composition.page?.moduleOrder || []).slice(0, 6).map((moduleId) => (
+              {moduleOrder.slice(0, 8).map((moduleId) => (
                 <li
                   key={moduleId}
                   className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/35 px-4 py-3 text-sm text-muted-foreground"
@@ -272,6 +290,154 @@ export default async function HomePage() {
                     <p className="text-sm leading-7 text-foreground">{item.implication}</p>
                   </div>
                 ) : null}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <Card className="overflow-hidden border-primary/20 bg-[linear-gradient(180deg,rgba(15,29,51,0.92),rgba(9,17,31,0.98))]">
+          <CardHeader className="gap-4 border-b border-border/60 pb-5">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <CardDescription className="flex items-center gap-2 text-primary/80">
+                  <Compass className="h-4 w-4" />
+                  {moduleHeadline('marketMap', 'Market map', marketMapModule?.headline)}
+                </CardDescription>
+                <CardTitle className="mt-2 text-3xl md:text-4xl">{briefing.marketMap?.title || 'Where leverage is moving'}</CardTitle>
+              </div>
+              <div className="flex flex-wrap justify-end gap-2">
+                {moduleMeta(marketMapModule).map((item) => (
+                  <Badge key={item} variant="accent">
+                    {item}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <p className="max-w-3xl text-sm leading-7 text-muted-foreground">{marketMapModule?.interactionCue}</p>
+          </CardHeader>
+          <CardContent className="grid gap-4 pt-6">
+            {marketMapItems.map((item) => (
+              <article
+                key={`${item.label}-${item.text}`}
+                className="rounded-3xl border border-primary/15 bg-background/45 p-5 shadow-[0_18px_60px_rgba(9,19,37,0.26)]"
+              >
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="space-y-3">
+                    <Badge>{item.label}</Badge>
+                    <p className="max-w-2xl text-base leading-7 text-foreground/90">{item.text}</p>
+                  </div>
+                  {item.powerShift ? (
+                    <div className="max-w-sm rounded-2xl border border-accent/25 bg-accent/10 p-4 text-sm leading-7 text-foreground">
+                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Power shift</p>
+                      <p>{item.powerShift}</p>
+                    </div>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </CardContent>
+        </Card>
+
+        <div className="grid gap-6">
+          {briefing.reusableLesson ? (
+            <Card className="overflow-hidden border-accent/30 bg-accent/5">
+              <CardHeader className="gap-4 border-b border-border/60 pb-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <CardDescription>{moduleHeadline('reusableLesson', 'Reusable lesson', reusableLessonModule?.headline)}</CardDescription>
+                    <CardTitle className="mt-2 text-2xl leading-tight md:text-3xl">
+                      {briefing.reusableLesson.title}
+                    </CardTitle>
+                  </div>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    {moduleMeta(reusableLessonModule).map((item) => (
+                      <Badge key={item} variant="muted">
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-5 pt-6">
+                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
+                  <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Pattern</p>
+                  <p className="text-sm leading-7 text-foreground/90">{briefing.reusableLesson.pattern}</p>
+                </div>
+                <div className="rounded-2xl border border-accent/25 bg-accent/10 p-4">
+                  <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Takeaway</p>
+                  <p className="text-sm leading-7 text-foreground">{briefing.reusableLesson.takeaway}</p>
+                </div>
+                {briefing.reusableLesson.applyWhen?.length ? (
+                  <div>
+                    <p className="mb-3 text-xs uppercase tracking-[0.18em] text-foreground/60">Apply when</p>
+                    <div className="flex flex-wrap gap-2">
+                      {briefing.reusableLesson.applyWhen.map((item) => (
+                        <Badge key={item} variant="accent">
+                          {item}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </CardContent>
+            </Card>
+          ) : null}
+
+          <Card>
+            <CardHeader>
+              <CardDescription>Composition cue</CardDescription>
+              <CardTitle className="text-2xl">How the closing modules turn argument into posture</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <p className="leading-7 text-foreground/85">
+                Market map turns the thesis into strategic positioning, then the reusable lesson and watchlist convert that positioning into a repeatable operating lens.
+              </p>
+              <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
+                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
+                <div className="flex flex-wrap gap-2">
+                  {[...(marketMapModule?.layoutHints || []), ...(watchlistModule?.layoutHints || [])].map((hint) => (
+                    <Badge key={hint} variant="muted">
+                      {hint}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-3">
+            <CardDescription>{moduleHeadline('watchlist', 'Watchlist', watchlistModule?.headline)}</CardDescription>
+            <h2 className="text-3xl font-semibold leading-tight text-foreground md:text-5xl">
+              {briefing.watchlist?.title || 'Watch framework'}
+            </h2>
+            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">
+              {watchlistModule?.interactionCue}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {moduleMeta(watchlistModule).map((item) => (
+              <Badge key={item}>{item}</Badge>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {watchlistItems.map((item, index) => (
+            <Card key={`${item.text}-${index}`} className="border-border/80 bg-background/45">
+              <CardHeader className="gap-3 border-b border-border/60 pb-4">
+                <div className="flex items-center justify-between gap-3">
+                  <Badge variant="muted">Question {index + 1}</Badge>
+                  <Badge variant={item.type === 'metric' ? 'accent' : 'muted'}>{watchTypeLabel(item.type)}</Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-5">
+                <p className="text-sm leading-7 text-foreground/90">{item.text}</p>
               </CardContent>
             </Card>
           ))}

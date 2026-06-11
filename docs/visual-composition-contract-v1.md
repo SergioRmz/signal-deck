@@ -173,7 +173,7 @@ Defines the reusable components selected for this edition.
 Each module requires:
 
 - `moduleId`: stable local identifier
-- `kind`: one of `hero`, `topline`, `radar`, `deep-dive-grid`, `deep-dive-stack`, `market-map`, `watchlist`, `quote-band`, `signal-strip`, or `comparison-panel`
+- `kind`: one of `hero`, `topline`, `radar`, `deep-dive-grid`, `deep-dive-stack`, `market-map`, `reusable-lesson`, `watchlist`, `quote-band`, `signal-strip`, or `comparison-panel`
 - `variant`: short controlled label for the component style
 - `sourceKey`: which briefing section this module stages
 - `priority`: one of `primary`, `secondary`, or `supporting`
@@ -244,7 +244,7 @@ It stores the compositional intent the renderer should honor.
     "heroVariant": "thesis-wall",
     "rhythm": "staged",
     "emphasis": "topline",
-    "moduleOrder": ["mod-hero", "mod-topline", "mod-radar", "mod-deep-dives", "mod-market-map", "mod-watchlist"]
+    "moduleOrder": ["mod-hero", "mod-topline", "mod-radar", "mod-deep-dives", "mod-market-map", "mod-reusable-lesson", "mod-watchlist"]
   },
   "modules": [
     {
