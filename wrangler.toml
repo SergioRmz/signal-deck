@@ -2,5 +2,8 @@
 name = "signal-deck"
 compatibility_date = "2026-06-10"
 
+[build]
+command = "cd apps/web && npm install && npm run build"
+
 [assets]
-directory = "./apps/briefing-page"
+directory = "./apps/web/dist"

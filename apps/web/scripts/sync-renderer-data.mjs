@@ -7,8 +7,8 @@ const __dirname = path.dirname(__filename);
 const webRoot = path.resolve(__dirname, '..');
 const publicDataDir = path.resolve(webRoot, 'public/data');
 
-const DEFAULT_BRIEFING_PATH = '../briefing-page/data/briefing.sample.json';
-const DEFAULT_COMPOSITION_PATH = '../briefing-page/data/visual-composition.sample.json';
+const DEFAULT_BRIEFING_PATH = '../../data/briefing.sample.json';
+const DEFAULT_COMPOSITION_PATH = '../../data/visual-composition.sample.json';
 
 async function maybeLoadDotEnvFile(filename) {
   const envPath = path.resolve(webRoot, filename);

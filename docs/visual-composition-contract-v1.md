@@ -264,12 +264,12 @@ It stores the compositional intent the renderer should honor.
 
 The formal machine-readable schema for this contract lives at:
 
-- `apps/briefing-page/data/visual-composition.schema.json`
+- `data/visual-composition.schema.json`
 
 For lightweight local checks without external dependencies, use:
 
 - `python3 scripts/validate_visual_composition.py`
-- `python3 scripts/validate_visual_composition.py apps/briefing-page/data/visual-composition.sample.json`
+- `python3 scripts/validate_visual_composition.py data/visual-composition.sample.json`
 
 ## What v1 proves
 

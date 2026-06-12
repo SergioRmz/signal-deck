@@ -23,16 +23,16 @@ The current contracts are:
 
 - **ingestion contract v1**
   - `docs/briefing-ingestion-v1.md`
-  - `apps/briefing-page/data/signal-input.schema.json`
+  - `data/signal-input.schema.json`
 - **transformation layer v1**
   - `docs/briefing-transformation-v1.md`
   - `scripts/generate_briefing.py`
 - **briefing contract v1**
   - `docs/briefing-contract-v1.md`
-  - `apps/briefing-page/data/briefing.schema.json`
+  - `data/briefing.schema.json`
 - **visual composition contract v1**
   - `docs/visual-composition-contract-v1.md`
-  - `apps/briefing-page/data/visual-composition.schema.json`
+  - `data/visual-composition.schema.json`
 
 ### 2. Presentation
 
@@ -49,12 +49,11 @@ Responsible for:
 - exposing module-depth metadata so each section carries visible priority, accent mode, variant, and layout-hint context
 - preparing a component-driven renderer that can map contracts into reusable UI primitives
 
-The presentation layer now has two implementations in the repo:
+The presentation layer now has one active implementation in the repo:
 
-- a static HTML/CSS/JS prototype in `apps/briefing-page/`
-- a React + Vite renderer in `apps/web/` that now ports Hero, Top Line, Reader Translation, Radar, Deep Dives, Market Map, Reusable Lesson, and Watchlist from real briefing + composition payloads
+- a React + Vite renderer in `apps/web/` that renders Hero, Top Line, Reader Translation, Radar, Deep Dives, Market Map, Reusable Lesson, and Watchlist from real briefing + composition payloads
 
-The static prototype remains the richer interaction surface today, while the Vite app is the new migration path for componentized rendering and static deployment ergonomics.
+The previous framework-free prototype has been removed so the Vite renderer is the single source of presentation work and static deployment.
 
 The presentation layer should consume the briefing and composition contracts, not invent them.
 
@@ -72,15 +71,15 @@ Cloudflare Pages remains a strong fit here because of its simplicity, low mainte
 
 The current repository boundary is:
 
-- **input packet to editorial layer**: `apps/briefing-page/data/signal-input.sample.json`
-- **machine-readable ingestion schema**: `apps/briefing-page/data/signal-input.schema.json`
+- **input packet to editorial layer**: `data/signal-input.sample.json`
+- **machine-readable ingestion schema**: `data/signal-input.schema.json`
 - **human-readable ingestion contract**: `docs/briefing-ingestion-v1.md`
 - **deterministic transformation entry point**: `scripts/generate_briefing.py`
 - **human-readable transformation rules**: `docs/briefing-transformation-v1.md`
-- **machine-readable visual composition schema**: `apps/briefing-page/data/visual-composition.schema.json`
+- **machine-readable visual composition schema**: `data/visual-composition.schema.json`
 - **human-readable visual composition contract**: `docs/visual-composition-contract-v1.md`
-- **input to presentation**: `apps/briefing-page/data/visual-composition.sample.json`
-- **machine-readable briefing schema**: `apps/briefing-page/data/briefing.schema.json`
+- **input to presentation**: `data/visual-composition.sample.json`
+- **machine-readable briefing schema**: `data/briefing.schema.json`
 - **human-readable briefing contract**: `docs/briefing-contract-v1.md`
 
 This is the most important architectural decision in the current phase.
@@ -104,14 +103,14 @@ The intended flow is now:
 
 The system is still early, but the contracts now define the intended path.
 
-## Initial technical decision
+## Current technical decision
 
-The prototype uses a static page because it:
+The product uses a static React + Vite renderer because it:
 
-- reduces unnecessary complexity
-- accelerates editorial feedback loops
-- avoids choosing a framework too early
-- leaves room to migrate later to a more sophisticated renderer if needed
+- reduces unnecessary operational complexity
+- keeps Cloudflare Pages deployment straightforward
+- preserves component boundaries for richer presentation work
+- keeps the final artifact fully static while the editorial contracts evolve
 
 ## Planned evolution
 
@@ -140,9 +139,8 @@ The prototype uses a static page because it:
 
 ## Repository structure
 
-- `apps/briefing-page/`: static visual artifact and interaction prototype
 - `apps/web/`: React + Vite renderer for the componentized briefing surface
-- `apps/briefing-page/data/`: briefing payloads, ingestion payloads, and schemas
+- `data/`: canonical briefing payloads, ingestion payloads, composition payloads, and schemas
 - `docs/`: vision, decisions, contracts, and operations
 - `scripts/`: lightweight local validators and future utilities
 

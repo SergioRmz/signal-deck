@@ -290,11 +290,11 @@ Across the packet:
 
 The formal machine-readable schema for this contract lives at:
 
-- `apps/briefing-page/data/signal-input.schema.json`
+- `data/signal-input.schema.json`
 
 For lightweight local checks without external dependencies, use:
 
 - `python3 scripts/validate_signal_input.py`
-- `python3 scripts/validate_signal_input.py apps/briefing-page/data/signal-input.sample.json`
+- `python3 scripts/validate_signal_input.py data/signal-input.sample.json`
 
 The schema, sample, validator, and this document should evolve together.

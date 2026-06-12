@@ -17,8 +17,8 @@ from typing import Any
 from validate_briefing import validate_briefing
 from validate_signal_input import expect_dict, validate_input_packet
 
-DEFAULT_INPUT = Path("apps/briefing-page/data/signal-input.sample.json")
-DEFAULT_OUTPUT = Path("apps/briefing-page/data/briefing.sample.json")
+DEFAULT_INPUT = Path("data/signal-input.sample.json")
+DEFAULT_OUTPUT = Path("data/briefing.sample.json")
 QUESTION_PREFIXES = ("which", "what", "where", "who", "how", "when", "why", "do", "does", "will", "can")
 
 

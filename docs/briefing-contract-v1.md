@@ -274,15 +274,15 @@ Across all sections:
 
 Machine-readable schema:
 
-- `apps/briefing-page/data/briefing.schema.json`
+- `data/briefing.schema.json`
 
 Canonical sample:
 
-- `apps/briefing-page/data/briefing.sample.json`
+- `data/briefing.sample.json`
 
 Lightweight validator:
 
 - `python3 scripts/validate_briefing.py`
-- `python3 scripts/validate_briefing.py apps/briefing-page/data/briefing.sample.json`
+- `python3 scripts/validate_briefing.py data/briefing.sample.json`
 
 The schema, sample, validator, and this document should evolve together.
