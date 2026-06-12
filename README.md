@@ -58,9 +58,10 @@ signal-deck/
 ├── .gitignore
 ├── apps/
 │   ├── web/
-│   │   ├── app/
+│   │   ├── src/
 │   │   ├── components/
 │   │   ├── lib/
+│   │   ├── scripts/
 │   │   ├── .env.example
 │   │   └── package.json
 │   └── briefing-page/
@@ -99,12 +100,12 @@ This first foundation includes:
 - a **formal briefing contract** for the final briefing artifact
 - a briefing contract that supports richer pedagogical fields and optional learning modules
 - a **dark-theme single-page briefing prototype**
-- a **Next.js + shadcn/ui foundation** for the future component renderer
+- a **React + Vite renderer foundation** for the future component renderer
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
-- a **ported Radar + Deep Dives layer** in Next.js that already renders real evidence signals and mechanism cards from the briefing payload
-- a **ported Reader Translation layer** in Next.js that renders role-specific takeaways from the real briefing + composition artifacts
-- a **ported closing layer** in Next.js that renders Market Map, Reusable Lesson, and Watchlist modules from the real briefing + composition artifacts
-- environment-based data paths for the Next.js app so payload locations are not hardcoded into the renderer
+- a **ported Radar + Deep Dives layer** in React + Vite that already renders real evidence signals and mechanism cards from the briefing payload
+- a **ported Reader Translation layer** in React + Vite that renders role-specific takeaways from the real briefing + composition artifacts
+- a **ported closing layer** in React + Vite that renders Market Map, Reusable Lesson, and Watchlist modules from the real briefing + composition artifacts
+- environment-based data paths for the Vite app so payload locations are not hardcoded into the renderer
 - an **interaction layer** with guided reading progress and section-to-section navigation
 - a **scroll choreography base** that keeps active focus, cue text, and module emphasis in sync
 - a **viewport-aware choreography layer** that scrolls between modules and re-syncs focus from real section intersections
@@ -118,7 +119,7 @@ This first foundation includes:
 - a deterministic generator that turns a validated input packet into a validated briefing payload
 - initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
-That may sound modest, but it is an important strategic choice: the project now has both a lean static prototype and the first framework-based path for moving into a component system without losing contract clarity.
+That may sound modest, but it is an important strategic choice: the project now has both a lean static prototype and a lightweight framework-based path for moving into a component system without losing contract clarity.
 
 ## Why this foundation matters
 
@@ -203,7 +204,7 @@ Then open:
 http://localhost:4173
 ```
 
-## Running the Next.js foundation locally
+## Running the React + Vite renderer locally
 
 From the repository root:
 
@@ -217,7 +218,7 @@ npm run dev
 Then open:
 
 ```text
-http://localhost:3000
+http://localhost:5173
 ```
 
 The current env variables are:
@@ -227,7 +228,7 @@ The current env variables are:
 
 Both paths are resolved relative to `apps/web/`.
 
-The Next.js renderer also pins `experimental.cpus = 1` in `apps/web/next.config.ts` so `next build` stays stable in constrained container environments where parallel worker creation can abort with `pthread_create: Resource temporarily unavailable`.
+Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sync-renderer-data.mjs`, which copies the configured briefing and composition JSON files into `apps/web/public/data/` so the Vite build stays fully static.
 
 ## Key contract documents
 
@@ -244,7 +245,7 @@ The Next.js renderer also pins `experimental.cpus = 1` in `apps/web/next.config.
 
 1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
 2. Connect the page to generated or real briefing artifacts more systematically
-3. Port the remaining optional briefing modules and richer interaction affordances into the Next.js component renderer
+3. Port the remaining richer interaction affordances into the React + Vite component renderer
 4. Prepare external deployment through Cloudflare Pages
 5. Introduce briefing history and recurring publication workflows
 6. Move the remaining renderer configuration behind explicit environment variables before the full migration cutover

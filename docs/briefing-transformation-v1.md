@@ -273,4 +273,4 @@ The next iterations should likely focus on:
 - explicit source traces or citations
 - multiple renderer targets from the same briefing payload
 - an auditable distinction between deterministic rules and model-authored prose
-- tighter integration with future Next.js component rendering
+- tighter integration with future React + Vite component rendering

@@ -52,9 +52,9 @@ Responsible for:
 The presentation layer now has two implementations in the repo:
 
 - a static HTML/CSS/JS prototype in `apps/briefing-page/`
-- a new Next.js + shadcn/ui renderer in `apps/web/` that now ports Hero, Top Line, Reader Translation, Radar, Deep Dives, Market Map, Reusable Lesson, and Watchlist from real briefing + composition payloads
+- a React + Vite renderer in `apps/web/` that now ports Hero, Top Line, Reader Translation, Radar, Deep Dives, Market Map, Reusable Lesson, and Watchlist from real briefing + composition payloads
 
-The static prototype remains the richer interaction surface today, while the Next.js app is the new migration path for componentized rendering and future deployment ergonomics.
+The static prototype remains the richer interaction surface today, while the Vite app is the new migration path for componentized rendering and static deployment ergonomics.
 
 The presentation layer should consume the briefing and composition contracts, not invent them.
 
@@ -131,7 +131,7 @@ The prototype uses a static page because it:
 
 ### Phase 3
 
-- Next.js renderer foundation with shadcn/ui-compatible primitives
+- React + Vite renderer foundation with shadcn/ui-compatible primitives
 - briefing history
 - thematic views
 - navigation or reading metrics if they prove useful
@@ -141,7 +141,7 @@ The prototype uses a static page because it:
 ## Repository structure
 
 - `apps/briefing-page/`: static visual artifact and interaction prototype
-- `apps/web/`: Next.js + shadcn/ui foundation for the future component renderer
+- `apps/web/`: React + Vite renderer for the componentized briefing surface
 - `apps/briefing-page/data/`: briefing payloads, ingestion payloads, and schemas
 - `docs/`: vision, decisions, contracts, and operations
 - `scripts/`: lightweight local validators and future utilities

@@ -2,11 +2,7 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   darkMode: ['class'],
-  content: [
-    './app/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './lib/**/*.{ts,tsx}',
-  ],
+  content: ['./index.html', './src/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -31,7 +27,8 @@ const config: Config = {
         glow: '0 0 0 1px rgba(120,164,255,0.18), 0 24px 80px rgba(2, 10, 28, 0.55)',
       },
       backgroundImage: {
-        'signal-grid': 'radial-gradient(circle at top, rgba(120,164,255,0.18), transparent 30%), linear-gradient(180deg, rgba(255,255,255,0.02), transparent)',
+        'signal-grid':
+          'radial-gradient(circle at top, rgba(120,164,255,0.18), transparent 30%), linear-gradient(180deg, rgba(255,255,255,0.02), transparent)',
       },
     },
   },
