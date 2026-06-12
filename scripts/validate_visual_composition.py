@@ -31,6 +31,7 @@ VALID_EMPHASIS = {"topline", "radar", "deep-dives", "market-map", "watchlist", "
 VALID_MODULE_KINDS = {
     "hero",
     "topline",
+    "reader-translation",
     "radar",
     "deep-dive-grid",
     "deep-dive-stack",
