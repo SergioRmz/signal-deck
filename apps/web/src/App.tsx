@@ -1,8 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, Compass, Orbit, Sparkles, Telescope, Users2 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { type CompositionModule, loadBriefing, loadComposition } from '@/lib/data';
+import { type BriefingData, type CompositionModule, type VisualComposition, loadBriefing, loadComposition } from '@/lib/data';
+
+type RendererState =
+  | { status: 'loading' }
+  | { status: 'error'; message: string }
+  | { status: 'ready'; briefing: BriefingData; composition: VisualComposition };
 
 function moduleHeadline(kind: string, fallback: string, compositionHeadline?: string) {
   return compositionHeadline || fallback || kind;
@@ -32,28 +38,147 @@ function watchTypeLabel(type?: string) {
   return type.replaceAll('-', ' ');
 }
 
-export default async function HomePage() {
-  const [briefing, composition] = await Promise.all([loadBriefing(), loadComposition()]);
-  const heroModule = composition.modules?.find((module) => module.moduleId === 'mod-hero');
-  const topLineModule = composition.modules?.find((module) => module.moduleId === 'mod-topline');
-  const readerTranslationModule = composition.modules?.find(
-    (module) => module.moduleId === 'mod-reader-translation' || module.sourceKey === 'readerTranslation',
-  );
-  const radarModule = composition.modules?.find((module) => module.moduleId === 'mod-radar');
-  const deepDivesModule = composition.modules?.find((module) => module.moduleId === 'mod-deep-dives');
-  const marketMapModule = composition.modules?.find((module) => module.moduleId === 'mod-market-map');
-  const reusableLessonModule = composition.modules?.find(
-    (module) => module.moduleId === 'mod-reusable-lesson' || module.sourceKey === 'reusableLesson',
-  );
-  const watchlistModule = composition.modules?.find((module) => module.moduleId === 'mod-watchlist');
-  const radarItems = briefing.radar?.items || [];
-  const deepDiveItems = briefing.deepDives?.items || [];
-  const marketMapItems = briefing.marketMap?.items || [];
-  const readerTranslationItems = briefing.readerTranslation?.items || [];
-  const watchlistItems = briefing.watchlist?.items || [];
-  const moduleOrder = composition.page?.moduleOrder || [];
-  const readerUpgrade =
-    briefing.meta.readerContext?.desiredUpgrade || briefing.readerTranslation?.items?.[0]?.body || briefing.topLine.stakes;
+export default function App() {
+  const [state, setState] = useState<RendererState>({ status: 'loading' });
+
+  useEffect(() => {
+    document.title = 'signal-deck / Vite renderer';
+
+    let active = true;
+
+    Promise.all([loadBriefing(), loadComposition()])
+      .then(([briefing, composition]) => {
+        if (!active) {
+          return;
+        }
+
+        setState({ status: 'ready', briefing, composition });
+      })
+      .catch((error: unknown) => {
+        if (!active) {
+          return;
+        }
+
+        const message = error instanceof Error ? error.message : 'Unknown renderer error';
+        setState({ status: 'error', message });
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const derived = useMemo(() => {
+    if (state.status !== 'ready') {
+      return null;
+    }
+
+    const { briefing, composition } = state;
+
+    const heroModule = composition.modules?.find((module) => module.moduleId === 'mod-hero');
+    const topLineModule = composition.modules?.find((module) => module.moduleId === 'mod-topline');
+    const readerTranslationModule = composition.modules?.find(
+      (module) => module.moduleId === 'mod-reader-translation' || module.sourceKey === 'readerTranslation',
+    );
+    const radarModule = composition.modules?.find((module) => module.moduleId === 'mod-radar');
+    const deepDivesModule = composition.modules?.find((module) => module.moduleId === 'mod-deep-dives');
+    const marketMapModule = composition.modules?.find((module) => module.moduleId === 'mod-market-map');
+    const reusableLessonModule = composition.modules?.find(
+      (module) => module.moduleId === 'mod-reusable-lesson' || module.sourceKey === 'reusableLesson',
+    );
+    const watchlistModule = composition.modules?.find((module) => module.moduleId === 'mod-watchlist');
+    const radarItems = briefing.radar?.items || [];
+    const deepDiveItems = briefing.deepDives?.items || [];
+    const marketMapItems = briefing.marketMap?.items || [];
+    const readerTranslationItems = briefing.readerTranslation?.items || [];
+    const watchlistItems = briefing.watchlist?.items || [];
+    const moduleOrder = composition.page?.moduleOrder || [];
+    const readerUpgrade =
+      briefing.meta.readerContext?.desiredUpgrade || briefing.readerTranslation?.items?.[0]?.body || briefing.topLine.stakes;
+
+    return {
+      briefing,
+      composition,
+      heroModule,
+      topLineModule,
+      readerTranslationModule,
+      radarModule,
+      deepDivesModule,
+      marketMapModule,
+      reusableLessonModule,
+      watchlistModule,
+      radarItems,
+      deepDiveItems,
+      marketMapItems,
+      readerTranslationItems,
+      watchlistItems,
+      moduleOrder,
+      readerUpgrade,
+    };
+  }, [state]);
+
+  if (state.status === 'loading' || !derived) {
+    return (
+      <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 py-20 md:px-10">
+        <Card className="w-full max-w-2xl border-primary/25 bg-signal-grid">
+          <CardHeader className="gap-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge>signal-deck / vite renderer</Badge>
+              <Badge variant="accent">loading</Badge>
+            </div>
+            <CardTitle className="text-3xl md:text-4xl">Preparing the briefing surface</CardTitle>
+            <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
+              The React + Vite renderer is loading the briefing payload and visual composition artifacts into a static, deployable reading surface.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </main>
+    );
+  }
+
+  if (state.status === 'error') {
+    return (
+      <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 py-20 md:px-10">
+        <Card className="w-full max-w-2xl border-accent/30 bg-accent/5">
+          <CardHeader className="gap-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge>signal-deck / vite renderer</Badge>
+              <Badge variant="accent">load error</Badge>
+            </div>
+            <CardTitle className="text-3xl md:text-4xl">The renderer could not load its data artifacts</CardTitle>
+            <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
+              Make sure the sync step copied the JSON payloads into <code>public/data</code> before starting the app.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-2xl border border-border/80 bg-background/40 p-4 font-mono text-sm leading-7 text-foreground/90">
+              {state.message}
+            </div>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
+
+  const {
+    briefing,
+    composition,
+    heroModule,
+    topLineModule,
+    readerTranslationModule,
+    radarModule,
+    deepDivesModule,
+    marketMapModule,
+    reusableLessonModule,
+    watchlistModule,
+    radarItems,
+    deepDiveItems,
+    marketMapItems,
+    readerTranslationItems,
+    watchlistItems,
+    moduleOrder,
+    readerUpgrade,
+  } = derived;
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8 px-6 py-8 md:px-10 lg:px-12">
@@ -61,7 +186,7 @@ export default async function HomePage() {
         <Card className="overflow-hidden bg-signal-grid">
           <CardHeader className="gap-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / next renderer</Badge>
+              <Badge>signal-deck / vite renderer</Badge>
               <Badge variant="muted">{briefing.meta.editionDate}</Badge>
               <Badge variant="accent">{composition.experience?.visualTone || 'dark tone'}</Badge>
             </div>
@@ -72,9 +197,7 @@ export default async function HomePage() {
               <CardTitle className="max-w-4xl text-4xl font-semibold leading-tight md:text-6xl">
                 {briefing.hero.title}
               </CardTitle>
-              <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">
-                {briefing.hero.lede}
-              </p>
+              <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{briefing.hero.lede}</p>
             </div>
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -151,7 +274,7 @@ export default async function HomePage() {
         <Card>
           <CardHeader>
             <CardDescription>Composition signal</CardDescription>
-            <CardTitle className="text-2xl">How the Next renderer is sequencing the reading path</CardTitle>
+            <CardTitle className="text-2xl">How the Vite renderer is sequencing the reading path</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-2xl border border-border/80 bg-background/40 p-4">
@@ -330,9 +453,7 @@ export default async function HomePage() {
             <h2 className="text-3xl font-semibold leading-tight text-foreground md:text-5xl">
               {briefing.deepDives?.title || 'Mechanism breakdown'}
             </h2>
-            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">
-              {deepDivesModule?.interactionCue}
-            </p>
+            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{deepDivesModule?.interactionCue}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {moduleMeta(deepDivesModule).map((item) => (
@@ -432,9 +553,7 @@ export default async function HomePage() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <CardDescription>{moduleHeadline('reusableLesson', 'Reusable lesson', reusableLessonModule?.headline)}</CardDescription>
-                    <CardTitle className="mt-2 text-2xl leading-tight md:text-3xl">
-                      {briefing.reusableLesson.title}
-                    </CardTitle>
+                    <CardTitle className="mt-2 text-2xl leading-tight md:text-3xl">{briefing.reusableLesson.title}</CardTitle>
                   </div>
                   <div className="flex flex-wrap justify-end gap-2">
                     {moduleMeta(reusableLessonModule).map((item) => (
@@ -501,9 +620,7 @@ export default async function HomePage() {
             <h2 className="text-3xl font-semibold leading-tight text-foreground md:text-5xl">
               {briefing.watchlist?.title || 'Watch framework'}
             </h2>
-            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">
-              {watchlistModule?.interactionCue}
-            </p>
+            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{watchlistModule?.interactionCue}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {moduleMeta(watchlistModule).map((item) => (

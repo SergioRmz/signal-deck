@@ -6,3 +6,4 @@ dist/
 .next/
 .coverage
 __pycache__/
+apps/web/public/data/
