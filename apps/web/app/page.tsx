@@ -1,4 +1,4 @@
-import { ArrowRight, Compass, Orbit, Sparkles, Telescope } from 'lucide-react';
+import { ArrowRight, Compass, Orbit, Sparkles, Telescope, Users2 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,6 +36,9 @@ export default async function HomePage() {
   const [briefing, composition] = await Promise.all([loadBriefing(), loadComposition()]);
   const heroModule = composition.modules?.find((module) => module.moduleId === 'mod-hero');
   const topLineModule = composition.modules?.find((module) => module.moduleId === 'mod-topline');
+  const readerTranslationModule = composition.modules?.find(
+    (module) => module.moduleId === 'mod-reader-translation' || module.sourceKey === 'readerTranslation',
+  );
   const radarModule = composition.modules?.find((module) => module.moduleId === 'mod-radar');
   const deepDivesModule = composition.modules?.find((module) => module.moduleId === 'mod-deep-dives');
   const marketMapModule = composition.modules?.find((module) => module.moduleId === 'mod-market-map');
@@ -46,6 +49,7 @@ export default async function HomePage() {
   const radarItems = briefing.radar?.items || [];
   const deepDiveItems = briefing.deepDives?.items || [];
   const marketMapItems = briefing.marketMap?.items || [];
+  const readerTranslationItems = briefing.readerTranslation?.items || [];
   const watchlistItems = briefing.watchlist?.items || [];
   const moduleOrder = composition.page?.moduleOrder || [];
   const readerUpgrade =
@@ -168,6 +172,87 @@ export default async function HomePage() {
           </CardContent>
         </Card>
       </section>
+
+      {readerTranslationItems.length ? (
+        <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+          <Card className="overflow-hidden border-accent/20 bg-[linear-gradient(180deg,rgba(12,26,47,0.95),rgba(7,17,31,0.98))]">
+            <CardHeader className="gap-4 border-b border-border/60 pb-5">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <CardDescription className="flex items-center gap-2 text-primary/80">
+                    <Users2 className="h-4 w-4" />
+                    {moduleHeadline('readerTranslation', 'Reader translation', readerTranslationModule?.headline)}
+                  </CardDescription>
+                  <CardTitle className="mt-2 text-3xl md:text-4xl">
+                    {briefing.readerTranslation?.title || 'What this changes for you'}
+                  </CardTitle>
+                </div>
+                <div className="flex flex-wrap justify-end gap-2">
+                  {moduleMeta(readerTranslationModule).map((item) => (
+                    <Badge key={item} variant="accent">
+                      {item}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              <p className="max-w-3xl text-sm leading-7 text-muted-foreground">{readerTranslationModule?.interactionCue}</p>
+            </CardHeader>
+            <CardContent className="grid gap-4 pt-6 md:grid-cols-2 xl:grid-cols-3">
+              {readerTranslationItems.map((item, index) => (
+                <Card
+                  key={`${item.role}-${index}`}
+                  className="border-accent/20 bg-background/45 shadow-[0_18px_48px_rgba(9,19,37,0.24)]"
+                >
+                  <CardHeader className="gap-3 border-b border-border/60 pb-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <Badge variant="muted">Role {index + 1}</Badge>
+                      <Badge>{roleLabel(item.role)}</Badge>
+                    </div>
+                    <CardTitle className="text-2xl leading-tight">{item.headline}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pt-5">
+                    <p className="text-sm leading-7 text-foreground/90">{item.body}</p>
+                    {typeof item.weight === 'number' ? (
+                      <div className="rounded-2xl border border-accent/20 bg-accent/10 px-4 py-3 text-sm text-foreground">
+                        <p className="text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Priority weight</p>
+                        <p className="mt-1 leading-7">{item.weight}</p>
+                      </div>
+                    ) : null}
+                  </CardContent>
+                </Card>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardDescription>Composition cue</CardDescription>
+              <CardTitle className="text-2xl">Why the page now translates the thesis by role</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <p className="leading-7 text-foreground/85">
+                Reader Translation turns the edition from a generic argument into a role-aware upgrade path before the evidence modules ask for deeper attention.
+              </p>
+              <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
+                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
+                <div className="flex flex-wrap gap-2">
+                  {(readerTranslationModule?.layoutHints || []).map((hint) => (
+                    <Badge key={hint} variant="muted">
+                      {hint}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-2xl border border-accent/20 bg-accent/10 p-4">
+                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Migration status</p>
+                <p className="leading-7 text-foreground">
+                  Reader Translation is now rendered from the real briefing payload instead of remaining an unused optional layer in the contract.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      ) : null}
 
       <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <Card className="overflow-hidden border-primary/20 bg-primary/5">

@@ -323,6 +323,7 @@
             "enum": [
               "hero",
               "topline",
+              "reader-translation",
               "radar",
               "deep-dive-grid",
               "deep-dive-stack",

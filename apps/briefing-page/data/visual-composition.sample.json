@@ -60,6 +60,7 @@
     "moduleOrder": [
       "mod-hero",
       "mod-topline",
+      "mod-reader-translation",
       "mod-radar",
       "mod-deep-dives",
       "mod-market-map",
@@ -110,6 +111,25 @@
       "dataRefs": [
         "topLine.title",
         "topLine.body"
+      ]
+    },
+    {
+      "moduleId": "mod-reader-translation",
+      "kind": "reader-translation",
+      "variant": "role-translation-grid",
+      "sourceKey": "readerTranslation",
+      "priority": "secondary",
+      "headline": "Translate the thesis into role-specific action before the heavier evidence stack.",
+      "layoutHints": [
+        "three-up-grid",
+        "role-chips",
+        "bridge-from-thesis"
+      ],
+      "interactionCue": "Let the reader find their own seat in the argument before they process the rest of the edition.",
+      "accentMode": "accent",
+      "dataRefs": [
+        "readerTranslation.title",
+        "readerTranslation.items"
       ]
     },
     {

@@ -102,6 +102,7 @@ This first foundation includes:
 - a **Next.js + shadcn/ui foundation** for the future component renderer
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
 - a **ported Radar + Deep Dives layer** in Next.js that already renders real evidence signals and mechanism cards from the briefing payload
+- a **ported Reader Translation layer** in Next.js that renders role-specific takeaways from the real briefing + composition artifacts
 - a **ported closing layer** in Next.js that renders Market Map, Reusable Lesson, and Watchlist modules from the real briefing + composition artifacts
 - environment-based data paths for the Next.js app so payload locations are not hardcoded into the renderer
 - an **interaction layer** with guided reading progress and section-to-section navigation
@@ -243,7 +244,7 @@ The Next.js renderer also pins `experimental.cpus = 1` in `apps/web/next.config.
 
 1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
 2. Connect the page to generated or real briefing artifacts more systematically
-3. Port the remaining optional briefing modules into the Next.js component renderer, starting with Reader Translation
+3. Port the remaining optional briefing modules and richer interaction affordances into the Next.js component renderer
 4. Prepare external deployment through Cloudflare Pages
 5. Introduce briefing history and recurring publication workflows
 6. Move the remaining renderer configuration behind explicit environment variables before the full migration cutover
