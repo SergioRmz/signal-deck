@@ -6,11 +6,23 @@
     "publishedAt": "2026-06-11T09:00:00Z",
     "slug": "distribution-is-becoming-as-important-as-the-model",
     "language": "en",
-    "topics": ["ai", "distribution", "product-strategy"],
+    "topics": [
+      "ai",
+      "distribution",
+      "workflow",
+      "product-strategy"
+    ],
     "readerContext": {
-      "roles": ["software-engineer", "founder", "operator"],
-      "interests": ["ai", "workflow", "career-positioning"],
-      "desiredUpgrade": "Understand where leverage moves when core capabilities commoditize."
+      "roles": [
+        "software-engineer",
+        "founder",
+        "operator"
+      ],
+      "interests": [
+        "ai",
+        "workflow",
+        "product-strategy"
+      ]
     }
   },
   "hero": {
@@ -127,6 +139,26 @@
       {
         "text": "Where will the most valuable non-portable context accumulate?",
         "type": "question"
+      }
+    ]
+  },
+  "readerTranslation": {
+    "title": "What this changes for you",
+    "items": [
+      {
+        "role": "software-engineer",
+        "headline": "What this means for software-engineer",
+        "body": "Owning the user relationship becomes economically more important."
+      },
+      {
+        "role": "founder",
+        "headline": "What this means for founder",
+        "body": "Owning the user relationship becomes economically more important."
+      },
+      {
+        "role": "operator",
+        "headline": "What this means for operator",
+        "body": "Owning the user relationship becomes economically more important."
       }
     ]
   }

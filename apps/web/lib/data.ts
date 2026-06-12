@@ -45,11 +45,42 @@ export type BriefingData = {
       implication?: string;
     }>;
   };
+  marketMap?: {
+    title: string;
+    items: Array<{
+      label: string;
+      text: string;
+      powerShift?: string;
+    }>;
+  };
+  reusableLesson?: {
+    title: string;
+    pattern: string;
+    takeaway: string;
+    applyWhen?: string[];
+  };
+  readerTranslation?: {
+    title: string;
+    items: Array<{
+      role: string;
+      headline: string;
+      body: string;
+      weight?: number;
+    }>;
+  };
+  watchlist?: {
+    title: string;
+    items: Array<{
+      text: string;
+      type?: string;
+    }>;
+  };
 };
 
 export type CompositionModule = {
   moduleId: string;
   kind: string;
+  sourceKey?: string;
   variant?: string;
   headline?: string;
   interactionCue?: string;

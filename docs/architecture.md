@@ -52,7 +52,7 @@ Responsible for:
 The presentation layer now has two implementations in the repo:
 
 - a static HTML/CSS/JS prototype in `apps/briefing-page/`
-- a new Next.js + shadcn/ui renderer in `apps/web/` that now ports Hero, Top Line, Radar, and Deep Dives from real briefing + composition payloads
+- a new Next.js + shadcn/ui renderer in `apps/web/` that now ports Hero, Top Line, Radar, Deep Dives, Market Map, Reusable Lesson, and Watchlist from real briefing + composition payloads
 
 The static prototype remains the richer interaction surface today, while the Next.js app is the new migration path for componentized rendering and future deployment ergonomics.
 
