@@ -208,7 +208,7 @@ def validate_input_packet(data: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("apps/briefing-page/data/signal-input.sample.json")
+    path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/signal-input.sample.json")
     if not path.exists():
         fail(f"File not found: {path}")
 

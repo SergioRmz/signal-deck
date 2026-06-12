@@ -29,14 +29,14 @@ The goal is to make the first transformation rules explicit, runnable, and debug
 The transformation layer consumes a payload that matches:
 
 - `docs/briefing-ingestion-v1.md`
-- `apps/briefing-page/data/signal-input.schema.json`
+- `data/signal-input.schema.json`
 
 ### Output
 
 It emits a payload that matches:
 
 - `docs/briefing-contract-v1.md`
-- `apps/briefing-page/data/briefing.schema.json`
+- `data/briefing.schema.json`
 
 ## Current implementation
 
@@ -46,8 +46,8 @@ The current transformation entry point is:
 
 Default paths:
 
-- input: `apps/briefing-page/data/signal-input.sample.json`
-- output: `apps/briefing-page/data/briefing.sample.json`
+- input: `data/signal-input.sample.json`
+- output: `data/briefing.sample.json`
 
 ## Design goals for v1
 

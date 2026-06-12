@@ -190,7 +190,7 @@ def validate_visual_composition(data: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("apps/briefing-page/data/visual-composition.sample.json")
+    path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/visual-composition.sample.json")
     if not path.exists():
         fail(f"File not found: {path}")
 

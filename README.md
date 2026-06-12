@@ -56,39 +56,35 @@ The goal is not complexity for its own sake. The goal is a system that can produ
 signal-deck/
 ├── README.md
 ├── .gitignore
+├── data/
+│   ├── briefing.sample.json
+│   ├── briefing.schema.json
+│   ├── signal-input.sample.json
+│   ├── signal-input.schema.json
+│   ├── visual-composition.sample.json
+│   └── visual-composition.schema.json
 ├── apps/
-│   ├── web/
-│   │   ├── src/
-│   │   ├── components/
-│   │   ├── lib/
-│   │   ├── scripts/
-│   │   ├── .env.example
-│   │   └── package.json
-│   └── briefing-page/
-│       ├── index.html
-│       ├── styles.css
-│       ├── app.js
-│       └── data/
-│           ├── briefing.sample.json
-│           ├── briefing.schema.json
-│           ├── signal-input.sample.json
-│           ├── signal-input.schema.json
-│           ├── visual-composition.sample.json
-│           └── visual-composition.schema.json
+│   └── web/
+│       ├── src/
+│       ├── components/
+│       ├── lib/
+│       ├── scripts/
+│       ├── .env.example
+│       └── package.json
 ├── scripts/
 │   ├── validate_briefing.py
 │   ├── validate_visual_composition.py
 │   ├── validate_signal_input.py
 │   └── generate_briefing.py
 └── docs/
-│   ├── architecture.md
-│   ├── briefing-contract-v1.md
-│   ├── briefing-ingestion-v1.md
-│   ├── briefing-transformation-v1.md
-│   ├── visual-composition-contract-v1.md
-│   ├── product-brief.md
-│   └── deployment/
-│       └── cloudflare-pages.md
+    ├── architecture.md
+    ├── briefing-contract-v1.md
+    ├── briefing-ingestion-v1.md
+    ├── briefing-transformation-v1.md
+    ├── visual-composition-contract-v1.md
+    ├── product-brief.md
+    └── deployment/
+        └── cloudflare-pages.md
 ```
 
 ## What is already in place
@@ -99,8 +95,8 @@ This first foundation includes:
 - an **explicit transformation layer** from ingestion packets to briefing payloads
 - a **formal briefing contract** for the final briefing artifact
 - a briefing contract that supports richer pedagogical fields and optional learning modules
-- a **dark-theme single-page briefing prototype**
-- a **React + Vite renderer foundation** for the future component renderer
+- a **dark-theme React + Vite single-page renderer**
+- a component renderer foundation that keeps shadcn/ui-compatible primitives available
 - a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
 - a **ported Radar + Deep Dives layer** in React + Vite that already renders real evidence signals and mechanism cards from the briefing payload
 - a **ported Reader Translation layer** in React + Vite that renders role-specific takeaways from the real briefing + composition artifacts
@@ -119,7 +115,7 @@ This first foundation includes:
 - a deterministic generator that turns a validated input packet into a validated briefing payload
 - initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
-That may sound modest, but it is an important strategic choice: the project now has both a lean static prototype and a lightweight framework-based path for moving into a component system without losing contract clarity.
+That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
 
 ## Why this foundation matters
 
@@ -167,7 +163,7 @@ It is also showing how the project is being executed with an agentic delivery lo
   - `python3 scripts/generate_briefing.py`
   - `python3 scripts/validate_briefing.py`
   - `python3 scripts/validate_visual_composition.py`
-  - `node --test tests/briefing-page.test.mjs`
+  - `cd apps/web && npm run build`
 
 - **Agent-friendly repository shape**  
   The project is being kept legible on purpose: explicit contracts, predictable folders, and a renderer that can be evolved safely by an autonomous coding agent.
@@ -184,7 +180,7 @@ Hermes Agent is especially relevant to where this repository is going next, beca
 In other words, Hermes is not incidental to this project.
 It is part of the operational thesis behind how a system like **signal-deck** can eventually move from prototype to recurring high-value editorial production.
 
-## Running the prototype locally
+## Validating the editorial artifacts
 
 From the repository root:
 
@@ -193,15 +189,6 @@ python3 scripts/validate_signal_input.py
 python3 scripts/generate_briefing.py
 python3 scripts/validate_briefing.py
 python3 scripts/validate_visual_composition.py
-node --test tests/briefing-page.test.mjs
-cd apps/briefing-page
-python3 -m http.server 4173
-```
-
-Then open:
-
-```text
-http://localhost:4173
 ```
 
 ## Running the React + Vite renderer locally
@@ -233,9 +220,9 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 ## Key contract documents
 
 - `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
-- `apps/briefing-page/data/signal-input.schema.json` — ingestion schema
+- `data/signal-input.schema.json` — ingestion schema
 - `docs/briefing-contract-v1.md` — editorial contract for final briefings
-- `apps/briefing-page/data/briefing.schema.json` — briefing schema
+- `data/briefing.schema.json` — briefing schema
 - `docs/briefing-transformation-v1.md` — deterministic mapping rules from ingestion to briefing
 - `scripts/validate_signal_input.py` — ingestion validator
 - `scripts/validate_briefing.py` — briefing validator
@@ -245,10 +232,9 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 
 1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
 2. Connect the page to generated or real briefing artifacts more systematically
-3. Port the remaining richer interaction affordances into the React + Vite component renderer
-4. Prepare external deployment through Cloudflare Pages
-5. Introduce briefing history and recurring publication workflows
-6. Move the remaining renderer configuration behind explicit environment variables before the full migration cutover
+3. Prepare and validate external deployment through Cloudflare Pages
+4. Introduce briefing history and recurring publication workflows
+5. Continue moving operational renderer configuration behind explicit environment variables as deployment needs become clearer
 
 ## Project status
 

@@ -60,12 +60,12 @@ The repository now treats both the input side and the output side of the briefin
 ### Ingestion side
 
 - `docs/briefing-ingestion-v1.md`
-- `apps/briefing-page/data/signal-input.schema.json`
+- `data/signal-input.schema.json`
 
 ### Briefing side
 
 - `docs/briefing-contract-v1.md`
-- `apps/briefing-page/data/briefing.schema.json`
+- `data/briefing.schema.json`
 
 Together, those contracts define the current editorial surface of the product.
 
