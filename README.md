@@ -75,7 +75,8 @@ signal-deck/
 │   ├── validate_briefing.py
 │   ├── validate_visual_composition.py
 │   ├── validate_signal_input.py
-│   └── generate_briefing.py
+│   ├── generate_briefing.py
+│   └── run_briefing_pipeline.py
 └── docs/
     ├── architecture.md
     ├── briefing-contract-v1.md
@@ -113,6 +114,7 @@ This first foundation includes:
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
+- a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
 - initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
 That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
@@ -164,6 +166,7 @@ It is also showing how the project is being executed with an agentic delivery lo
   - `python3 scripts/generate_briefing.py`
   - `python3 scripts/validate_briefing.py`
   - `python3 scripts/validate_visual_composition.py`
+  - `python3 scripts/run_briefing_pipeline.py --build-renderer`
   - `cd apps/web && npm run build`
 
 - **Agent-friendly repository shape**  
@@ -191,7 +194,22 @@ python3 scripts/validate_signal_input.py
 python3 scripts/generate_briefing.py
 python3 scripts/validate_briefing.py
 python3 scripts/validate_visual_composition.py
+python3 scripts/run_briefing_pipeline.py
 ```
+
+To execute a full local trial run and build the renderer from generated run artifacts:
+
+```bash
+python3 scripts/run_briefing_pipeline.py --run-date 2026-06-11 --build-renderer
+```
+
+The pipeline writes local-only artifacts under `runs/YYYY-MM-DD/`:
+
+- `signal-input.json`
+- `briefing.final.json`
+- `visual-composition.json`
+- `telegram-message.md`
+- `manifest.json`
 
 ## Running the React + Vite renderer locally
 
@@ -229,11 +247,12 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 - `scripts/validate_signal_input.py` — ingestion validator
 - `scripts/validate_briefing.py` — briefing validator
 - `scripts/generate_briefing.py` — briefing generator
+- `scripts/run_briefing_pipeline.py` — local run orchestrator for generated briefing, composition, Telegram draft, and optional renderer build
 
 ## Near-term roadmap
 
 1. Strengthen market-map generation and source-trace handling beyond the current deterministic transformation v2 baseline
-2. Connect the page to generated or real briefing artifacts more systematically
+2. Run the first end-to-end editorial trial with a fresh input packet and inspect the generated Telegram draft plus rendered page
 3. Prepare and validate external deployment through Cloudflare Pages
 4. Introduce briefing history and recurring publication workflows
 5. Continue moving operational renderer configuration behind explicit environment variables as deployment needs become clearer

@@ -44,6 +44,10 @@ The current transformation entry point is:
 
 - `scripts/generate_briefing.py`
 
+The local trial-run entry point is:
+
+- `scripts/run_briefing_pipeline.py`
+
 Default paths:
 
 - input: `data/signal-input.sample.json`
@@ -276,6 +280,26 @@ Generate from an explicit input path:
 
 ```bash
 python3 scripts/generate_briefing.py path/to/input.json path/to/output.json
+```
+
+Run an auditable local pipeline execution:
+
+```bash
+python3 scripts/run_briefing_pipeline.py --run-date 2026-06-11
+```
+
+This writes local-only artifacts under `runs/YYYY-MM-DD/`:
+
+- `signal-input.json`
+- `briefing.final.json`
+- `visual-composition.json`
+- `telegram-message.md`
+- `manifest.json`
+
+To validate the renderer against those generated artifacts in the same command:
+
+```bash
+python3 scripts/run_briefing_pipeline.py --run-date 2026-06-11 --build-renderer
 ```
 
 ## What v1 proves
