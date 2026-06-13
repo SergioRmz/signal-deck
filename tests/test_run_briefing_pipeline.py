@@ -24,6 +24,7 @@ class RunBriefingPipelineTest(unittest.TestCase):
                 composition_template=(ROOT / "data" / "visual-composition.sample.json"),
                 runs_dir=Path(tmpdir),
                 run_date="2030-01-02",
+                public_url="https://signal-deck.example.com/",
                 build_renderer=False,
             )
 
@@ -41,6 +42,7 @@ class RunBriefingPipelineTest(unittest.TestCase):
             self.assertEqual(composition["sourceBriefing"]["editionDate"], briefing["meta"]["editionDate"])
             self.assertIn(briefing["topLine"]["title"], telegram_message)
             self.assertIn("Signals to read first", telegram_message)
+            self.assertIn("Read the full briefing: https://signal-deck.example.com/", telegram_message)
 
 
 if __name__ == "__main__":
