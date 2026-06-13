@@ -35,8 +35,8 @@
   },
   "topLine": {
     "title": "Distribution is becoming as important as the model.",
-    "body": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution. Owning the user relationship becomes economically more important. Memory and workflow embedding can become part of the moat.",
-    "stakes": "Owning the user relationship becomes economically more important."
+    "body": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution. Owning the user relationship becomes economically more important. Memory and workflow embedding can become part of the moat. Second-order effect: Go-to-market strength can compound technical capability rather than merely follow it. Question to track: Which layer keeps the recurring user relationship as model access broadens?",
+    "stakes": "Switching costs may rise at the interface layer rather than the model layer."
   },
   "radar": {
     "title": "Evidence radar",
@@ -63,7 +63,7 @@
     "items": [
       {
         "title": "1. Distribution is carrying more strategic weight as raw model differentiation narrows",
-        "body": "Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access. Owning the user relationship becomes economically more important. Go-to-market strength can compound technical capability rather than merely follow it. Counterpoint: Frontier model gaps can still matter in narrow, high-stakes domains.",
+        "body": "Mechanism: Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access. Why it matters: Owning the user relationship becomes economically more important. Second-order effect: Go-to-market strength can compound technical capability rather than merely follow it. Watch the tension: Frontier model gaps can still matter in narrow, high-stakes domains.",
         "mechanism": "Distribution",
         "claim": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
         "explanation": "Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access.",
@@ -71,7 +71,7 @@
       },
       {
         "title": "2. Context capture is emerging as the scarcer asset than inference alone",
-        "body": "Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts. Memory and workflow embedding can become part of the moat. Switching costs may rise at the interface layer rather than the model layer.",
+        "body": "Mechanism: Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts. Why it matters: Memory and workflow embedding can become part of the moat. Second-order effect: Switching costs may rise at the interface layer rather than the model layer.",
         "mechanism": "Workflow",
         "claim": "Context capture is emerging as the scarcer asset than inference alone.",
         "explanation": "Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts.",
@@ -79,7 +79,7 @@
       },
       {
         "title": "3. Interface design is increasingly shaping product economics, not just usability",
-        "body": "The interface determines what gets repeated, measured, remembered, and eventually monetized. The presentation surface influences retention and monetization. UI decisions can determine where strategic capture lands.",
+        "body": "Mechanism: The interface determines what gets repeated, measured, remembered, and eventually monetized. Why it matters: The presentation surface influences retention and monetization. Second-order effect: UI decisions can determine where strategic capture lands.",
         "mechanism": "Product",
         "claim": "Interface design is increasingly shaping product economics, not just usability.",
         "explanation": "The interface determines what gets repeated, measured, remembered, and eventually monetized.",
@@ -148,17 +148,20 @@
       {
         "role": "software-engineer",
         "headline": "What this means for software-engineer",
-        "body": "Owning the user relationship becomes economically more important."
+        "body": "For a software engineer, the advantage is architecture: design products that capture workflow context, memory, and repeat usage instead of treating model calls as the moat.",
+        "weight": 0.5
       },
       {
         "role": "founder",
         "headline": "What this means for founder",
-        "body": "Owning the user relationship becomes economically more important."
+        "body": "For a founder, the advantage is distribution: own the recurring user relationship before model access becomes a commodity input everyone can buy.",
+        "weight": 0.3
       },
       {
         "role": "operator",
         "headline": "What this means for operator",
-        "body": "Owning the user relationship becomes economically more important."
+        "body": "For an operator, the advantage is operating cadence: find where AI becomes a repeated workflow dependency rather than an occasional productivity add-on.",
+        "weight": 0.2
       }
     ]
   }

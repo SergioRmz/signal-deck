@@ -97,7 +97,7 @@ The intended flow is now:
 1. collect and normalize source material into an ingestion packet
 2. derive prioritized signals and a working thesis
 3. record editorial decisions that map input material toward the output artifact
-4. transform the packet into a validated briefing payload
+4. transform the packet into a validated briefing payload with explicit implication layers, mechanism framing, and reader-role translation
 5. stage the briefing through a validated visual composition payload
 6. render and distribute the final page
 
@@ -135,7 +135,7 @@ The product uses a static React + Vite renderer because it:
 - thematic views
 - navigation or reading metrics if they prove useful
 - recurring delivery workflows
-- migration of hardcoded renderer paths into explicit environment variables
+- further migration of operational configuration into explicit environment variables as deployment needs become clearer
 
 ## Repository structure
 

@@ -6,7 +6,7 @@ This document defines the first explicit transformation layer in `signal-deck`.
 
 If the ingestion contract describes the structured editorial packet and the briefing contract describes the final structured artifact, the transformation layer defines **how the system moves from one to the other**.
 
-Version 1 is still deterministic by design, but it now targets a more pedagogical briefing shape rather than a plain executive recap.
+Version 1 is still deterministic by design, but it now targets a more pedagogical briefing shape rather than a plain executive recap. The current implementation includes a second editorial pass over the baseline mapping: it separates first-order implications from second-order effects, exposes watch questions inside the top line, expands deep dives into explicit mechanism → implication → tension explanations, and weights reader translations when the input packet provides role weights.
 
 ## Why this layer matters
 
@@ -58,6 +58,7 @@ Version 1 is designed to be:
 - lightweight to run locally
 - good enough to prove the architecture
 - honest about where editorial heuristics still remain crude
+- more useful than a mechanical field mapping by making consequence, tension, and role-specific advantage visible
 
 ## Non-goals for v1
 
@@ -100,6 +101,7 @@ This means:
 - `contradictions` can become `hero.tension`
 - `supportingThemes` can inform `reusableLesson.applyWhen`
 - `openQuestions` contributes to `watchlist.items`
+- the strongest open question can be promoted into `topLine.body` as the question the reader should track
 
 ### 4. Convert signals into pedagogical modules
 
@@ -114,7 +116,27 @@ This means:
 - market-map frames produce explicit `powerShift` descriptions
 - the transformation should emit a `reusableLesson` block even when personalization is absent
 
-### 5. Keep the generated briefing compact
+### 5. Separate consequence layers
+
+The transformation should distinguish between:
+
+- first-order implications — what changes directly
+- second-order effects — what can compound, shift incentives, or create downstream strategic pressure
+
+This keeps the briefing closer to an executive mini-masterclass than to a recap.
+
+### 6. Translate through the reader profile when available
+
+When `brief.readerProfile.roles` and `roleWeights` are present, the generator should:
+
+- preserve the reader's multiple roles
+- order reader translations by explicit role weight
+- emit the role weight in the final briefing payload
+- use deterministic role lenses for common roles such as `software-engineer`, `founder`, `operator`, and `executive`
+
+The goal is not fake hyper-personalization. It is to make the same briefing useful through more than one professional lens.
+
+### 7. Keep the generated briefing compact
 
 The transformation should not dump the full ingestion packet into the final artifact.
 
@@ -125,7 +147,7 @@ Instead it should:
 - surface implications that help an executive reader reason quickly
 - keep each section legible inside the one-page format
 
-### 6. Preserve traceability
+### 8. Preserve traceability
 
 The output does not need to be a literal field-for-field copy.
 It does need to preserve a visible path from:
@@ -172,7 +194,7 @@ Generated from:
 - `synthesis.workingThesis`
 - strongest implications from the highest-priority signals
 
-The goal is to express the thesis, the argument, and the stakes.
+The goal is to express the thesis, the argument, and the stakes. The body may include an explicit `Second-order effect:` sentence and a `Question to track:` sentence when the input provides enough material.
 
 ### `radar`
 
@@ -197,7 +219,10 @@ Each deep dive should combine:
 - the signal statement as the local claim
 - the signal evidence as the explanation layer
 - one implication worth carrying forward
+- one second-order effect when a second implication is available
 - optional counterpoints when they materially change the reading
+
+The generated body uses explicit labels such as `Mechanism:`, `Why it matters:`, `Second-order effect:`, and `Watch the tension:` so the reader can see the causal structure quickly.
 
 ### `marketMap`
 
@@ -214,7 +239,7 @@ That is acceptable as long as the output remains coherent and inspectable.
 Optional.
 Generated only when the input packet already includes structured `brief.readerProfile.roles`.
 
-This keeps the transformation forward-compatible with personalization work without forcing fake role-specific output when the input is generic.
+This keeps the transformation forward-compatible with personalization work without forcing fake role-specific output when the input is generic. When `brief.readerProfile.roleWeights` is present, translations are ordered by weight and the numeric `weight` is preserved in the output.
 
 ### `reusableLesson`
 
@@ -241,6 +266,7 @@ The generator may also assign a lightweight `type` heuristic such as `question` 
 Generate the sample briefing:
 
 ```bash
+python3 -m unittest tests/test_generate_briefing.py -v
 python3 scripts/validate_signal_input.py
 python3 scripts/generate_briefing.py
 python3 scripts/validate_briefing.py

@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+"""Behavior tests for the deterministic briefing transformation layer."""
+
+from __future__ import annotations
+
+import copy
+import json
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from generate_briefing import transform_packet  # noqa: E402
+
+
+class EditorialTransformationV2Test(unittest.TestCase):
+    def setUp(self) -> None:
+        self.packet = json.loads((ROOT / "data" / "signal-input.sample.json").read_text())
+
+    def test_reader_translation_uses_role_weights_and_role_specific_advantage(self) -> None:
+        packet = copy.deepcopy(self.packet)
+        packet["brief"]["readerProfile"]["roleWeights"] = {
+            "operator": 0.7,
+            "founder": 0.2,
+            "software-engineer": 0.1,
+        }
+
+        briefing = transform_packet(packet)
+        items = briefing["readerTranslation"]["items"]
+
+        self.assertEqual([item["role"] for item in items], ["operator", "founder", "software-engineer"])
+        self.assertEqual([item["weight"] for item in items], [0.7, 0.2, 0.1])
+        bodies_by_role = {item["role"]: item["body"] for item in items}
+        self.assertIn("operating cadence", bodies_by_role["operator"])
+        self.assertIn("distribution", bodies_by_role["founder"])
+        self.assertIn("architecture", bodies_by_role["software-engineer"])
+
+    def test_deep_dives_explain_mechanism_implication_and_tension_explicitly(self) -> None:
+        briefing = transform_packet(self.packet)
+        first = briefing["deepDives"]["items"][0]
+
+        self.assertIn("Mechanism:", first["body"])
+        self.assertIn("Why it matters:", first["body"])
+        self.assertIn("Second-order effect:", first["body"])
+        self.assertIn("Watch the tension:", first["body"])
+
+    def test_top_line_surfaces_stakes_second_order_effect_and_open_question(self) -> None:
+        briefing = transform_packet(self.packet)
+        top_line = briefing["topLine"]
+
+        self.assertIn("Second-order effect:", top_line["body"])
+        self.assertIn("Question to track:", top_line["body"])
+        self.assertIn("Switching costs may rise", top_line["stakes"])
+
+
+if __name__ == "__main__":
+    unittest.main()

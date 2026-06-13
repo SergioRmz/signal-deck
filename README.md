@@ -112,7 +112,7 @@ This first foundation includes:
 - a **clean separation** between content structure and presentation
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
-- a deterministic generator that turns a validated input packet into a validated briefing payload
+- a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
 - initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
 
 That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
@@ -159,6 +159,7 @@ It is also showing how the project is being executed with an agentic delivery lo
 
 - **Test-and-validation loop**  
   The repo is structured so Hermes can run deterministic checks repeatedly while the presentation system evolves:
+  - `python3 -m unittest tests/test_generate_briefing.py -v`
   - `python3 scripts/validate_signal_input.py`
   - `python3 scripts/generate_briefing.py`
   - `python3 scripts/validate_briefing.py`
@@ -185,6 +186,7 @@ It is part of the operational thesis behind how a system like **signal-deck** ca
 From the repository root:
 
 ```bash
+python3 -m unittest tests/test_generate_briefing.py -v
 python3 scripts/validate_signal_input.py
 python3 scripts/generate_briefing.py
 python3 scripts/validate_briefing.py
@@ -230,7 +232,7 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 
 ## Near-term roadmap
 
-1. Strengthen the transformation heuristics from ingestion packets to briefing payloads
+1. Strengthen market-map generation and source-trace handling beyond the current deterministic transformation v2 baseline
 2. Connect the page to generated or real briefing artifacts more systematically
 3. Prepare and validate external deployment through Cloudflare Pages
 4. Introduce briefing history and recurring publication workflows
