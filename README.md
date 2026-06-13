@@ -50,12 +50,48 @@ The goal is not complexity for its own sake. The goal is a system that can produ
 - **Scalable editorial structure**  
   The repository should grow cleanly as the system evolves from prototype to repeatable publishing workflow.
 
+## Development method
+
+This repository now uses **GitHub Spec Kit** for spec-driven development. Product and architecture changes should move from ambiguity → spec → clarification → plan → tasks → implementation, rather than jumping directly from an idea into code.
+
+Spec Kit was initialized with the Codex integration in skills mode. The core workflow is:
+
+```text
+$speckit-specify
+  → $speckit-clarify
+  → $speckit-checklist
+  → $speckit-plan
+  → $speckit-tasks
+  → $speckit-analyze
+  → $speckit-implement
+```
+
+Before starting a new spec, clarify the scope with Sergio. The governing principles live in:
+
+```text
+.specify/memory/constitution.md
+```
+
+The project-specific workflow is documented in:
+
+```text
+docs/spec-driven-workflow.md
+```
+
 ## Current repository structure
 
 ```text
 signal-deck/
 ├── README.md
+├── AGENTS.md
 ├── .gitignore
+├── .specify/
+│   ├── memory/
+│   │   └── constitution.md
+│   ├── scripts/
+│   └── templates/
+├── .agents/
+│   └── skills/
 ├── data/
 │   ├── briefing.sample.json
 │   ├── briefing.schema.json
@@ -84,6 +120,7 @@ signal-deck/
     ├── briefing-transformation-v1.md
     ├── visual-composition-contract-v1.md
     ├── product-brief.md
+    ├── spec-driven-workflow.md
     └── deployment/
         └── cloudflare-pages.md
 ```
@@ -115,7 +152,8 @@ This first foundation includes:
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
-- initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
+- initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, and **Spec Kit workflow**
+- GitHub Spec Kit infrastructure with a signal-deck constitution for future ambiguous work
 
 That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
 
