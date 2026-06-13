@@ -113,18 +113,31 @@ def build_top_line(signals_by_id: dict[str, dict[str, Any]], packet: dict[str, A
     editorial = packet["editorialDecisions"]
     synthesis = packet["synthesis"]
 
-    implication_sentences: list[str] = []
+    first_order_implications: list[str] = []
+    second_order_implications: list[str] = []
     for signal_id in editorial["radarOrder"]:
         signal = signals_by_id[signal_id]
         if signal["priority"] != "high":
             continue
-        implication_sentences.extend(signal["implications"][:1])
-        if len(implication_sentences) >= 2:
+        implications = signal["implications"]
+        first_order_implications.extend(implications[:1])
+        second_order_implications.extend(implications[1:2])
+        if len(first_order_implications) >= 2:
             break
 
     body_parts = [clean_sentence(synthesis["workingThesis"])]
-    body_parts.extend(clean_sentence(item) for item in unique_preserving_order(implication_sentences)[:2])
-    stakes = implication_sentences[0] if implication_sentences else brief_stakes_fallback(packet)
+    body_parts.extend(clean_sentence(item) for item in unique_preserving_order(first_order_implications)[:2])
+    if second_order_implications:
+        body_parts.append(clean_sentence(f"Second-order effect: {second_order_implications[0]}"))
+    if synthesis.get("openQuestions"):
+        body_parts.append(clean_sentence(f"Question to track: {synthesis['openQuestions'][0]}"))
+    stakes = (
+        second_order_implications[-1]
+        if second_order_implications
+        else first_order_implications[0]
+        if first_order_implications
+        else brief_stakes_fallback(packet)
+    )
 
     return {
         "title": editorial["topLineThesis"],
@@ -163,10 +176,15 @@ def build_deep_dives(signals_by_id: dict[str, dict[str, Any]], deep_dive_ids: li
     items = []
     for index, signal_id in enumerate(deep_dive_ids, start=1):
         signal = signals_by_id[signal_id]
-        body_parts = [clean_sentence(signal["evidence"])]
-        body_parts.extend(clean_sentence(item) for item in signal["implications"][:2])
+        implications = signal["implications"]
+        body_parts = [
+            clean_sentence(f"Mechanism: {signal['evidence']}"),
+            clean_sentence(f"Why it matters: {implications[0]}"),
+        ]
+        if len(implications) > 1:
+            body_parts.append(clean_sentence(f"Second-order effect: {implications[1]}"))
         if signal.get("counterpoints"):
-            body_parts.append(f"Counterpoint: {clean_sentence(signal['counterpoints'][0])}")
+            body_parts.append(clean_sentence(f"Watch the tension: {signal['counterpoints'][0]}"))
         items.append(
             {
                 "title": f"{index}. {signal['statement'].rstrip('.')}" ,
@@ -219,19 +237,51 @@ def build_reader_translation(packet: dict[str, Any], high_priority_signals: list
     if not isinstance(roles, list) or not roles:
         return None
 
-    first_implication = high_priority_signals[0]["implications"][0] if high_priority_signals else packet["brief"]["objective"]
+    raw_role_weights = reader_profile.get("roleWeights")
+    role_weights = raw_role_weights if isinstance(raw_role_weights, dict) else {}
+    role_signal_index = {
+        "software-engineer": 1 if len(high_priority_signals) > 1 else 0,
+        "engineer": 1 if len(high_priority_signals) > 1 else 0,
+        "founder": 0,
+        "operator": 1 if len(high_priority_signals) > 1 else 0,
+        "executive": 0,
+    }
+    role_lenses = {
+        "software-engineer": "For a software engineer, the advantage is architecture: design products that capture workflow context, memory, and repeat usage instead of treating model calls as the moat.",
+        "engineer": "For an engineer, the advantage is architecture: design products that capture workflow context, memory, and repeat usage instead of treating model calls as the moat.",
+        "founder": "For a founder, the advantage is distribution: own the recurring user relationship before model access becomes a commodity input everyone can buy.",
+        "operator": "For an operator, the advantage is operating cadence: find where AI becomes a repeated workflow dependency rather than an occasional productivity add-on.",
+        "executive": "For an executive, the advantage is allocation discipline: move resources toward workflow ownership, context capture, and durable distribution.",
+    }
+
+    original_role_order = {str(role).strip(): index for index, role in enumerate(roles) if str(role).strip()}
+
+    def role_weight(role: str) -> float | None:
+        value = role_weights.get(role)
+        if isinstance(value, (int, float)) and value > 0:
+            return float(value)
+        return None
+
+    ordered_roles = sorted(
+        original_role_order,
+        key=lambda role: (-(role_weight(role) or 0), original_role_order[role]),
+    )
     items = []
-    for role in roles:
-        role_text = str(role).strip()
-        if not role_text:
-            continue
-        items.append(
-            {
-                "role": role_text,
-                "headline": clean_sentence(f"What this means for {role_text}").rstrip("."),
-                "body": clean_sentence(first_implication),
-            }
-        )
+    for role_text in ordered_roles:
+        normalized_role = role_text.lower()
+        signal_index = role_signal_index.get(normalized_role, 0)
+        source_signal = high_priority_signals[signal_index] if high_priority_signals else None
+        fallback_body = source_signal["implications"][0] if source_signal else packet["brief"]["objective"]
+        body = role_lenses.get(normalized_role, fallback_body)
+        weight = role_weight(role_text)
+        item = {
+            "role": role_text,
+            "headline": clean_sentence(f"What this means for {role_text}").rstrip("."),
+            "body": clean_sentence(body),
+        }
+        if weight is not None:
+            item["weight"] = weight
+        items.append(item)
 
     if not items:
         return None
