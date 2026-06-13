@@ -253,7 +253,7 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 
 1. Strengthen market-map generation and source-trace handling beyond the current deterministic transformation v2 baseline
 2. Run the first end-to-end editorial trial with a fresh input packet and inspect the generated Telegram draft plus rendered page
-3. Prepare and validate external deployment through Cloudflare Pages
+3. Prepare and validate external deployment through Cloudflare Workers static assets
 4. Introduce briefing history and recurring publication workflows
 5. Continue moving operational renderer configuration behind explicit environment variables as deployment needs become clearer
 

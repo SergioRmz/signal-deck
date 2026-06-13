@@ -46,6 +46,45 @@ directory = "./apps/web/dist"
 
 This makes a fresh Cloudflare build produce `apps/web/dist/` before Wrangler uploads static assets.
 
+## Direct Wrangler publishing for generated daily runs
+
+For editorial runs that should not create a Git commit per briefing, the preferred operational path is to publish the generated local artifacts directly with Wrangler.
+
+From the repository root, keep Cloudflare credentials in a local-only `.env` file:
+
+```bash
+CLOUDFLARE_API_TOKEN=...
+CLOUDFLARE_ACCOUNT_ID=...
+```
+
+The token must be scoped to the Cloudflare account that owns `signal-deck` and must have permission to edit Workers scripts/assets. The `.env` file is ignored by git and should never be committed.
+
+After a pipeline run writes `runs/YYYY-MM-DD/briefing.final.json` and `runs/YYYY-MM-DD/visual-composition.json`, deploy those exact artifacts with:
+
+```bash
+set -a
+. ./.env
+set +a
+
+SIGNAL_DECK_BRIEFING_PATH=../../runs/YYYY-MM-DD/briefing.final.json \
+SIGNAL_DECK_COMPOSITION_PATH=../../runs/YYYY-MM-DD/visual-composition.json \
+npx wrangler deploy
+```
+
+Wrangler runs the configured build command, the renderer syncs those artifact paths into `apps/web/public/data/`, and Cloudflare uploads the static assets to:
+
+```text
+https://signal-deck.sergio-ramirez-mtz.workers.dev/
+```
+
+Always verify the deployed content after publication:
+
+```bash
+curl -s https://signal-deck.sergio-ramirez-mtz.workers.dev/data/briefing.json \
+  | python3 -m json.tool \
+  | head
+```
+
 ## Variables and data artifacts
 
 The build can be pointed at explicit artifact paths with:
