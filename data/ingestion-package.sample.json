@@ -1,0 +1,720 @@
+{
+  "meta": {
+    "schemaVersion": "2.0",
+    "packageId": "ingestion-package-2026-06-14-foundation",
+    "createdAt": "2026-06-14T12:00:00Z",
+    "language": "es",
+    "domains": [
+      "technology",
+      "ai",
+      "economy"
+    ]
+  },
+  "run": {
+    "runId": "run-2026-06-14-foundation",
+    "runDate": "2026-06-14",
+    "status": "complete",
+    "candidateCount": 15,
+    "selectedCount": 0,
+    "rejectedCount": 0,
+    "watchItemCount": 0,
+    "sourceDiversity": {
+      "domainCounts": {
+        "technology": 5,
+        "ai": 5,
+        "economy": 5
+      },
+      "publisherCounts": {
+        "OpenAI": 3,
+        "NVIDIA": 3,
+        "Federal Reserve": 3,
+        "European Commission": 3,
+        "The Information": 3
+      },
+      "concentrationRisk": "low",
+      "concentrationRationale": "Foundation sample is intentionally balanced across the three target domains.",
+      "alternativeSearchNotes": "Story-specific discovery notes are added as the candidate pool becomes realistic."
+    }
+  },
+  "readerProfiles": [
+    {
+      "profileId": "sergio-canonical",
+      "displayName": "Sergio Ramirez",
+      "canonical": true,
+      "roles": [
+        "operator",
+        "editor",
+        "learner"
+      ],
+      "interests": [
+        "technology",
+        "ai",
+        "economy"
+      ],
+      "advantageTargets": [
+        "labor-market edge",
+        "strategic judgment"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "sourceId": "src-01",
+      "title": "Source note 01",
+      "publisher": "NVIDIA",
+      "sourceType": "filing",
+      "sourceRole": "primary",
+      "url": "https://example.com/source-01",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-02",
+      "title": "Source note 02",
+      "publisher": "Federal Reserve",
+      "sourceType": "paper",
+      "sourceRole": "source_of_record",
+      "url": "https://example.com/source-02",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-03",
+      "title": "Source note 03",
+      "publisher": "European Commission",
+      "sourceType": "article",
+      "sourceRole": "technical_analysis",
+      "url": "https://example.com/source-03",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-04",
+      "title": "Source note 04",
+      "publisher": "The Information",
+      "sourceType": "dataset",
+      "sourceRole": "economic_analysis",
+      "url": "https://example.com/source-04",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-05",
+      "title": "Source note 05",
+      "publisher": "OpenAI",
+      "sourceType": "official_blog",
+      "sourceRole": "market_context",
+      "url": "https://example.com/source-05",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-06",
+      "title": "Source note 06",
+      "publisher": "NVIDIA",
+      "sourceType": "filing",
+      "sourceRole": "regulatory_context",
+      "url": "https://example.com/source-06",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-07",
+      "title": "Source note 07",
+      "publisher": "Federal Reserve",
+      "sourceType": "paper",
+      "sourceRole": "critical_contrast",
+      "url": "https://example.com/source-07",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-08",
+      "title": "Source note 08",
+      "publisher": "European Commission",
+      "sourceType": "article",
+      "sourceRole": "secondary_coverage",
+      "url": "https://example.com/source-08",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-09",
+      "title": "Source note 09",
+      "publisher": "The Information",
+      "sourceType": "dataset",
+      "sourceRole": "primary",
+      "url": "https://example.com/source-09",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-10",
+      "title": "Source note 10",
+      "publisher": "OpenAI",
+      "sourceType": "official_blog",
+      "sourceRole": "source_of_record",
+      "url": "https://example.com/source-10",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-11",
+      "title": "Source note 11",
+      "publisher": "NVIDIA",
+      "sourceType": "filing",
+      "sourceRole": "technical_analysis",
+      "url": "https://example.com/source-11",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-12",
+      "title": "Source note 12",
+      "publisher": "Federal Reserve",
+      "sourceType": "paper",
+      "sourceRole": "economic_analysis",
+      "url": "https://example.com/source-12",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-13",
+      "title": "Source note 13",
+      "publisher": "European Commission",
+      "sourceType": "article",
+      "sourceRole": "market_context",
+      "url": "https://example.com/source-13",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-14",
+      "title": "Source note 14",
+      "publisher": "The Information",
+      "sourceType": "dataset",
+      "sourceRole": "regulatory_context",
+      "url": "https://example.com/source-14",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    },
+    {
+      "sourceId": "src-15",
+      "title": "Source note 15",
+      "publisher": "OpenAI",
+      "sourceType": "official_blog",
+      "sourceRole": "critical_contrast",
+      "url": "https://example.com/source-15",
+      "publishedAt": "2026-06-14T09:00:00Z",
+      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+    }
+  ],
+  "candidates": [
+    {
+      "signalId": "sig-01",
+      "title": "Candidate signal 01",
+      "factualSummary": "Foundational placeholder summary for candidate 01 in the technology domain.",
+      "domainTags": [
+        "technology"
+      ],
+      "sourceIds": [
+        "src-01"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "causal_mechanism"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-02",
+      "title": "Candidate signal 02",
+      "factualSummary": "Foundational placeholder summary for candidate 02 in the ai domain.",
+      "domainTags": [
+        "ai"
+      ],
+      "sourceIds": [
+        "src-02"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "incentive_structure"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-03",
+      "title": "Candidate signal 03",
+      "factualSummary": "Foundational placeholder summary for candidate 03 in the economy domain.",
+      "domainTags": [
+        "economy"
+      ],
+      "sourceIds": [
+        "src-03"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "reusable_mental_model"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-04",
+      "title": "Candidate signal 04",
+      "factualSummary": "Foundational placeholder summary for candidate 04 in the technology domain.",
+      "domainTags": [
+        "technology"
+      ],
+      "sourceIds": [
+        "src-04"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "second_order_effect"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-05",
+      "title": "Candidate signal 05",
+      "factualSummary": "Foundational placeholder summary for candidate 05 in the ai domain.",
+      "domainTags": [
+        "ai"
+      ],
+      "sourceIds": [
+        "src-05"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "technical_moat"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-06",
+      "title": "Candidate signal 06",
+      "factualSummary": "Foundational placeholder summary for candidate 06 in the economy domain.",
+      "domainTags": [
+        "economy"
+      ],
+      "sourceIds": [
+        "src-06"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "market_structure"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-07",
+      "title": "Candidate signal 07",
+      "factualSummary": "Foundational placeholder summary for candidate 07 in the technology domain.",
+      "domainTags": [
+        "technology"
+      ],
+      "sourceIds": [
+        "src-07"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "strategic_judgment"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-08",
+      "title": "Candidate signal 08",
+      "factualSummary": "Foundational placeholder summary for candidate 08 in the ai domain.",
+      "domainTags": [
+        "ai"
+      ],
+      "sourceIds": [
+        "src-08"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "risk_pattern"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-09",
+      "title": "Candidate signal 09",
+      "factualSummary": "Foundational placeholder summary for candidate 09 in the economy domain.",
+      "domainTags": [
+        "economy"
+      ],
+      "sourceIds": [
+        "src-09"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "causal_mechanism"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-10",
+      "title": "Candidate signal 10",
+      "factualSummary": "Foundational placeholder summary for candidate 10 in the technology domain.",
+      "domainTags": [
+        "technology"
+      ],
+      "sourceIds": [
+        "src-10"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "incentive_structure"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-11",
+      "title": "Candidate signal 11",
+      "factualSummary": "Foundational placeholder summary for candidate 11 in the ai domain.",
+      "domainTags": [
+        "ai"
+      ],
+      "sourceIds": [
+        "src-11"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "reusable_mental_model"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-12",
+      "title": "Candidate signal 12",
+      "factualSummary": "Foundational placeholder summary for candidate 12 in the economy domain.",
+      "domainTags": [
+        "economy"
+      ],
+      "sourceIds": [
+        "src-12"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "second_order_effect"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-13",
+      "title": "Candidate signal 13",
+      "factualSummary": "Foundational placeholder summary for candidate 13 in the technology domain.",
+      "domainTags": [
+        "technology"
+      ],
+      "sourceIds": [
+        "src-13"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "technical_moat"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-14",
+      "title": "Candidate signal 14",
+      "factualSummary": "Foundational placeholder summary for candidate 14 in the ai domain.",
+      "domainTags": [
+        "ai"
+      ],
+      "sourceIds": [
+        "src-14"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "market_structure"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    },
+    {
+      "signalId": "sig-15",
+      "title": "Candidate signal 15",
+      "factualSummary": "Foundational placeholder summary for candidate 15 in the economy domain.",
+      "domainTags": [
+        "economy"
+      ],
+      "sourceIds": [
+        "src-15"
+      ],
+      "status": "candidate",
+      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "educationalValue": {
+        "score": 0.5,
+        "teachingMechanisms": [
+          "strategic_judgment"
+        ],
+        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "deepDivePotential": "possible"
+      },
+      "profileRelevance": [
+        {
+          "profileId": "sergio-canonical",
+          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
+          "relevanceScore": 0.5
+        }
+      ],
+      "confidence": 0.6,
+      "corroborationStatus": "partially_corroborated",
+      "auditNotes": [
+        "Foundational fixture shell; realistic enrichment follows in US1."
+      ]
+    }
+  ],
+  "clusters": [],
+  "selectedSignals": [],
+  "rejectedSignals": [],
+  "watchItems": [],
+  "qualityNotes": [
+    {
+      "code": "FOUNDATION_FIXTURE",
+      "message": "Minimal complete fixture for validating the v2 package skeleton before user-story enrichment.",
+      "severity": "info"
+    }
+  ]
+}

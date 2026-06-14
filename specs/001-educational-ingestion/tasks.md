@@ -20,10 +20,10 @@
 
 **Purpose**: Move the planned v2 ingestion package contract into canonical implementation locations without changing runtime behavior yet.
 
-- [ ] T001 Copy `specs/001-educational-ingestion/contracts/ingestion-package-v2.schema.json` to `data/ingestion-package.schema.json`
-- [ ] T002 [P] Create placeholder documentation shell for `docs/briefing-ingestion-v2.md` from `specs/001-educational-ingestion/data-model.md`
-- [ ] T003 [P] Create validation test skeleton in `tests/test_validate_ingestion_package.py`
-- [ ] T004 Create validator script skeleton in `scripts/validate_ingestion_package.py` with CLI argument parsing for `data/ingestion-package.sample.json`
+- [x] T001 Copy `specs/001-educational-ingestion/contracts/ingestion-package-v2.schema.json` to `data/ingestion-package.schema.json`
+- [x] T002 [P] Create placeholder documentation shell for `docs/briefing-ingestion-v2.md` from `specs/001-educational-ingestion/data-model.md`
+- [x] T003 [P] Create validation test skeleton in `tests/test_validate_ingestion_package.py`
+- [x] T004 Create validator script skeleton in `scripts/validate_ingestion_package.py` with CLI argument parsing for `data/ingestion-package.sample.json`
 
 ---
 
@@ -33,12 +33,12 @@
 
 **⚠️ CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T005 Add JSON loading, object expectation, and schema validation helpers in `scripts/validate_ingestion_package.py`
-- [ ] T006 Add shared uniqueness and cross-reference helper functions in `scripts/validate_ingestion_package.py`
-- [ ] T007 [P] Add a minimal valid package fixture with 15 candidate shells in `data/ingestion-package.sample.json`
-- [ ] T008 [P] Add documentation for package top-level shape in `docs/briefing-ingestion-v2.md`
-- [ ] T009 Add base passing validation test for `data/ingestion-package.sample.json` in `tests/test_validate_ingestion_package.py`
-- [ ] T010 Run `python3 -m unittest tests/test_validate_ingestion_package.py -v` and confirm the base fixture validation passes
+- [x] T005 Add JSON loading, object expectation, and schema validation helpers in `scripts/validate_ingestion_package.py`
+- [x] T006 Add shared uniqueness and cross-reference helper functions in `scripts/validate_ingestion_package.py`
+- [x] T007 [P] Add a minimal valid package fixture with 15 candidate shells in `data/ingestion-package.sample.json`
+- [x] T008 [P] Add documentation for package top-level shape in `docs/briefing-ingestion-v2.md`
+- [x] T009 Add base passing validation test for `data/ingestion-package.sample.json` in `tests/test_validate_ingestion_package.py`
+- [x] T010 Run `python3 -m unittest tests/test_validate_ingestion_package.py -v` and confirm the base fixture validation passes
 
 **Checkpoint**: Foundation ready — user story implementation can now begin.
 
