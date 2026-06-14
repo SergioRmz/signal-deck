@@ -102,7 +102,7 @@ def build_hero(packet: dict[str, Any], ordered_signals: list[dict[str, Any]]) ->
         "lede": f"{clean_sentence(brief['objective'])} {clean_sentence(synthesis['workingThesis'])}",
         "signal": clean_sentence(lead_signal["statement"]),
         "thesis": clean_sentence(synthesis["workingThesis"]),
-        "promise": clean_sentence(f"This briefing helps {audience} understand where leverage is moving and why it matters."),
+        "promise": clean_sentence(f"Esta edición ayuda a {audience} a ubicar dónde se está moviendo la ventaja y qué decisión exige."),
     }
     if tension:
         hero["tension"] = clean_sentence(str(tension))
@@ -128,9 +128,9 @@ def build_top_line(signals_by_id: dict[str, dict[str, Any]], packet: dict[str, A
     body_parts = [clean_sentence(synthesis["workingThesis"])]
     body_parts.extend(clean_sentence(item) for item in unique_preserving_order(first_order_implications)[:2])
     if second_order_implications:
-        body_parts.append(clean_sentence(f"Second-order effect: {second_order_implications[0]}"))
+        body_parts.append(clean_sentence(f"Efecto de segundo orden: {second_order_implications[0]}"))
     if synthesis.get("openQuestions"):
-        body_parts.append(clean_sentence(f"Question to track: {synthesis['openQuestions'][0]}"))
+        body_parts.append(clean_sentence(f"Pregunta a vigilar: {synthesis['openQuestions'][0]}"))
     stakes = (
         second_order_implications[-1]
         if second_order_implications
@@ -178,13 +178,13 @@ def build_deep_dives(signals_by_id: dict[str, dict[str, Any]], deep_dive_ids: li
         signal = signals_by_id[signal_id]
         implications = signal["implications"]
         body_parts = [
-            clean_sentence(f"Mechanism: {signal['evidence']}"),
-            clean_sentence(f"Why it matters: {implications[0]}"),
+            clean_sentence(f"Mecanismo: {signal['evidence']}"),
+            clean_sentence(f"Por qué importa: {implications[0]}"),
         ]
         if len(implications) > 1:
-            body_parts.append(clean_sentence(f"Second-order effect: {implications[1]}"))
+            body_parts.append(clean_sentence(f"Efecto de segundo orden: {implications[1]}"))
         if signal.get("counterpoints"):
-            body_parts.append(clean_sentence(f"Watch the tension: {signal['counterpoints'][0]}"))
+            body_parts.append(clean_sentence(f"Tensión a vigilar: {signal['counterpoints'][0]}"))
         items.append(
             {
                 "title": f"{index}. {signal['statement'].rstrip('.')}" ,
@@ -203,29 +203,44 @@ def build_deep_dives(signals_by_id: dict[str, dict[str, Any]], deep_dive_ids: li
 
 
 def build_market_map(packet: dict[str, Any]) -> dict[str, Any]:
-    frames = packet["editorialDecisions"]["marketMapFrames"]
-    items = []
-    for frame in frames:
-        normalized = frame.strip().lower()
-        if normalized == "winners":
-            text = "Platforms and products that own distribution, recurring workflow, and durable user context."
-            power_shift = "Leverage compounds where workflow and context accumulate."
-        elif normalized == "pressured":
-            text = "Vendors whose differentiation depends mainly on standalone access to a better model."
-            power_shift = "Feature-level advantage erodes faster when access broadens."
-        elif normalized == "opportunity":
-            text = "Vertical operators that can turn AI into embedded workflow and capture non-portable context over time."
-            power_shift = "Specialization wins when it becomes part of daily operating behavior."
-        else:
-            text = (
-                "Interpret this frame through the packet's prioritized signals, implications, and editorial thesis."
-            )
-            power_shift = "Power moves toward the layer that owns repetition, context, or switching cost."
-        items.append({"label": frame, "text": text, "powerShift": power_shift})
+    """Build a content-specific market map from the actual signals.
+
+    The first prototype used generic winners/pressured/opportunity copy, which
+    made the public page feel templated even when the source packet was real.
+    This keeps the same contract but derives the positioning from the edition's
+    own themes and implications.
+    """
+    signals = packet["signals"]
+    by_category = {str(signal.get("category", "")).lower(): signal for signal in signals}
+    infra = by_category.get("infrastructure", signals[0])
+    governance = by_category.get("governance", signals[min(1, len(signals) - 1)])
+    economics = by_category.get("economics", signals[min(2, len(signals) - 1)])
 
     return {
-        "title": "Where leverage is moving",
-        "items": items,
+        "title": "Mapa de poder: dónde se mueve la ventaja",
+        "items": [
+            {
+                "label": "Ganan poder",
+                "text": clean_sentence(
+                    "Operadores con acceso creíble a capacidad: chips, energía, data centers, redes y equipos capaces de orquestar inferencia a costo controlado"
+                ),
+                "powerShift": clean_sentence(infra["implications"][0]),
+            },
+            {
+                "label": "Quedan presionados",
+                "text": clean_sentence(
+                    "Compradores y vendors que trataban la nube como una abstracción neutral; ahora deben justificar dependencia, jurisdicción y continuidad operacional"
+                ),
+                "powerShift": clean_sentence(governance["implications"][-1]),
+            },
+            {
+                "label": "Se abre oportunidad",
+                "text": clean_sentence(
+                    "Perfiles puente —software, infraestructura, riesgo y finanzas— que puedan traducir ambición de IA en arquitectura, procurement y unit economics"
+                ),
+                "powerShift": clean_sentence(economics["implications"][-1]),
+            },
+        ],
     }
 
 
@@ -247,11 +262,11 @@ def build_reader_translation(packet: dict[str, Any], high_priority_signals: list
         "executive": 0,
     }
     role_lenses = {
-        "software-engineer": "For a software engineer, the advantage is architecture: design products that capture workflow context, memory, and repeat usage instead of treating model calls as the moat.",
-        "engineer": "For an engineer, the advantage is architecture: design products that capture workflow context, memory, and repeat usage instead of treating model calls as the moat.",
-        "founder": "For a founder, the advantage is distribution: own the recurring user relationship before model access becomes a commodity input everyone can buy.",
-        "operator": "For an operator, the advantage is operating cadence: find where AI becomes a repeated workflow dependency rather than an occasional productivity add-on.",
-        "executive": "For an executive, the advantage is allocation discipline: move resources toward workflow ownership, context capture, and durable distribution.",
+        "software-engineer": "Para un software engineer, la ventaja es diseñar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional.",
+        "engineer": "Para un engineer, la ventaja es diseñar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional.",
+        "founder": "Para un founder, la ventaja es convertir infraestructura confiable en promesa comercial: no vender magia de IA, sino capacidad repetible con unit economics defendibles.",
+        "operator": "Para un operator, la ventaja es comprar y gobernar IA como sistema crítico: vendor risk, jurisdicción, presupuesto, SLAs y dependencia operacional.",
+        "executive": "Para un executive, la ventaja es asignar capital con disciplina: separar demanda narrativa de capacidad física, riesgo legal y margen operativo.",
     }
 
     original_role_order = {str(role).strip(): index for index, role in enumerate(roles) if str(role).strip()}
@@ -276,7 +291,7 @@ def build_reader_translation(packet: dict[str, Any], high_priority_signals: list
         weight = role_weight(role_text)
         item = {
             "role": role_text,
-            "headline": clean_sentence(f"What this means for {role_text}").rstrip("."),
+            "headline": clean_sentence(f"Qué cambia para {role_text}").rstrip("."),
             "body": clean_sentence(body),
         }
         if weight is not None:
@@ -286,7 +301,7 @@ def build_reader_translation(packet: dict[str, Any], high_priority_signals: list
     if not items:
         return None
     return {
-        "title": "What this changes for you",
+        "title": "Qué cambia para ti",
         "items": items,
     }
 
@@ -296,9 +311,9 @@ def build_reusable_lesson(packet: dict[str, Any], high_priority_signals: list[di
     apply_when = synthesis.get("supportingThemes", [])[:3]
     takeaway = high_priority_signals[0]["implications"][0] if high_priority_signals else packet["brief"]["objective"]
     return {
-        "title": "Reusable lesson",
+        "title": "Lección reutilizable",
         "pattern": clean_sentence(
-            "When a base capability commoditizes, value often migrates toward the layer that owns workflow, distribution, or non-portable context."
+            "Cuando una capacidad base se vuelve commodity, la ventaja migra hacia quien controla la restricción escasa: capacidad, continuidad, regulación, distribución o contexto no portable."
         ),
         "applyWhen": [clean_sentence(theme) for theme in apply_when],
         "takeaway": clean_sentence(takeaway),
@@ -321,7 +336,7 @@ def build_watchlist(packet: dict[str, Any]) -> dict[str, Any]:
     editorial = packet["editorialDecisions"]
     questions = unique_preserving_order(editorial["watchlistSeeds"] + synthesis["openQuestions"])
     return {
-        "title": "Watch framework",
+        "title": "Marco de vigilancia",
         "items": [{"text": clean_sentence(question), "type": infer_watch_type(question)} for question in questions],
     }
 

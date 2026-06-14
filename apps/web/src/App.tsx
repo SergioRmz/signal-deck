@@ -42,7 +42,7 @@ export default function App() {
   const [state, setState] = useState<RendererState>({ status: 'loading' });
 
   useEffect(() => {
-    document.title = 'signal-deck / Vite renderer';
+    document.title = 'signal-deck';
 
     let active = true;
 
@@ -123,12 +123,12 @@ export default function App() {
         <Card className="w-full max-w-2xl border-primary/25 bg-signal-grid">
           <CardHeader className="gap-4">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / vite renderer</Badge>
-              <Badge variant="accent">loading</Badge>
+              <Badge>signal-deck</Badge>
+              <Badge variant="accent">cargando</Badge>
             </div>
-            <CardTitle className="text-3xl md:text-4xl">Preparing the briefing surface</CardTitle>
+            <CardTitle className="text-3xl md:text-4xl">Preparando la edición</CardTitle>
             <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
-              The React + Vite renderer is loading the briefing payload and visual composition artifacts into a static, deployable reading surface.
+              Estamos cargando el briefing y su composición visual.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -142,12 +142,12 @@ export default function App() {
         <Card className="w-full max-w-2xl border-accent/30 bg-accent/5">
           <CardHeader className="gap-4">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / vite renderer</Badge>
-              <Badge variant="accent">load error</Badge>
+              <Badge>signal-deck</Badge>
+              <Badge variant="accent">error de carga</Badge>
             </div>
-            <CardTitle className="text-3xl md:text-4xl">The renderer could not load its data artifacts</CardTitle>
+            <CardTitle className="text-3xl md:text-4xl">No se pudo cargar la edición</CardTitle>
             <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
-              Make sure the sync step copied the JSON payloads into <code>public/data</code> before starting the app.
+              Verifica que el paso de sincronización haya copiado los archivos JSON a <code>public/data</code> antes de desplegar.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -186,7 +186,7 @@ export default function App() {
         <Card className="overflow-hidden bg-signal-grid">
           <CardHeader className="gap-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / vite renderer</Badge>
+              <Badge>signal-deck</Badge>
               <Badge variant="muted">{briefing.meta.editionDate}</Badge>
               <Badge variant="accent">{composition.experience?.visualTone || 'dark tone'}</Badge>
             </div>
@@ -222,8 +222,8 @@ export default function App() {
 
         <Card>
           <CardHeader>
-            <CardDescription>Reader context</CardDescription>
-            <CardTitle className="text-2xl">Who this edition is trying to upgrade</CardTitle>
+            <CardDescription>Contexto del lector</CardDescription>
+            <CardTitle className="text-2xl">Para quién está diseñada esta edición</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5 text-sm text-muted-foreground">
             <div>
@@ -237,7 +237,7 @@ export default function App() {
               </div>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Interests</p>
+              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Intereses</p>
               <div className="flex flex-wrap gap-2">
                 {briefing.meta.readerContext?.interests?.map((interest) => (
                   <Badge key={interest}>{interest}</Badge>
@@ -273,12 +273,12 @@ export default function App() {
 
         <Card>
           <CardHeader>
-            <CardDescription>Composition signal</CardDescription>
-            <CardTitle className="text-2xl">How the Vite renderer is sequencing the reading path</CardTitle>
+            <CardDescription>Ruta editorial</CardDescription>
+            <CardTitle className="text-2xl">Cómo conviene leer esta edición</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="rounded-2xl border border-border/80 bg-background/40 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Engagement goal</p>
+              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Objetivo de lectura</p>
               <p className="text-sm leading-7 text-foreground/85">{composition.experience?.engagementGoal}</p>
             </div>
             <ul className="space-y-3">
@@ -287,7 +287,7 @@ export default function App() {
                   key={moduleId}
                   className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/35 px-4 py-3 text-sm text-muted-foreground"
                 >
-                  <span>{moduleId}</span>
+                  <span>{moduleId.replace('mod-', '').replaceAll('-', ' ')}</span>
                   <ArrowRight className="h-4 w-4 text-primary" />
                 </li>
               ))}
@@ -349,12 +349,12 @@ export default function App() {
 
           <Card>
             <CardHeader>
-              <CardDescription>Composition cue</CardDescription>
-              <CardTitle className="text-2xl">Why the page now translates the thesis by role</CardTitle>
+              <CardDescription>Por qué aparece aquí</CardDescription>
+              <CardTitle className="text-2xl">La tesis cambia según tu rol operativo</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm text-muted-foreground">
               <p className="leading-7 text-foreground/85">
-                Reader Translation turns the edition from a generic argument into a role-aware upgrade path before the evidence modules ask for deeper attention.
+                Esta sección convierte la tesis en decisiones prácticas para cada rol antes de entrar al bloque de evidencia.
               </p>
               <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
                 <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
@@ -367,9 +367,9 @@ export default function App() {
                 </div>
               </div>
               <div className="rounded-2xl border border-accent/20 bg-accent/10 p-4">
-                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Migration status</p>
+                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Uso práctico</p>
                 <p className="leading-7 text-foreground">
-                  Reader Translation is now rendered from the real briefing payload instead of remaining an unused optional layer in the contract.
+                  Lee primero tu rol dominante y luego contrástalo con el resto: la ventaja aparece en los cruces, no en una sola etiqueta.
                 </p>
               </div>
             </CardContent>
@@ -416,12 +416,12 @@ export default function App() {
 
         <Card>
           <CardHeader>
-            <CardDescription>Reading cue</CardDescription>
-            <CardTitle className="text-2xl">Why the radar exists at this point in the page</CardTitle>
+            <CardDescription>Clave de lectura</CardDescription>
+            <CardTitle className="text-2xl">Por qué este radar va antes del análisis largo</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-muted-foreground">
             <p className="leading-7 text-foreground/85">
-              The composition wants the reader to test the thesis quickly before committing to the heavier argument.
+              El radar te deja probar la tesis contra varias señales antes de invertir atención en el análisis de mecanismos.
             </p>
             <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
               <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
@@ -434,9 +434,9 @@ export default function App() {
               </div>
             </div>
             <div className="rounded-2xl border border-accent/20 bg-accent/10 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Migration status</p>
+              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Uso práctico</p>
               <p className="leading-7 text-foreground">
-                Radar is now rendered from the real briefing payload instead of staying implicit in the composition sample.
+              Si una señal no sostiene la tesis, esa tensión debe subir de peso en la lectura, no esconderse como excepción.
               </p>
             </div>
           </CardContent>
@@ -484,7 +484,7 @@ export default function App() {
                 <div className="space-y-3 text-sm leading-7 text-foreground/85">
                   {item.explanation ? (
                     <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Why it matters</p>
+                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Mecanismo</p>
                       <p>{item.explanation}</p>
                     </div>
                   ) : null}
@@ -492,7 +492,7 @@ export default function App() {
                 </div>
                 {item.implication ? (
                   <div className="rounded-2xl border border-accent/25 bg-accent/10 p-4">
-                    <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Implication</p>
+                    <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Implicación</p>
                     <p className="text-sm leading-7 text-foreground">{item.implication}</p>
                   </div>
                 ) : null}
@@ -536,7 +536,7 @@ export default function App() {
                   </div>
                   {item.powerShift ? (
                     <div className="max-w-sm rounded-2xl border border-accent/25 bg-accent/10 p-4 text-sm leading-7 text-foreground">
-                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Power shift</p>
+                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Cambio de poder</p>
                       <p>{item.powerShift}</p>
                     </div>
                   ) : null}
@@ -591,12 +591,12 @@ export default function App() {
 
           <Card>
             <CardHeader>
-              <CardDescription>Composition cue</CardDescription>
-              <CardTitle className="text-2xl">How the closing modules turn argument into posture</CardTitle>
+              <CardDescription>Cierre operativo</CardDescription>
+              <CardTitle className="text-2xl">Cómo convertir el análisis en postura</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm text-muted-foreground">
               <p className="leading-7 text-foreground/85">
-                Market map turns the thesis into strategic positioning, then the reusable lesson and watchlist convert that positioning into a repeatable operating lens.
+                El mapa de poder traduce la tesis en posicionamiento; la lección reutilizable y la vigilancia la convierten en una forma repetible de leer el mercado.
               </p>
               <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
                 <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
@@ -634,7 +634,7 @@ export default function App() {
             <Card key={`${item.text}-${index}`} className="border-border/80 bg-background/45">
               <CardHeader className="gap-3 border-b border-border/60 pb-4">
                 <div className="flex items-center justify-between gap-3">
-                  <Badge variant="muted">Question {index + 1}</Badge>
+                  <Badge variant="muted">Pregunta {index + 1}</Badge>
                   <Badge variant={item.type === 'metric' ? 'accent' : 'muted'}>{watchTypeLabel(item.type)}</Badge>
                 </div>
               </CardHeader>
