@@ -66,6 +66,23 @@ Educational scoring is separate from factual relevance. A candidate can be timel
 
 A candidate with educational score below `0.4` is considered weak for the product's teaching mission. It must be downgraded to `watch_item`/`merged` or rejected; if rejected specifically for weak learning value, it should use `rejectionReason: low_educational_value`.
 
+## Clustering, selection, and deep-dive rules
+
+Clusters turn individual signals into reusable theses. Each cluster must reference known candidate `signalIds` and explain:
+
+- `thesisCandidate`: the executive lesson the cluster could teach.
+- `sharedMechanism`: the causal/economic/technical mechanism that binds the signals.
+- `keyTension`: the contradiction or tradeoff a deep dive should not hide.
+- `educationalRationale`: why the cluster deserves teaching time.
+
+A normal `complete` run must promote **5-8 selected signals**. It must include **2-3 `deep_dive` selections**. Deep dives are not picked by hype: they require strong educational density. For a signal or cluster to serve as a deep dive, at least one underlying candidate must have:
+
+- `educationalValue.score >= 0.75`
+- `educationalValue.deepDivePotential: strong`
+- a teaching mechanism such as `reusable_mental_model`, `causal_mechanism`, `second_order_effect`, `technical_moat`, or `market_structure`
+
+`generate_briefing.py` now accepts either the legacy v1 `signal-input` packet or the v2 ingestion package. For v2 packages, it adapts selected signals and clusters into the existing v1 transformation layer so downstream renderer behavior remains compatible while the richer ingestion artifact matures.
+
 ## Validation
 
 Run the validator from the repository root:

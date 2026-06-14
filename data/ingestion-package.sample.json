@@ -15,7 +15,7 @@
     "runDate": "2026-06-14",
     "status": "complete",
     "candidateCount": 15,
-    "selectedCount": 0,
+    "selectedCount": 6,
     "rejectedCount": 0,
     "watchItemCount": 0,
     "sourceDiversity": {
@@ -33,7 +33,12 @@
       },
       "concentrationRisk": "low",
       "concentrationRationale": "Foundation sample is intentionally balanced across the three target domains.",
-      "alternativeSearchNotes": "Story-specific discovery notes are added as the candidate pool becomes realistic."
+      "alternativeSearchNotes": "Story-specific discovery notes are added as the candidate pool becomes realistic.",
+      "narrativeCounts": {
+        "ai workflow moats": 4,
+        "infrastructure constraints": 3,
+        "macro regulation trust": 3
+      }
     }
   },
   "readerProfiles": [
@@ -220,21 +225,22 @@
       "sourceIds": [
         "src-01"
       ],
-      "status": "candidate",
+      "status": "selected",
       "editorialRationale": "Tests whether agentic AI monetizes through workflow ownership instead of model novelty.",
       "educationalValue": {
-        "score": 0.62,
+        "score": 0.88,
         "teachingMechanisms": [
-          "causal_mechanism"
+          "causal_mechanism",
+          "reusable_mental_model"
         ],
         "learningRationale": "This item teaches causal mechanism through a concrete market signal.",
-        "deepDivePotential": "possible"
+        "deepDivePotential": "strong"
       },
       "profileRelevance": [
         {
           "profileId": "sergio-canonical",
-          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
-          "relevanceScore": 0.5
+          "relevanceRationale": "Alta relevancia para Sergio porque convierte una señal de mercado en una tesis reutilizable sobre IA, tecnología y economía.",
+          "relevanceScore": 0.82
         }
       ],
       "confidence": 0.68,
@@ -253,7 +259,7 @@
       "sourceIds": [
         "src-02"
       ],
-      "status": "candidate",
+      "status": "selected",
       "editorialRationale": "Connects hardware scarcity to pricing power, margins, and model-serving architecture decisions.",
       "educationalValue": {
         "score": 0.66,
@@ -266,8 +272,8 @@
       "profileRelevance": [
         {
           "profileId": "sergio-canonical",
-          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
-          "relevanceScore": 0.5
+          "relevanceRationale": "Alta relevancia para Sergio porque convierte una señal de mercado en una tesis reutilizable sobre IA, tecnología y economía.",
+          "relevanceScore": 0.82
         }
       ],
       "confidence": 0.68,
@@ -286,7 +292,7 @@
       "sourceIds": [
         "src-03"
       ],
-      "status": "candidate",
+      "status": "selected",
       "editorialRationale": "Explains how macro uncertainty changes discount rates for long-duration technology bets.",
       "educationalValue": {
         "score": 0.7,
@@ -299,8 +305,8 @@
       "profileRelevance": [
         {
           "profileId": "sergio-canonical",
-          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
-          "relevanceScore": 0.5
+          "relevanceRationale": "Alta relevancia para Sergio porque convierte una señal de mercado en una tesis reutilizable sobre IA, tecnología y economía.",
+          "relevanceScore": 0.82
         }
       ],
       "confidence": 0.68,
@@ -319,21 +325,22 @@
       "sourceIds": [
         "src-04"
       ],
-      "status": "candidate",
+      "status": "selected",
       "editorialRationale": "Surfaces the moat question: distribution, data, product integration, and trust may matter more than model access alone.",
       "educationalValue": {
-        "score": 0.74,
+        "score": 0.86,
         "teachingMechanisms": [
-          "second_order_effect"
+          "second_order_effect",
+          "reusable_mental_model"
         ],
         "learningRationale": "This item teaches second order effect through a concrete market signal.",
-        "deepDivePotential": "possible"
+        "deepDivePotential": "strong"
       },
       "profileRelevance": [
         {
           "profileId": "sergio-canonical",
-          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
-          "relevanceScore": 0.5
+          "relevanceRationale": "Alta relevancia para Sergio porque convierte una señal de mercado en una tesis reutilizable sobre IA, tecnología y economía.",
+          "relevanceScore": 0.82
         }
       ],
       "confidence": 0.68,
@@ -451,21 +458,22 @@
       "sourceIds": [
         "src-08"
       ],
-      "status": "candidate",
+      "status": "selected",
       "editorialRationale": "Connects AI scaling to physical-world bottlenecks and second-order capital allocation effects.",
       "educationalValue": {
-        "score": 0.62,
+        "score": 0.84,
         "teachingMechanisms": [
-          "risk_pattern"
+          "risk_pattern",
+          "reusable_mental_model"
         ],
         "learningRationale": "This item teaches risk pattern through a concrete market signal.",
-        "deepDivePotential": "possible"
+        "deepDivePotential": "strong"
       },
       "profileRelevance": [
         {
           "profileId": "sergio-canonical",
-          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
-          "relevanceScore": 0.5
+          "relevanceRationale": "Alta relevancia para Sergio porque convierte una señal de mercado en una tesis reutilizable sobre IA, tecnología y economía.",
+          "relevanceScore": 0.82
         }
       ],
       "confidence": 0.68,
@@ -616,7 +624,7 @@
       "sourceIds": [
         "src-13"
       ],
-      "status": "candidate",
+      "status": "selected",
       "editorialRationale": "Separates macro labor evidence from simplistic automation narratives.",
       "educationalValue": {
         "score": 0.82,
@@ -629,8 +637,8 @@
       "profileRelevance": [
         {
           "profileId": "sergio-canonical",
-          "relevanceRationale": "Placeholder relevance for Sergio's canonical educational lens.",
-          "relevanceScore": 0.5
+          "relevanceRationale": "Alta relevancia para Sergio porque convierte una señal de mercado en una tesis reutilizable sobre IA, tecnología y economía.",
+          "relevanceScore": 0.82
         }
       ],
       "confidence": 0.68,
@@ -706,8 +714,101 @@
       ]
     }
   ],
-  "clusters": [],
-  "selectedSignals": [],
+  "clusters": [
+    {
+      "clusterId": "cluster-ai-workflow-moats",
+      "title": "AI workflow moats move beyond raw model capability",
+      "signalIds": [
+        "sig-01",
+        "sig-04",
+        "sig-09",
+        "sig-15"
+      ],
+      "thesisCandidate": "La ventaja en IA se desplaza desde el modelo aislado hacia control de workflow, distribución, evaluación y confianza operativa.",
+      "sharedMechanism": "Capability commoditization pushes value toward workflow ownership and trust infrastructure.",
+      "keyTension": "Open models compress differentiation while enterprise buyers still demand reliability, auditability and procurement safety.",
+      "educationalRationale": "Teaches how technical moats migrate when a base capability becomes more widely available.",
+      "concentrationNotes": [
+        "AI concentration is intentional because the reusable moat lesson links product, trust and distribution."
+      ]
+    },
+    {
+      "clusterId": "cluster-infrastructure-constraints",
+      "title": "Physical infrastructure becomes the hidden AI strategy layer",
+      "signalIds": [
+        "sig-02",
+        "sig-08",
+        "sig-10"
+      ],
+      "thesisCandidate": "AI strategy is increasingly constrained by chips, power, capex discipline and deployment economics.",
+      "sharedMechanism": "Scarce physical inputs create pricing power and force ROI discipline downstream.",
+      "keyTension": "Demand for AI capacity keeps rising while investors scrutinize whether capex turns into durable cash flow.",
+      "educationalRationale": "Teaches second-order effects between infrastructure bottlenecks and software business models."
+    },
+    {
+      "clusterId": "cluster-macro-regulation-trust",
+      "title": "Macro and regulation shape the trust boundary for AI adoption",
+      "signalIds": [
+        "sig-03",
+        "sig-06",
+        "sig-13"
+      ],
+      "thesisCandidate": "AI adoption is not only a capability curve; it is filtered through rates, labor evidence, compliance and buyer risk tolerance.",
+      "sharedMechanism": "External constraints change the payoff of technical adoption by altering cost of capital and acceptable risk.",
+      "keyTension": "The automation narrative can outrun macro evidence and regulatory deployment constraints.",
+      "educationalRationale": "Teaches why strategic judgment requires connecting technical signals to economic and institutional constraints."
+    }
+  ],
+  "selectedSignals": [
+    {
+      "selectionId": "sel-01",
+      "clusterId": "cluster-ai-workflow-moats",
+      "roleInBriefing": "deep_dive",
+      "selectionRationale": "Highest educational density: reusable moat migration thesis across agents, open models and evaluations.",
+      "sourceCoverageSummary": "Combines product, technical and procurement evidence from the sample source set.",
+      "profileRationale": "For Sergio, this becomes a reusable framework for judging AI products beyond hype."
+    },
+    {
+      "selectionId": "sel-02",
+      "signalId": "sig-08",
+      "roleInBriefing": "deep_dive",
+      "selectionRationale": "Turns AI scaling into a concrete physical bottleneck lesson with second-order capex implications.",
+      "sourceCoverageSummary": "Backed by infrastructure/power context source metadata in the sample package.",
+      "profileRationale": "For Sergio, this links AI strategy to infrastructure economics and operational constraints."
+    },
+    {
+      "selectionId": "sel-03",
+      "signalId": "sig-02",
+      "roleInBriefing": "radar",
+      "selectionRationale": "Keeps chip and inference economics visible as a near-term market signal.",
+      "sourceCoverageSummary": "Uses market-context source metadata.",
+      "profileRationale": "Useful for Sergio as a leading indicator for AI cost structure and vendor power."
+    },
+    {
+      "selectionId": "sel-04",
+      "signalId": "sig-03",
+      "roleInBriefing": "radar",
+      "selectionRationale": "Adds macro cost-of-capital context for technology valuation and spending decisions.",
+      "sourceCoverageSummary": "Uses source-of-record monetary policy metadata.",
+      "profileRationale": "Helps Sergio connect tech narratives to economic discount-rate pressure."
+    },
+    {
+      "selectionId": "sel-05",
+      "clusterId": "cluster-infrastructure-constraints",
+      "roleInBriefing": "market_map",
+      "selectionRationale": "Maps winners and pressure points around scarce AI infrastructure.",
+      "sourceCoverageSummary": "Combines chip, power and capex evidence.",
+      "profileRationale": "Gives Sergio an operator/investor map for where power is shifting."
+    },
+    {
+      "selectionId": "sel-06",
+      "signalId": "sig-13",
+      "roleInBriefing": "reader_translation",
+      "selectionRationale": "Grounds automation narratives in uneven labor-market evidence.",
+      "sourceCoverageSummary": "Uses source-of-record labor-market metadata.",
+      "profileRationale": "Keeps Sergio from overgeneralizing AI labor claims without evidence."
+    }
+  ],
   "rejectedSignals": [],
   "watchItems": [],
   "qualityNotes": [

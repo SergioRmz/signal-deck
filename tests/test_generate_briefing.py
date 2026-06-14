@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from generate_briefing import transform_packet  # noqa: E402
+from generate_briefing import transform_ingestion_package, transform_packet  # noqa: E402
 
 
 class EditorialTransformationV2Test(unittest.TestCase):
@@ -53,6 +53,17 @@ class EditorialTransformationV2Test(unittest.TestCase):
         self.assertIn("Efecto de segundo orden:", top_line["body"])
         self.assertIn("Pregunta a vigilar:", top_line["body"])
         self.assertIn("Switching costs may rise", top_line["stakes"])
+
+    def test_ingestion_package_selected_signals_feed_briefing_transformation(self) -> None:
+        package = json.loads((ROOT / "data" / "ingestion-package.sample.json").read_text())
+
+        briefing = transform_ingestion_package(package)
+
+        self.assertEqual(briefing["meta"]["language"], "es")
+        self.assertGreaterEqual(len(briefing["radar"]["items"]), 5)
+        self.assertEqual(len(briefing["deepDives"]["items"]), 2)
+        self.assertIn("Mecanismo:", briefing["deepDives"]["items"][0]["body"])
+        self.assertIn("Qué cambia para ti", briefing["readerTranslation"]["title"])
 
 
 if __name__ == "__main__":

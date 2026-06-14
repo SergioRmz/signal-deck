@@ -291,6 +291,57 @@ def _validate_selected_profile_rationales(selected_signals: list[Any]) -> None:
         )
 
 
+def _candidate_by_id(candidates: list[Any]) -> dict[str, dict[str, Any]]:
+    return {expect_dict(candidate, "candidate")["signalId"]: candidate for candidate in candidates}
+
+
+def _validate_selection_semantics(package: dict[str, Any], candidates: list[Any]) -> None:
+    run = expect_dict(package.get("run"), "run")
+    selected_signals = expect_list(package.get("selectedSignals"), "selectedSignals")
+    clusters = expect_list(package.get("clusters"), "clusters")
+    candidates_by_id = _candidate_by_id(candidates)
+    clusters_by_id = {expect_dict(cluster, "cluster")["clusterId"]: cluster for cluster in clusters}
+
+    if run.get("status") == "complete" and not 5 <= len(selected_signals) <= 8:
+        fail("complete run must contain 5-8 selected signals")
+
+    deep_dives = [selected for selected in selected_signals if expect_dict(selected, "selectedSignal").get("roleInBriefing") == "deep_dive"]
+    if run.get("status") == "complete" and not 2 <= len(deep_dives) <= 3:
+        fail("complete run must contain 2-3 deep dive selections")
+
+    for index, selected in enumerate(selected_signals, start=1):
+        item = expect_dict(selected, f"selectedSignals[{index}]")
+        if item.get("signalId"):
+            signal_id = item["signalId"]
+            if signal_id not in candidates_by_id:
+                fail(f"selectedSignals[{index}] references unknown signalId: {signal_id}")
+            candidate_ids = [signal_id]
+        else:
+            cluster_id = item.get("clusterId")
+            if cluster_id not in clusters_by_id:
+                fail(f"selectedSignals[{index}] references unknown clusterId: {cluster_id}")
+            candidate_ids = clusters_by_id[cluster_id]["signalIds"]
+
+        if item.get("roleInBriefing") != "deep_dive":
+            continue
+
+        dense_candidates = []
+        for signal_id in candidate_ids:
+            if signal_id not in candidates_by_id:
+                fail(f"selectedSignals[{index}] references cluster with unknown signalId: {signal_id}")
+            candidate = candidates_by_id[signal_id]
+            value = expect_dict(candidate.get("educationalValue"), f"candidate {signal_id}.educationalValue")
+            mechanisms = set(expect_non_empty_list(value.get("teachingMechanisms"), f"candidate {signal_id}.educationalValue.teachingMechanisms"))
+            if (
+                value.get("score", 0) >= 0.75
+                and value.get("deepDivePotential") == "strong"
+                and mechanisms.intersection({"reusable_mental_model", "causal_mechanism", "second_order_effect", "technical_moat", "market_structure"})
+            ):
+                dense_candidates.append(signal_id)
+        if not dense_candidates:
+            fail(f"deep dive {item.get('selectionId', index)} requires strong educational density")
+
+
 def validate_shared_semantics(package: dict[str, Any]) -> None:
     sources = expect_non_empty_list(package.get("sources"), "sources")
     candidates = expect_non_empty_list(package.get("candidates"), "candidates")
@@ -349,6 +400,8 @@ def validate_shared_semantics(package: dict[str, Any]) -> None:
             fail(f"selectedSignals[{index}] references unknown signalId: {selected['signalId']}")
         if selected.get("clusterId") and selected["clusterId"] not in cluster_ids:
             fail(f"selectedSignals[{index}] references unknown clusterId: {selected['clusterId']}")
+
+    _validate_selection_semantics(package, candidates)
 
     for index, rejected in enumerate(package.get("rejectedSignals", []), start=1):
         signal_id = rejected.get("signalId")

@@ -70,7 +70,10 @@ class ValidateIngestionPackageTests(unittest.TestCase):
     def test_underfilled_run_allows_smaller_pool_with_quality_note(self) -> None:
         package = copy.deepcopy(self.sample)
         package["candidates"] = package["candidates"][:12]
+        package["clusters"] = []
+        package["selectedSignals"] = []
         package["run"]["candidateCount"] = 12
+        package["run"]["selectedCount"] = 0
         package["run"]["status"] = "underfilled"
         package["qualityNotes"] = [{"code": "UNDERFILLED", "message": "Only 12 credible candidates found.", "severity": "warning"}]
 
@@ -159,6 +162,38 @@ class ValidateIngestionPackageTests(unittest.TestCase):
         package["run"]["selectedCount"] = 1
 
         self.assert_validation_error(package, "profileRationale")
+
+    def test_cluster_rejects_unknown_signal_reference(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["clusters"][0]["signalIds"].append("sig-does-not-exist")
+
+        self.assert_validation_error(package, "clusters\[1\] references unknown signalId")
+
+    def test_complete_run_requires_five_to_eight_selected_signals(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["selectedSignals"] = package["selectedSignals"][:4]
+        package["run"]["selectedCount"] = 4
+
+        self.assert_validation_error(package, "complete run must contain 5-8 selected signals")
+
+    def test_complete_run_requires_two_to_three_deep_dives_with_strong_density(self) -> None:
+        package = copy.deepcopy(self.sample)
+        for selected in package["selectedSignals"]:
+            if selected["roleInBriefing"] == "deep_dive":
+                selected["roleInBriefing"] = "radar"
+
+        self.assert_validation_error(package, "complete run must contain 2-3 deep dive selections")
+
+    def test_deep_dive_selection_requires_strong_educational_density(self) -> None:
+        package = copy.deepcopy(self.sample)
+        deep_dive = next(
+            selected for selected in package["selectedSignals"] if selected["roleInBriefing"] == "deep_dive" and selected.get("signalId")
+        )
+        target = next(candidate for candidate in package["candidates"] if candidate["signalId"] == deep_dive["signalId"])
+        target["educationalValue"]["score"] = 0.55
+        target["educationalValue"]["deepDivePotential"] = "possible"
+
+        self.assert_validation_error(package, "deep dive .* strong educational density")
 
 
 if __name__ == "__main__":

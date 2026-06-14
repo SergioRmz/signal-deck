@@ -125,19 +125,19 @@
 
 ### Tests for User Story 4
 
-- [ ] T036 [P] [US4] Add cluster cross-reference tests for unknown `signalIds` in `tests/test_validate_ingestion_package.py`
-- [ ] T037 [P] [US4] Add selected-signal count tests for normal completed runs in `tests/test_validate_ingestion_package.py`
-- [ ] T038 [P] [US4] Add deep dive educational density tests in `tests/test_validate_ingestion_package.py`
-- [ ] T039 [P] [US4] Add transformation tests proving selected/deep-dive package signals can feed `generate_briefing.py` in `tests/test_generate_briefing.py`
+- [x] T036 [P] [US4] Add cluster cross-reference tests for unknown `signalIds` in `tests/test_validate_ingestion_package.py`
+- [x] T037 [P] [US4] Add selected-signal count tests for normal completed runs in `tests/test_validate_ingestion_package.py`
+- [x] T038 [P] [US4] Add deep dive educational density tests in `tests/test_validate_ingestion_package.py`
+- [x] T039 [P] [US4] Add transformation tests proving selected/deep-dive package signals can feed `generate_briefing.py` in `tests/test_generate_briefing.py`
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Populate `clusters` in `data/ingestion-package.sample.json` with thesis candidates, shared mechanisms, and key tensions
-- [ ] T041 [US4] Populate `selectedSignals` in `data/ingestion-package.sample.json` with 5-8 selected signals and 2-3 deep dive roles
-- [ ] T042 [US4] Implement cluster and selected-signal semantic validation in `scripts/validate_ingestion_package.py`
-- [ ] T043 [US4] Add package-to-v1 transformation adapter in `scripts/generate_briefing.py` without breaking existing `signal-input.sample.json` flow
-- [ ] T044 [US4] Document clustering, selection, and deep dive rules in `docs/briefing-ingestion-v2.md`
-- [ ] T045 [US4] Run `python3 -m unittest tests/test_generate_briefing.py -v` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T040 [US4] Populate `clusters` in `data/ingestion-package.sample.json` with thesis candidates, shared mechanisms, and key tensions
+- [x] T041 [US4] Populate `selectedSignals` in `data/ingestion-package.sample.json` with 5-8 selected signals and 2-3 deep dive roles
+- [x] T042 [US4] Implement cluster and selected-signal semantic validation in `scripts/validate_ingestion_package.py`
+- [x] T043 [US4] Add package-to-v1 transformation adapter in `scripts/generate_briefing.py` without breaking existing `signal-input.sample.json` flow
+- [x] T044 [US4] Document clustering, selection, and deep dive rules in `docs/briefing-ingestion-v2.md`
+- [x] T045 [US4] Run `python3 -m unittest tests/test_generate_briefing.py -v` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US4 is independently complete when package-selected signals can drive downstream briefing transformation.
 
