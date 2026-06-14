@@ -177,9 +177,76 @@ def _collect_unique_ids(items: list[Any], id_field: str, label: str) -> set[str]
     return ids
 
 
+def _validate_run_counts(package: dict[str, Any]) -> None:
+    run = expect_dict(package.get("run"), "run")
+    candidates = expect_list(package.get("candidates"), "candidates")
+    selected = expect_list(package.get("selectedSignals"), "selectedSignals")
+    rejected = expect_list(package.get("rejectedSignals"), "rejectedSignals")
+    watch_items = expect_list(package.get("watchItems"), "watchItems")
+
+    expected_counts = {
+        "candidateCount": len(candidates),
+        "selectedCount": len(selected),
+        "rejectedCount": len(rejected),
+        "watchItemCount": len(watch_items),
+    }
+    for field, expected in expected_counts.items():
+        if run.get(field) != expected:
+            fail(f"run.{field} must equal actual {field.removesuffix('Count')} count {expected}")
+
+    if run.get("status") == "complete" and not 15 <= len(candidates) <= 30:
+        fail("complete run must contain 15-30 candidates")
+
+    if len(candidates) < 15 and run.get("status") not in {"underfilled", "needs_review"}:
+        fail("runs with fewer than 15 candidates must be underfilled or needs_review")
+
+    if len(candidates) < 15 and not package.get("qualityNotes"):
+        fail("underfilled candidate pools require a quality note")
+
+
+def _validate_domain_coverage(package: dict[str, Any]) -> None:
+    candidates = expect_list(package.get("candidates"), "candidates")
+    domains = {
+        tag
+        for candidate in candidates
+        for tag in expect_non_empty_list(candidate.get("domainTags"), f"candidate {candidate.get('signalId', '<unknown>')}.domainTags")
+    }
+    required_domains = {"technology", "ai", "economy"}
+    missing = sorted(required_domains - domains)
+    if expect_dict(package.get("run"), "run").get("status") == "complete" and missing:
+        fail(f"domain coverage must include technology, ai, and economy; missing: {missing}")
+
+
+def _validate_source_metadata(sources: list[Any]) -> None:
+    for index, item in enumerate(sources, start=1):
+        source = expect_dict(item, f"sources[{index}]")
+        source_id = expect_non_empty_string(source.get("sourceId"), f"sources[{index}].sourceId")
+        expect_non_empty_string(source.get("credibilityNotes"), f"sources[{index}].credibilityNotes")
+        if "publishedAt" not in source and "accessLimitations" not in source:
+            fail(f"source {source_id} missing publication metadata notes")
+
+
+def _validate_candidate_metadata(candidates: list[Any]) -> None:
+    for index, item in enumerate(candidates, start=1):
+        candidate = expect_dict(item, f"candidates[{index}]")
+        signal_id = expect_non_empty_string(candidate.get("signalId"), f"candidates[{index}].signalId")
+        expect_non_empty_string(candidate.get("factualSummary"), f"candidate {signal_id}.factualSummary")
+        expect_non_empty_string(candidate.get("editorialRationale"), f"candidate {signal_id}.editorialRationale")
+        expect_non_empty_list(candidate.get("domainTags"), f"candidate {signal_id}.domainTags")
+        if not candidate.get("auditNotes"):
+            fail(f"candidate {signal_id} must include source or publication metadata audit notes")
+
+
 def validate_shared_semantics(package: dict[str, Any]) -> None:
-    source_ids = _collect_unique_ids(expect_non_empty_list(package.get("sources"), "sources"), "sourceId", "sources")
-    candidate_ids = _collect_unique_ids(expect_non_empty_list(package.get("candidates"), "candidates"), "signalId", "candidates")
+    sources = expect_non_empty_list(package.get("sources"), "sources")
+    candidates = expect_non_empty_list(package.get("candidates"), "candidates")
+    _validate_run_counts(package)
+    _validate_domain_coverage(package)
+    _validate_source_metadata(sources)
+    _validate_candidate_metadata(candidates)
+
+    source_ids = _collect_unique_ids(sources, "sourceId", "sources")
+    candidate_ids = _collect_unique_ids(candidates, "signalId", "candidates")
     cluster_ids = _collect_unique_ids(expect_list(package.get("clusters"), "clusters"), "clusterId", "clusters")
 
     profile_ids = _collect_unique_ids(
@@ -188,7 +255,7 @@ def validate_shared_semantics(package: dict[str, Any]) -> None:
         "readerProfiles",
     )
 
-    for index, candidate in enumerate(package["candidates"], start=1):
+    for index, candidate in enumerate(candidates, start=1):
         linked_sources = expect_unique_strings(
             expect_non_empty_list(candidate.get("sourceIds"), f"candidates[{index}].sourceIds"),
             f"candidates[{index}].sourceIds",

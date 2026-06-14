@@ -19,6 +19,31 @@ A v2 package contains these required sections:
 - `watchItems`: uncertain but potentially useful signals to revisit.
 - `qualityNotes`: run-level notes for underfilled runs, concentration risk, or other quality caveats.
 
+## Candidate pool semantics
+
+A normal `complete` run should contain **15-30 candidates**. If a run discovers fewer credible candidates, the package must set `run.status` to `underfilled` or `needs_review` and include a `qualityNotes` entry explaining the fallback. The validator also checks that run count fields match the actual array lengths.
+
+For the core signal-deck editorial scope, a complete package must include candidate coverage across:
+
+- `technology`
+- `ai`
+- `economy`
+
+This is a coverage floor, not a forced equal split. The package may remain concentrated when the day genuinely demands it, but concentration must be auditable in `run.sourceDiversity` and later selection notes.
+
+## Source metadata requirements
+
+Every candidate must reference at least one known `sources[].sourceId`. Every source must include:
+
+- `title`
+- `publisher`
+- `sourceType`
+- `sourceRole`
+- `credibilityNotes`
+- either `publishedAt` or explicit access/publication limitations
+
+Candidate `auditNotes` should preserve source or publication metadata caveats so a reviewer can distinguish verified facts from placeholders, paywalled context, or missing timestamps.
+
 ## Validation
 
 Run the validator from the repository root:
@@ -28,4 +53,4 @@ python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json
 python3 -m unittest tests/test_validate_ingestion_package.py -v
 ```
 
-The validator performs structural contract checks using `data/ingestion-package.schema.json` plus shared helper checks for object shape, unique IDs, and cross references. User-story-specific semantic rules are added incrementally in the implementation tasks.
+The validator performs structural contract checks using `data/ingestion-package.schema.json` plus shared helper checks for object shape, unique IDs, cross references, candidate volume, domain coverage, and source metadata completeness. Additional story-specific semantic rules are added incrementally in later implementation groups.

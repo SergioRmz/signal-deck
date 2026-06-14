@@ -52,18 +52,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add candidate count validation tests for underfilled and overfilled normal runs in `tests/test_validate_ingestion_package.py`
-- [ ] T012 [P] [US1] Add source reference cross-reference tests for missing `sourceIds` in `tests/test_validate_ingestion_package.py`
-- [ ] T013 [P] [US1] Add domain coverage test for technology, AI, and economy tags in `tests/test_validate_ingestion_package.py`
+- [x] T011 [P] [US1] Add candidate count validation tests for underfilled and overfilled normal runs in `tests/test_validate_ingestion_package.py`
+- [x] T012 [P] [US1] Add source reference cross-reference tests for missing `sourceIds` in `tests/test_validate_ingestion_package.py`
+- [x] T013 [P] [US1] Add domain coverage test for technology, AI, and economy tags in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Expand `data/ingestion-package.sample.json` to 15-30 realistic candidate signals with source metadata and factual summaries
-- [ ] T015 [US1] Implement candidate volume and underfilled-run validation in `scripts/validate_ingestion_package.py`
-- [ ] T016 [US1] Implement source ID existence validation for every candidate in `scripts/validate_ingestion_package.py`
-- [ ] T017 [US1] Implement required candidate metadata checks for domain tags, factual summary, source notes, and publication metadata notes in `scripts/validate_ingestion_package.py`
-- [ ] T018 [US1] Document candidate pool semantics and source metadata requirements in `docs/briefing-ingestion-v2.md`
-- [ ] T019 [US1] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T014 [US1] Expand `data/ingestion-package.sample.json` to 15-30 realistic candidate signals with source metadata and factual summaries
+- [x] T015 [US1] Implement candidate volume and underfilled-run validation in `scripts/validate_ingestion_package.py`
+- [x] T016 [US1] Implement source ID existence validation for every candidate in `scripts/validate_ingestion_package.py`
+- [x] T017 [US1] Implement required candidate metadata checks for domain tags, factual summary, source notes, and publication metadata notes in `scripts/validate_ingestion_package.py`
+- [x] T018 [US1] Document candidate pool semantics and source metadata requirements in `docs/briefing-ingestion-v2.md`
+- [x] T019 [US1] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US1 is independently complete when broad candidate pool validation passes without changing briefing transformation.
 

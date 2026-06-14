@@ -21,8 +21,8 @@
     "sourceDiversity": {
       "domainCounts": {
         "technology": 5,
-        "ai": 5,
-        "economy": 5
+        "ai": 6,
+        "economy": 4
       },
       "publisherCounts": {
         "OpenAI": 3,
@@ -60,174 +60,174 @@
   "sources": [
     {
       "sourceId": "src-01",
-      "title": "Source note 01",
-      "publisher": "NVIDIA",
+      "title": "Evidence for AI labs shift from model demos to enterprise workflow agents",
+      "publisher": "SEC filing",
       "sourceType": "filing",
       "sourceRole": "primary",
-      "url": "https://example.com/source-01",
+      "url": "https://example.com/evidence/sig-01",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-02",
-      "title": "Source note 02",
-      "publisher": "Federal Reserve",
-      "sourceType": "paper",
-      "sourceRole": "source_of_record",
-      "url": "https://example.com/source-02",
+      "title": "Evidence for Chip supply constraints keep inference economics strategically important",
+      "publisher": "Central bank",
+      "sourceType": "speech",
+      "sourceRole": "market_context",
+      "url": "https://example.com/evidence/sig-02",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-03",
-      "title": "Source note 03",
-      "publisher": "European Commission",
-      "sourceType": "article",
-      "sourceRole": "technical_analysis",
-      "url": "https://example.com/source-03",
+      "title": "Evidence for Central bank language keeps rate-cut timing conditional on inflation data",
+      "publisher": "Policy body",
+      "sourceType": "guidance",
+      "sourceRole": "source_of_record",
+      "url": "https://example.com/evidence/sig-03",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-04",
-      "title": "Source note 04",
-      "publisher": "The Information",
-      "sourceType": "dataset",
-      "sourceRole": "economic_analysis",
-      "url": "https://example.com/source-04",
+      "title": "Evidence for Open model releases pressure closed-model differentiation",
+      "publisher": "Industry analysis",
+      "sourceType": "expert_analysis",
+      "sourceRole": "technical_analysis",
+      "url": "https://example.com/evidence/sig-04",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-05",
-      "title": "Source note 05",
-      "publisher": "OpenAI",
+      "title": "Evidence for Cloud platforms package AI services into higher-level developer primitives",
+      "publisher": "Company blog",
       "sourceType": "official_blog",
-      "sourceRole": "market_context",
-      "url": "https://example.com/source-05",
+      "sourceRole": "economic_analysis",
+      "url": "https://example.com/evidence/sig-05",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-06",
-      "title": "Source note 06",
-      "publisher": "NVIDIA",
+      "title": "Evidence for Regulators focus on AI transparency in high-impact domains",
+      "publisher": "SEC filing",
       "sourceType": "filing",
       "sourceRole": "regulatory_context",
-      "url": "https://example.com/source-06",
+      "url": "https://example.com/evidence/sig-06",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-07",
-      "title": "Source note 07",
-      "publisher": "Federal Reserve",
-      "sourceType": "paper",
-      "sourceRole": "critical_contrast",
-      "url": "https://example.com/source-07",
+      "title": "Evidence for Enterprise software vendors reprice seats around embedded AI features",
+      "publisher": "Central bank",
+      "sourceType": "speech",
+      "sourceRole": "market_context",
+      "url": "https://example.com/evidence/sig-07",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-08",
-      "title": "Source note 08",
-      "publisher": "European Commission",
-      "sourceType": "article",
-      "sourceRole": "secondary_coverage",
-      "url": "https://example.com/source-08",
+      "title": "Evidence for Data-center power demand reframes AI infrastructure as an energy bottleneck",
+      "publisher": "Policy body",
+      "sourceType": "guidance",
+      "sourceRole": "critical_contrast",
+      "url": "https://example.com/evidence/sig-08",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-09",
-      "title": "Source note 09",
-      "publisher": "The Information",
-      "sourceType": "dataset",
-      "sourceRole": "primary",
-      "url": "https://example.com/source-09",
+      "title": "Evidence for Autonomous coding tools move from autocomplete to repository-level changes",
+      "publisher": "Industry analysis",
+      "sourceType": "expert_analysis",
+      "sourceRole": "technical_analysis",
+      "url": "https://example.com/evidence/sig-09",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-10",
-      "title": "Source note 10",
-      "publisher": "OpenAI",
+      "title": "Evidence for Public-market investors scrutinize AI capex payback periods",
+      "publisher": "Company blog",
       "sourceType": "official_blog",
-      "sourceRole": "source_of_record",
-      "url": "https://example.com/source-10",
+      "sourceRole": "economic_analysis",
+      "url": "https://example.com/evidence/sig-10",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-11",
-      "title": "Source note 11",
-      "publisher": "NVIDIA",
+      "title": "Evidence for Browser and device vendors compete to make AI the default interface layer",
+      "publisher": "SEC filing",
       "sourceType": "filing",
-      "sourceRole": "technical_analysis",
-      "url": "https://example.com/source-11",
+      "sourceRole": "secondary_coverage",
+      "url": "https://example.com/evidence/sig-11",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-12",
-      "title": "Source note 12",
-      "publisher": "Federal Reserve",
-      "sourceType": "paper",
-      "sourceRole": "economic_analysis",
-      "url": "https://example.com/source-12",
+      "title": "Evidence for Synthetic media tools force new provenance and trust workflows",
+      "publisher": "Central bank",
+      "sourceType": "speech",
+      "sourceRole": "critical_contrast",
+      "url": "https://example.com/evidence/sig-12",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-13",
-      "title": "Source note 13",
-      "publisher": "European Commission",
-      "sourceType": "article",
-      "sourceRole": "market_context",
-      "url": "https://example.com/source-13",
+      "title": "Evidence for Labor-market data shows uneven white-collar hiring amid automation narratives",
+      "publisher": "Policy body",
+      "sourceType": "guidance",
+      "sourceRole": "source_of_record",
+      "url": "https://example.com/evidence/sig-13",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-14",
-      "title": "Source note 14",
-      "publisher": "The Information",
-      "sourceType": "dataset",
-      "sourceRole": "regulatory_context",
-      "url": "https://example.com/source-14",
+      "title": "Evidence for Database vendors add vector and retrieval features to defend application workloads",
+      "publisher": "Industry analysis",
+      "sourceType": "expert_analysis",
+      "sourceRole": "technical_analysis",
+      "url": "https://example.com/evidence/sig-14",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     },
     {
       "sourceId": "src-15",
-      "title": "Source note 15",
-      "publisher": "OpenAI",
+      "title": "Evidence for AI safety evaluations become procurement criteria for large buyers",
+      "publisher": "Company blog",
       "sourceType": "official_blog",
-      "sourceRole": "critical_contrast",
-      "url": "https://example.com/source-15",
+      "sourceRole": "regulatory_context",
+      "url": "https://example.com/evidence/sig-15",
       "publishedAt": "2026-06-14T09:00:00Z",
-      "credibilityNotes": "Placeholder source metadata for the foundational v2 ingestion fixture."
+      "credibilityNotes": "Sample provenance record: replace with the actual source URL, timestamp, and access notes during a real run."
     }
   ],
   "candidates": [
     {
       "signalId": "sig-01",
-      "title": "Candidate signal 01",
-      "factualSummary": "Foundational placeholder summary for candidate 01 in the technology domain.",
+      "title": "AI labs shift from model demos to enterprise workflow agents",
+      "factualSummary": "A leading AI vendor framed its latest product update around task orchestration, tool use, and enterprise controls rather than raw benchmark gains.",
       "domainTags": [
-        "technology"
+        "ai"
       ],
       "sourceIds": [
         "src-01"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Tests whether agentic AI monetizes through workflow ownership instead of model novelty.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.62,
         "teachingMechanisms": [
           "causal_mechanism"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches causal mechanism through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -237,30 +237,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-02",
-      "title": "Candidate signal 02",
-      "factualSummary": "Foundational placeholder summary for candidate 02 in the ai domain.",
+      "title": "Chip supply constraints keep inference economics strategically important",
+      "factualSummary": "A semiconductor supplier highlighted strong accelerator demand while customers continued optimizing deployment cost per token.",
       "domainTags": [
-        "ai"
+        "technology"
       ],
       "sourceIds": [
         "src-02"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Connects hardware scarcity to pricing power, margins, and model-serving architecture decisions.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.66,
         "teachingMechanisms": [
           "incentive_structure"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches incentive structure through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -270,16 +270,16 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-03",
-      "title": "Candidate signal 03",
-      "factualSummary": "Foundational placeholder summary for candidate 03 in the economy domain.",
+      "title": "Central bank language keeps rate-cut timing conditional on inflation data",
+      "factualSummary": "A monetary-policy communication emphasized data dependence and avoided committing to a fixed easing path.",
       "domainTags": [
         "economy"
       ],
@@ -287,13 +287,13 @@
         "src-03"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Explains how macro uncertainty changes discount rates for long-duration technology bets.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.7,
         "teachingMechanisms": [
           "reusable_mental_model"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches reusable mental model through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -303,30 +303,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-04",
-      "title": "Candidate signal 04",
-      "factualSummary": "Foundational placeholder summary for candidate 04 in the technology domain.",
+      "title": "Open model releases pressure closed-model differentiation",
+      "factualSummary": "A new open-weight model release narrowed the perceived capability gap for common coding and assistant tasks.",
       "domainTags": [
-        "technology"
+        "ai"
       ],
       "sourceIds": [
         "src-04"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Surfaces the moat question: distribution, data, product integration, and trust may matter more than model access alone.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.74,
         "teachingMechanisms": [
           "second_order_effect"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches second order effect through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -336,30 +336,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-05",
-      "title": "Candidate signal 05",
-      "factualSummary": "Foundational placeholder summary for candidate 05 in the ai domain.",
+      "title": "Cloud platforms package AI services into higher-level developer primitives",
+      "factualSummary": "A major cloud provider bundled model routing, observability, evaluation, and deployment controls into a managed AI platform layer.",
       "domainTags": [
-        "ai"
+        "technology"
       ],
       "sourceIds": [
         "src-05"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Shows platform capture: infrastructure vendors move upward to own developer workflow and switching costs.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.78,
         "teachingMechanisms": [
           "technical_moat"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches technical moat through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -369,30 +369,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-06",
-      "title": "Candidate signal 06",
-      "factualSummary": "Foundational placeholder summary for candidate 06 in the economy domain.",
+      "title": "Regulators focus on AI transparency in high-impact domains",
+      "factualSummary": "Policy guidance emphasized documentation, risk assessment, and traceability for AI systems used in sensitive decisions.",
       "domainTags": [
-        "economy"
+        "ai"
       ],
       "sourceIds": [
         "src-06"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Turns compliance into product architecture: auditability becomes a feature, not only legal overhead.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.82,
         "teachingMechanisms": [
           "market_structure"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches market structure through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -402,30 +402,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-07",
-      "title": "Candidate signal 07",
-      "factualSummary": "Foundational placeholder summary for candidate 07 in the technology domain.",
+      "title": "Enterprise software vendors reprice seats around embedded AI features",
+      "factualSummary": "Several software categories continued testing AI add-ons, usage tiers, and bundled premium plans.",
       "domainTags": [
-        "technology"
+        "economy"
       ],
       "sourceIds": [
         "src-07"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Teaches the incentive conflict between ARPU expansion, customer ROI proof, and feature commoditization.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.58,
         "teachingMechanisms": [
           "strategic_judgment"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches strategic judgment through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -435,30 +435,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-08",
-      "title": "Candidate signal 08",
-      "factualSummary": "Foundational placeholder summary for candidate 08 in the ai domain.",
+      "title": "Data-center power demand reframes AI infrastructure as an energy bottleneck",
+      "factualSummary": "Utility and infrastructure commentary pointed to grid interconnection delays and power availability as constraints on data-center growth.",
       "domainTags": [
-        "ai"
+        "technology"
       ],
       "sourceIds": [
         "src-08"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Connects AI scaling to physical-world bottlenecks and second-order capital allocation effects.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.62,
         "teachingMechanisms": [
           "risk_pattern"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches risk pattern through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -468,30 +468,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-09",
-      "title": "Candidate signal 09",
-      "factualSummary": "Foundational placeholder summary for candidate 09 in the economy domain.",
+      "title": "Autonomous coding tools move from autocomplete to repository-level changes",
+      "factualSummary": "Developer-tool updates emphasized multi-file edits, test execution, and pull-request workflows instead of single-line suggestions.",
       "domainTags": [
-        "economy"
+        "ai"
       ],
       "sourceIds": [
         "src-09"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Highlights a shift from productivity feature to delegated software-production system.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.66,
         "teachingMechanisms": [
           "causal_mechanism"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches causal mechanism through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -501,30 +501,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-10",
-      "title": "Candidate signal 10",
-      "factualSummary": "Foundational placeholder summary for candidate 10 in the technology domain.",
+      "title": "Public-market investors scrutinize AI capex payback periods",
+      "factualSummary": "Earnings commentary and analyst notes increasingly separated AI revenue contribution from infrastructure spending commitments.",
       "domainTags": [
-        "technology"
+        "economy"
       ],
       "sourceIds": [
         "src-10"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Explains why narrative momentum must eventually reconcile with return-on-invested-capital math.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.7,
         "teachingMechanisms": [
           "incentive_structure"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches incentive structure through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -534,30 +534,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-11",
-      "title": "Candidate signal 11",
-      "factualSummary": "Foundational placeholder summary for candidate 11 in the ai domain.",
+      "title": "Browser and device vendors compete to make AI the default interface layer",
+      "factualSummary": "Product announcements put AI assistants closer to operating-system, browser, and device surfaces.",
       "domainTags": [
-        "ai"
+        "technology"
       ],
       "sourceIds": [
         "src-11"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Shows distribution as moat: whoever controls the default interface can tax user intent.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.74,
         "teachingMechanisms": [
           "reusable_mental_model"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches reusable mental model through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -567,30 +567,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-12",
-      "title": "Candidate signal 12",
-      "factualSummary": "Foundational placeholder summary for candidate 12 in the economy domain.",
+      "title": "Synthetic media tools force new provenance and trust workflows",
+      "factualSummary": "Media tooling updates increased pressure on publishers and platforms to verify origin, consent, and manipulation of content.",
       "domainTags": [
-        "economy"
+        "ai"
       ],
       "sourceIds": [
         "src-12"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Teaches a risk pattern where capability diffusion creates demand for verification infrastructure.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.78,
         "teachingMechanisms": [
           "second_order_effect"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches second order effect through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -600,30 +600,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-13",
-      "title": "Candidate signal 13",
-      "factualSummary": "Foundational placeholder summary for candidate 13 in the technology domain.",
+      "title": "Labor-market data shows uneven white-collar hiring amid automation narratives",
+      "factualSummary": "Employment indicators suggested mixed demand across knowledge-work categories while AI adoption remained uneven by function.",
       "domainTags": [
-        "technology"
+        "economy"
       ],
       "sourceIds": [
         "src-13"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Separates macro labor evidence from simplistic automation narratives.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.82,
         "teachingMechanisms": [
           "technical_moat"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches technical moat through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -633,30 +633,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-14",
-      "title": "Candidate signal 14",
-      "factualSummary": "Foundational placeholder summary for candidate 14 in the ai domain.",
+      "title": "Database vendors add vector and retrieval features to defend application workloads",
+      "factualSummary": "Data platforms continued integrating vector search, retrieval pipelines, and governance controls into existing products.",
       "domainTags": [
-        "ai"
+        "technology"
       ],
       "sourceIds": [
         "src-14"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Explains incumbent defense: absorb adjacent AI primitives before they become standalone wedges.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.58,
         "teachingMechanisms": [
           "market_structure"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches market structure through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -666,30 +666,30 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     },
     {
       "signalId": "sig-15",
-      "title": "Candidate signal 15",
-      "factualSummary": "Foundational placeholder summary for candidate 15 in the economy domain.",
+      "title": "AI safety evaluations become procurement criteria for large buyers",
+      "factualSummary": "Buyer and policy discussions increasingly referenced evaluations, red-team results, and monitoring as prerequisites for deployment.",
       "domainTags": [
-        "economy"
+        "ai"
       ],
       "sourceIds": [
         "src-15"
       ],
       "status": "candidate",
-      "editorialRationale": "Placeholder rationale for validating the package structure before story-specific scoring is expanded.",
+      "editorialRationale": "Frames evaluation as market structure: trust signals can decide vendor access to regulated enterprise demand.",
       "educationalValue": {
-        "score": 0.5,
+        "score": 0.62,
         "teachingMechanisms": [
           "strategic_judgment"
         ],
-        "learningRationale": "Placeholder learning rationale for foundational validation.",
+        "learningRationale": "This item teaches strategic judgment through a concrete market signal.",
         "deepDivePotential": "possible"
       },
       "profileRelevance": [
@@ -699,10 +699,10 @@
           "relevanceScore": 0.5
         }
       ],
-      "confidence": 0.6,
+      "confidence": 0.68,
       "corroborationStatus": "partially_corroborated",
       "auditNotes": [
-        "Foundational fixture shell; realistic enrichment follows in US1."
+        "Sample candidate with publication timestamp and source credibility note; replace with live-source audit details in production."
       ]
     }
   ],
@@ -712,8 +712,8 @@
   "watchItems": [],
   "qualityNotes": [
     {
-      "code": "FOUNDATION_FIXTURE",
-      "message": "Minimal complete fixture for validating the v2 package skeleton before user-story enrichment.",
+      "code": "SAMPLE_DATA",
+      "message": "Realistic but non-live sample package for validator development; production runs must replace example.com sources with retrieved evidence.",
       "severity": "info"
     }
   ]
