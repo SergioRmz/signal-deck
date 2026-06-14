@@ -1,41 +1,41 @@
 {
   "meta": {
     "schemaVersion": "1.0",
-    "compositionId": "2026-06-11-distribution-composition",
+    "compositionId": "2026-06-11-distribucion-composition",
     "createdAt": "2026-06-11T09:05:00Z",
-    "language": "en",
+    "language": "es",
     "tags": [
-      "ai",
-      "distribution",
-      "workflow",
-      "product-strategy"
+      "ia",
+      "distribución",
+      "flujos de trabajo",
+      "estrategia de producto"
     ]
   },
   "sourceBriefing": {
-    "briefingId": "2026-06-11-distribution-is-becoming-as-important-as-the-model",
+    "briefingId": "2026-06-11-distribucion-flujo-trabajo-modelo",
     "editionDate": "2026-06-11",
-    "slug": "distribution-is-becoming-as-important-as-the-model",
+    "slug": "distribucion-flujo-trabajo-modelo",
     "topics": [
-      "ai",
-      "distribution",
-      "workflow",
-      "product-strategy"
+      "ia",
+      "distribución",
+      "flujos de trabajo",
+      "estrategia de producto"
     ]
   },
   "experience": {
-    "visualTone": "electric",
-    "readingMode": "mixed",
-    "engagementGoal": "Make the briefing feel like a strategic object you want to explore, not just a memo you finish.",
-    "interactionModel": "layered",
+    "visualTone": "eléctrico",
+    "readingMode": "mixto",
+    "engagementGoal": "Hacer que el briefing se sienta como un objeto estratégico para explorar, no como un memo que se termina.",
+    "interactionModel": "por capas",
     "hooks": [
-      "Land with a large thesis wall that instantly frames the edition.",
-      "Turn the radar into a quick-grab surface instead of a buried list.",
-      "Make the deep dives feel collectible rather than dutiful."
+      "Abrir con una tesis clara que encuadre la edición sin aplastar la lectura.",
+      "Convertir el radar en una superficie de prueba, no en una lista enterrada.",
+      "Hacer que los mecanismos se puedan comparar de un vistazo."
     ],
     "learningPrompts": [
-      "Touch the thesis first, then test it against the radar.",
-      "Compare deep dives to see where the moat is actually forming.",
-      "Use the watchlist as a next-questions engine, not a passive footer."
+      "Empieza por la tesis y luego pruébala contra el radar.",
+      "Compara los mecanismos para ver dónde se forma el foso.",
+      "Usa el marco de vigilancia como motor de próximas preguntas."
     ]
   },
   "designSystem": {
@@ -80,14 +80,14 @@
       "variant": "thesis-wall-glow",
       "sourceKey": "hero",
       "priority": "primary",
-      "headline": "Own the workflow, own the margin.",
-      "body": "The opening surface should feel immediate, bold, and worth touching before the user settles into reading.",
+      "headline": "Controla el flujo, captura el margen.",
+      "body": "La apertura debe encuadrar la tesis con fuerza, pero sin sacrificar legibilidad.",
       "layoutHints": [
-        "oversized-headline",
-        "offset-meta-panel",
-        "accent-halo"
+        "headline-amplio",
+        "panel-lateral",
+        "halo-de-acento"
       ],
-      "interactionCue": "Land fast, create curiosity, and set a premium visual mood.",
+      "interactionCue": "Entrar rápido, crear curiosidad y fijar un tono premium.",
       "accentMode": "contrast",
       "dataRefs": [
         "hero.title",
@@ -100,13 +100,13 @@
       "variant": "spotlight-card",
       "sourceKey": "topLine",
       "priority": "primary",
-      "headline": "Make the thesis feel like the collectible core of the edition.",
+      "headline": "Convertir la tesis en el núcleo coleccionable de la edición.",
       "layoutHints": [
-        "high-contrast-panel",
-        "short-copy",
-        "single-claim-focus"
+        "panel-de-alto-contraste",
+        "copy-breve",
+        "una-sola-tesis"
       ],
-      "interactionCue": "Invite the user to pause on the claim before moving into evidence.",
+      "interactionCue": "Pausar en el cambio estructural antes de entrar a la evidencia.",
       "accentMode": "accent",
       "dataRefs": [
         "topLine.title",
@@ -119,13 +119,13 @@
       "variant": "role-translation-grid",
       "sourceKey": "readerTranslation",
       "priority": "secondary",
-      "headline": "Translate the thesis into role-specific action before the heavier evidence stack.",
+      "headline": "Traducir la tesis a decisiones por rol antes de la evidencia pesada.",
       "layoutHints": [
-        "three-up-grid",
-        "role-chips",
-        "bridge-from-thesis"
+        "retícula-de-tres",
+        "chips-de-rol",
+        "puente-desde-la-tesis"
       ],
-      "interactionCue": "Let the reader find their own seat in the argument before they process the rest of the edition.",
+      "interactionCue": "Que el lector encuentre su lugar operativo dentro del argumento.",
       "accentMode": "accent",
       "dataRefs": [
         "readerTranslation.title",
@@ -138,13 +138,13 @@
       "variant": "signal-ribbons",
       "sourceKey": "radar",
       "priority": "secondary",
-      "headline": "Turn signals into a scan-and-grab strip.",
+      "headline": "Convertir señales en una superficie de prueba rápida.",
       "layoutHints": [
-        "horizontal-rhythm",
-        "tight-density",
-        "label-first"
+        "ritmo-horizontal",
+        "densidad-controlada",
+        "etiqueta-primero"
       ],
-      "interactionCue": "Let the reader skim quickly, then jump back into the deeper argument.",
+      "interactionCue": "Permitir una lectura rápida y volver después al argumento profundo.",
       "accentMode": "base",
       "dataRefs": [
         "radar.title",
@@ -157,13 +157,13 @@
       "variant": "collectible-triptych",
       "sourceKey": "deepDives",
       "priority": "primary",
-      "headline": "Make each argument feel like a card worth opening mentally.",
+      "headline": "Hacer que cada argumento se lea como un mecanismo comparable.",
       "layoutHints": [
-        "three-up-grid",
-        "varied-card-heights",
-        "numbered-subtheses"
+        "retícula-de-tres",
+        "tarjetas-con-altura-variable",
+        "subtesis-numeradas"
       ],
-      "interactionCue": "Encourage compare-and-contrast reading, not only linear reading.",
+      "interactionCue": "Invitar a comparar mecanismos, no solo a leer en línea recta.",
       "accentMode": "accent",
       "dataRefs": [
         "deepDives.title",
@@ -176,13 +176,13 @@
       "variant": "pressure-ladder",
       "sourceKey": "marketMap",
       "priority": "secondary",
-      "headline": "Translate thesis into positioning pressure and opportunity.",
+      "headline": "Traducir la tesis en presión competitiva y oportunidad.",
       "layoutHints": [
-        "stacked-bands",
-        "directional-labels",
-        "tight-summary"
+        "bandas-apiladas",
+        "etiquetas-direccionales",
+        "síntesis-breve"
       ],
-      "interactionCue": "Help the user shift from explanation to strategic posture.",
+      "interactionCue": "Ayudar al lector a pasar de explicación a postura estratégica.",
       "accentMode": "heat",
       "dataRefs": [
         "marketMap.title",
@@ -195,13 +195,13 @@
       "variant": "pattern-lift",
       "sourceKey": "reusableLesson",
       "priority": "supporting",
-      "headline": "Extract the reusable pattern before the reader leaves the page.",
+      "headline": "Extraer el patrón reutilizable antes de cerrar la lectura.",
       "layoutHints": [
-        "pattern-callout",
-        "compact-checklist",
-        "takeaway-emphasis"
+        "callout-de-patrón",
+        "checklist-compacto",
+        "takeaway-enfático"
       ],
-      "interactionCue": "Turn the edition into a reusable strategic lens, not just a one-day read.",
+      "interactionCue": "Convertir la edición en una lente estratégica, no en una lectura de un día.",
       "accentMode": "accent",
       "dataRefs": [
         "reusableLesson.pattern",
@@ -215,13 +215,13 @@
       "variant": "question-steps",
       "sourceKey": "watchlist",
       "priority": "supporting",
-      "headline": "End with active questions, not passive leftovers.",
+      "headline": "Cerrar con preguntas activas, no con sobrantes pasivos.",
       "layoutHints": [
-        "numbered-steps",
-        "breathing-room",
-        "exit-hook"
+        "pasos-numerados",
+        "aire-de-lectura",
+        "gancho-de-salida"
       ],
-      "interactionCue": "Make the user want to return tomorrow with better answers.",
+      "interactionCue": "Dejar al lector con mejores preguntas para volver mañana.",
       "accentMode": "contrast",
       "dataRefs": [
         "watchlist.title",

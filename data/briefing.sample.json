@@ -1,16 +1,16 @@
 {
   "meta": {
     "schemaVersion": "1.0",
-    "briefingId": "2026-06-11-distribution-is-becoming-as-important-as-the-model",
+    "briefingId": "2026-06-11-distribucion-flujo-trabajo-modelo",
     "editionDate": "2026-06-11",
     "publishedAt": "2026-06-11T09:00:00Z",
-    "slug": "distribution-is-becoming-as-important-as-the-model",
-    "language": "en",
+    "slug": "distribucion-flujo-trabajo-modelo",
+    "language": "es",
     "topics": [
-      "ai",
-      "distribution",
-      "workflow",
-      "product-strategy"
+      "ia",
+      "distribución",
+      "flujos de trabajo",
+      "estrategia de producto"
     ],
     "readerContext": {
       "roles": [
@@ -19,148 +19,148 @@
         "operator"
       ],
       "interests": [
-        "ai",
-        "workflow",
-        "product-strategy"
+        "ia",
+        "flujos de trabajo",
+        "estrategia de producto"
       ]
     }
   },
   "hero": {
-    "title": "The strategic fight is shifting from who has the best model to who owns the workflow around it.",
-    "lede": "Assess where strategic value is concentrating as model quality converges. As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution.",
-    "signal": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
-    "thesis": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution.",
-    "promise": "Esta edici\u00f3n ayuda a executives and operators a ubicar d\u00f3nde se est\u00e1 moviendo la ventaja y qu\u00e9 decisi\u00f3n exige.",
-    "tension": "Some categories will still reward raw model leadership more than distribution depth."
+    "title": "La pelea estratégica se mueve del mejor modelo al control del flujo de trabajo.",
+    "lede": "Cuando la calidad base de los modelos converge, la captura de valor sube en la pila: distribución, contexto operativo e integración en el trabajo diario.",
+    "signal": "La distribución gana peso estratégico conforme se estrecha la diferencia entre modelos.",
+    "thesis": "La ventaja ya no vive solo en tener acceso al modelo más capaz; vive en controlar el punto donde el usuario vuelve, deja contexto y convierte la IA en hábito operacional.",
+    "promise": "Esta edición te ayuda a ubicar dónde se está moviendo la ventaja y qué decisiones exige para producto, ingeniería y operación.",
+    "tension": "Los modelos frontera todavía importan en dominios estrechos y de alto riesgo, pero no explican por sí solos la captura de valor recurrente."
   },
   "topLine": {
-    "title": "Distribution is becoming as important as the model.",
-    "body": "As raw model capability converges, the battle for value is moving up the stack toward workflow ownership, context capture, and distribution. Owning the user relationship becomes economically more important. Memory and workflow embedding can become part of the moat. Efecto de segundo orden: Go-to-market strength can compound technical capability rather than merely follow it. Pregunta a vigilar: Which layer keeps the recurring user relationship as model access broadens?",
-    "stakes": "Switching costs may rise at the interface layer rather than the model layer."
+    "title": "La distribución empieza a pesar tanto como el modelo.",
+    "body": "Cuando la capacidad bruta converge, la batalla por el valor se desplaza hacia quien controla el flujo de trabajo, captura contexto y posee la relación recurrente con el usuario.",
+    "stakes": "Los costos de cambio pueden crecer en la interfaz y en el flujo diario, no necesariamente en la capa del modelo."
   },
   "radar": {
-    "title": "Evidence radar",
+    "title": "Radar de evidencia",
     "items": [
       {
-        "label": "Distribution",
-        "text": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
+        "label": "Distribución",
+        "text": "La distribución gana peso estratégico conforme se estrecha la diferencia entre modelos.",
         "role": "supports-thesis"
       },
       {
-        "label": "Workflow",
-        "text": "Context capture is emerging as the scarcer asset than inference alone.",
+        "label": "Flujo de trabajo",
+        "text": "La captura de contexto se vuelve más escasa que la inferencia aislada.",
         "role": "supports-thesis"
       },
       {
-        "label": "Product",
-        "text": "Interface design is increasingly shaping product economics, not just usability.",
+        "label": "Producto",
+        "text": "La interfaz ya moldea la economía del producto, no solo su usabilidad.",
         "role": "monitor"
       }
     ]
   },
   "deepDives": {
-    "title": "Mechanism breakdown",
+    "title": "Laboratorio de mecanismos",
     "items": [
       {
-        "title": "1. Distribution is carrying more strategic weight as raw model differentiation narrows",
-        "body": "Mecanismo: Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access. Por qu\u00e9 importa: Owning the user relationship becomes economically more important. Efecto de segundo orden: Go-to-market strength can compound technical capability rather than merely follow it. Tensi\u00f3n a vigilar: Frontier model gaps can still matter in narrow, high-stakes domains.",
-        "mechanism": "Distribution",
-        "claim": "Distribution is carrying more strategic weight as raw model differentiation narrows.",
-        "explanation": "Multiple product and buyer signals point toward packaging, workflow integration, and reach becoming more decisive than standalone model access.",
-        "implication": "Owning the user relationship becomes economically more important."
+        "title": "1. La distribución gana peso cuando la diferenciación del modelo se estrecha",
+        "body": "Mecanismo: las señales de producto y compra apuntan a que empaquetado, integración en flujos y alcance comercial pesan más que el acceso aislado al modelo. Por qué importa: poseer la relación con el usuario se vuelve económicamente más importante. Efecto de segundo orden: la fuerza de go-to-market puede amplificar la capacidad técnica en vez de solo seguirla.",
+        "mechanism": "Distribución",
+        "claim": "La distribución gana peso estratégico conforme se estrecha la diferencia entre modelos.",
+        "explanation": "Empaquetado, integración en flujos y alcance comercial empiezan a decidir más que el acceso independiente al modelo.",
+        "implication": "Poseer la relación con el usuario se vuelve económicamente más importante."
       },
       {
-        "title": "2. Context capture is emerging as the scarcer asset than inference alone",
-        "body": "Mecanismo: Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts. Por qu\u00e9 importa: Memory and workflow embedding can become part of the moat. Efecto de segundo orden: Switching costs may rise at the interface layer rather than the model layer.",
-        "mechanism": "Workflow",
-        "claim": "Context capture is emerging as the scarcer asset than inference alone.",
-        "explanation": "Embedded systems that learn user habits and store reusable context are harder to displace than point solutions that only answer prompts.",
-        "implication": "Memory and workflow embedding can become part of the moat."
+        "title": "2. El contexto operativo se vuelve más escaso que la inferencia aislada",
+        "body": "Mecanismo: los sistemas embebidos que aprenden hábitos y guardan contexto reusable son más difíciles de desplazar que soluciones puntuales que solo responden prompts. Por qué importa: memoria e integración en el flujo pueden convertirse en parte del foso.",
+        "mechanism": "Flujo de trabajo",
+        "claim": "La captura de contexto se vuelve más escasa que la inferencia aislada.",
+        "explanation": "Los sistemas que aprenden hábitos, almacenan contexto y aparecen dentro del trabajo diario acumulan una ventaja menos portable.",
+        "implication": "La memoria y el flujo de trabajo pueden formar parte del foso competitivo."
       },
       {
-        "title": "3. Interface design is increasingly shaping product economics, not just usability",
-        "body": "Mecanismo: The interface determines what gets repeated, measured, remembered, and eventually monetized. Por qu\u00e9 importa: The presentation surface influences retention and monetization. Efecto de segundo orden: UI decisions can determine where strategic capture lands.",
-        "mechanism": "Product",
-        "claim": "Interface design is increasingly shaping product economics, not just usability.",
-        "explanation": "The interface determines what gets repeated, measured, remembered, and eventually monetized.",
-        "implication": "The presentation surface influences retention and monetization."
+        "title": "3. La interfaz empieza a definir economía, no solo experiencia",
+        "body": "Mecanismo: la interfaz determina qué se repite, qué se mide, qué se recuerda y qué puede monetizarse después. Por qué importa: la superficie de presentación influye en retención, expansión y captura estratégica.",
+        "mechanism": "Producto",
+        "claim": "La interfaz ya moldea la economía del producto, no solo su usabilidad.",
+        "explanation": "Lo que la interfaz vuelve repetible y medible puede convertirse en una fuente directa de retención y monetización.",
+        "implication": "Las decisiones de UI pueden decidir dónde termina capturándose el valor estratégico."
       }
     ]
   },
   "marketMap": {
-    "title": "Mapa de poder: d\u00f3nde se mueve la ventaja",
+    "title": "Mapa de poder: dónde se mueve la ventaja",
     "items": [
       {
         "label": "Ganan poder",
-        "text": "Operadores con acceso cre\u00edble a capacidad: chips, energ\u00eda, data centers, redes y equipos capaces de orquestar inferencia a costo controlado.",
-        "powerShift": "Owning the user relationship becomes economically more important."
+        "text": "Operadores con acceso creíble a capacidad: chips, energía, data centers, redes y equipos capaces de orquestar inferencia a costo controlado.",
+        "powerShift": "Poseer la relación con el usuario se vuelve económicamente más importante."
       },
       {
         "label": "Quedan presionados",
-        "text": "Compradores y vendors que trataban la nube como una abstracci\u00f3n neutral; ahora deben justificar dependencia, jurisdicci\u00f3n y continuidad operacional.",
-        "powerShift": "Switching costs may rise at the interface layer rather than the model layer."
+        "text": "Compradores y vendors que trataban la nube como una abstracción neutral; ahora deben justificar dependencia, jurisdicción y continuidad operacional.",
+        "powerShift": "Los costos de cambio pueden subir en la interfaz y no solo en el modelo."
       },
       {
         "label": "Se abre oportunidad",
-        "text": "Perfiles puente \u2014software, infraestructura, riesgo y finanzas\u2014 que puedan traducir ambici\u00f3n de IA en arquitectura, procurement y unit economics.",
-        "powerShift": "UI decisions can determine where strategic capture lands."
+        "text": "Perfiles puente —software, infraestructura, riesgo y finanzas— que traduzcan ambición de IA en arquitectura, compras y economía unitaria.",
+        "powerShift": "Las decisiones de producto pueden definir dónde cae la captura estratégica."
       }
     ]
   },
   "reusableLesson": {
-    "title": "Lecci\u00f3n reutilizable",
-    "pattern": "Cuando una capacidad base se vuelve commodity, la ventaja migra hacia quien controla la restricci\u00f3n escasa: capacidad, continuidad, regulaci\u00f3n, distribuci\u00f3n o contexto no portable.",
+    "title": "Lección reutilizable",
+    "pattern": "Cuando una capacidad base se vuelve mercancía indiferenciada, la ventaja migra hacia quien controla la restricción escasa: capacidad, continuidad, regulación, distribución o contexto no portable.",
     "applyWhen": [
-      "distribution is becoming a moat.",
-      "workflow control is a strategic surface.",
-      "context accumulates where users return daily."
+      "La distribución empieza a operar como foso.",
+      "El flujo de trabajo se vuelve superficie estratégica.",
+      "El contexto se acumula donde el usuario regresa todos los días."
     ],
-    "takeaway": "Owning the user relationship becomes economically more important."
+    "takeaway": "La relación recurrente con el usuario puede valer más que el acceso aislado al modelo."
   },
   "watchlist": {
     "title": "Marco de vigilancia",
     "items": [
       {
-        "text": "Which layer captures the recurring user relationship?",
+        "text": "¿Qué capa captura la relación recurrente con el usuario?",
         "type": "question"
       },
       {
-        "text": "What kinds of context become least portable over time?",
+        "text": "¿Qué tipo de contexto se vuelve menos portable con el tiempo?",
         "type": "question"
       },
       {
-        "text": "Which products turn occasional use into operational dependency?",
+        "text": "¿Qué productos convierten uso ocasional en dependencia operativa?",
         "type": "question"
       },
       {
-        "text": "Which layer keeps the recurring user relationship as model access broadens?",
+        "text": "¿Qué interfaz acumula hábitos antes de que el usuario piense en cambiar de proveedor?",
         "type": "question"
       },
       {
-        "text": "Where will the most valuable non-portable context accumulate?",
+        "text": "¿Dónde se concentrará el contexto no portable más valioso?",
         "type": "question"
       }
     ]
   },
   "readerTranslation": {
-    "title": "Qu\u00e9 cambia para ti",
+    "title": "Qué cambia para ti",
     "items": [
       {
         "role": "software-engineer",
-        "headline": "Qu\u00e9 cambia para software-engineer",
-        "body": "Para un software engineer, la ventaja es dise\u00f1ar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberan\u00eda y continuidad operacional.",
+        "headline": "Diseñar para restricciones reales",
+        "body": "Para ingeniería, la ventaja está en diseñar con costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional en mente.",
         "weight": 0.5
       },
       {
         "role": "founder",
-        "headline": "Qu\u00e9 cambia para founder",
-        "body": "Para un founder, la ventaja es convertir infraestructura confiable en promesa comercial: no vender magia de IA, sino capacidad repetible con unit economics defendibles.",
+        "headline": "Vender capacidad repetible, no magia",
+        "body": "Para un fundador, la ventaja es convertir infraestructura confiable en promesa comercial: menos demostración espectacular y más economía unitaria defendible.",
         "weight": 0.3
       },
       {
         "role": "operator",
-        "headline": "Qu\u00e9 cambia para operator",
-        "body": "Para un operator, la ventaja es comprar y gobernar IA como sistema cr\u00edtico: vendor risk, jurisdicci\u00f3n, presupuesto, SLAs y dependencia operacional.",
+        "headline": "Gobernar IA como sistema crítico",
+        "body": "Para operaciones, la ventaja es comprar y gobernar IA considerando riesgo de proveedor, jurisdicción, presupuesto, acuerdos de nivel de servicio y dependencia operacional.",
         "weight": 0.2
       }
     ]

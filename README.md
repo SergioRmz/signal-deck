@@ -135,7 +135,8 @@ This first foundation includes:
 - a briefing contract that supports richer pedagogical fields and optional learning modules
 - a **dark-theme React + Vite single-page renderer**
 - a component renderer foundation that keeps shadcn/ui-compatible primitives available
-- a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
+- a **composition-aware React editorial canvas** that assembles semantic modules from the visual-composition contract instead of forcing every briefing into a generic card/list page
+- visual teaching modules for thesis framing, reader-role lenses, evidence orbit, mechanism flow, power map, reusable lesson, and watch sensors
 - a **ported Radar + Deep Dives layer** in React + Vite that already renders real evidence signals and mechanism cards from the briefing payload
 - a **ported Reader Translation layer** in React + Vite that renders role-specific takeaways from the real briefing + composition artifacts
 - a **ported closing layer** in React + Vite that renders Market Map, Reusable Lesson, and Watchlist modules from the real briefing + composition artifacts
