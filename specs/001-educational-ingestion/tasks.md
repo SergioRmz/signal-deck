@@ -101,17 +101,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T028 [P] [US3] Add test requiring one canonical Sergio profile in `tests/test_validate_ingestion_package.py`
-- [ ] T029 [P] [US3] Add test requiring canonical Sergio relevance on every selected signal in `tests/test_validate_ingestion_package.py`
-- [ ] T030 [P] [US3] Add test allowing multiple roles in a reader profile in `tests/test_validate_ingestion_package.py`
+- [x] T028 [P] [US3] Add test requiring one canonical Sergio profile in `tests/test_validate_ingestion_package.py`
+- [x] T029 [P] [US3] Add test requiring canonical Sergio relevance on every selected signal in `tests/test_validate_ingestion_package.py`
+- [x] T030 [P] [US3] Add test allowing multiple roles in a reader profile in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Populate `readerProfiles` and `profileRelevance` in `data/ingestion-package.sample.json`
-- [ ] T032 [US3] Implement canonical profile and multi-role validation in `scripts/validate_ingestion_package.py`
-- [ ] T033 [US3] Ensure selected signals expose `profileRationale` for Sergio in `data/ingestion-package.sample.json`
-- [ ] T034 [US3] Document reader profile lens semantics in `docs/briefing-ingestion-v2.md`
-- [ ] T035 [US3] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T031 [US3] Populate `readerProfiles` and `profileRelevance` in `data/ingestion-package.sample.json`
+- [x] T032 [US3] Implement canonical profile and multi-role validation in `scripts/validate_ingestion_package.py`
+- [x] T033 [US3] Ensure selected signals expose `profileRationale` for Sergio in `data/ingestion-package.sample.json`
+- [x] T034 [US3] Document reader profile lens semantics in `docs/briefing-ingestion-v2.md`
+- [x] T035 [US3] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US3 is independently complete when canonical Sergio relevance is enforced without blocking future multi-role profiles.
 

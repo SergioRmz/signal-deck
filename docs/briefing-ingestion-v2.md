@@ -44,6 +44,16 @@ Every candidate must reference at least one known `sources[].sourceId`. Every so
 
 Candidate `auditNotes` should preserve source or publication metadata caveats so a reviewer can distinguish verified facts from placeholders, paywalled context, or missing timestamps.
 
+## Reader profile lens semantics
+
+The package must contain exactly one canonical Sergio profile:
+
+- `profileId: sergio-canonical`
+- `canonical: true`
+- `roles`: multiple roles are allowed and expected; profile modeling must not force Sergio or future readers into one exclusive role.
+
+Every candidate must include `profileRelevance` for `sergio-canonical` with a non-empty rationale. Every selected signal must include `profileRationale`, which is the downstream-ready explanation of why the signal matters for Sergio's learning and competitive-advantage lens.
+
 ## Educational value assessment
 
 Educational scoring is separate from factual relevance. A candidate can be timely and still weak if it cannot teach a reusable mechanism. Every candidate must provide:

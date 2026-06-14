@@ -256,14 +256,52 @@ def _validate_educational_value(candidates: list[Any]) -> None:
             fail(f"candidate {signal_id} rejected for weak educational value must use rejectionReason low_educational_value")
 
 
+def _validate_reader_profiles(package: dict[str, Any]) -> str:
+    profiles = expect_non_empty_list(package.get("readerProfiles"), "readerProfiles")
+    canonical_true_profiles = [
+        expect_dict(profile, "readerProfile")
+        for profile in profiles
+        if profile.get("canonical") is True
+    ]
+    canonical_profiles = [profile for profile in canonical_true_profiles if profile.get("profileId") == "sergio-canonical"]
+    if len(canonical_true_profiles) != 1 or len(canonical_profiles) != 1:
+        fail("package must include exactly one canonical Sergio profile with profileId sergio-canonical")
+    roles = expect_non_empty_list(canonical_profiles[0].get("roles"), "canonical Sergio profile roles")
+    if len(roles) < 2:
+        fail("canonical Sergio profile must support multiple roles")
+    return "sergio-canonical"
+
+
+def _validate_profile_relevance(candidates: list[Any], canonical_profile_id: str) -> None:
+    for index, candidate in enumerate(candidates, start=1):
+        signal_id = expect_non_empty_string(candidate.get("signalId"), f"candidates[{index}].signalId")
+        relevance = expect_non_empty_list(candidate.get("profileRelevance"), f"candidate {signal_id}.profileRelevance")
+        if not any(expect_dict(item, f"candidate {signal_id}.profileRelevance[]").get("profileId") == canonical_profile_id for item in relevance):
+            fail(f"candidate {signal_id} must include canonical Sergio relevance")
+        for rel_index, item in enumerate(relevance, start=1):
+            rel = expect_dict(item, f"candidate {signal_id}.profileRelevance[{rel_index}]")
+            expect_non_empty_string(rel.get("relevanceRationale"), f"candidate {signal_id}.profileRelevance[{rel_index}].relevanceRationale")
+
+
+def _validate_selected_profile_rationales(selected_signals: list[Any]) -> None:
+    for index, selected in enumerate(selected_signals, start=1):
+        expect_non_empty_string(
+            expect_dict(selected, f"selectedSignals[{index}]").get("profileRationale"),
+            f"selectedSignals[{index}].profileRationale",
+        )
+
+
 def validate_shared_semantics(package: dict[str, Any]) -> None:
     sources = expect_non_empty_list(package.get("sources"), "sources")
     candidates = expect_non_empty_list(package.get("candidates"), "candidates")
+    canonical_profile_id = _validate_reader_profiles(package)
     _validate_run_counts(package)
     _validate_domain_coverage(package)
     _validate_source_metadata(sources)
     _validate_candidate_metadata(candidates)
     _validate_educational_value(candidates)
+    _validate_profile_relevance(candidates, canonical_profile_id)
+    _validate_selected_profile_rationales(expect_list(package.get("selectedSignals"), "selectedSignals"))
 
     source_ids = _collect_unique_ids(sources, "sourceId", "sources")
     candidate_ids = _collect_unique_ids(candidates, "signalId", "candidates")

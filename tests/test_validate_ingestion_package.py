@@ -122,6 +122,44 @@ class ValidateIngestionPackageTests(unittest.TestCase):
 
         self.assert_validation_error(package, "weak educational value")
 
+    def test_requires_exactly_one_canonical_sergio_profile(self) -> None:
+        package = copy.deepcopy(self.sample)
+        clone = copy.deepcopy(package["readerProfiles"][0])
+        clone["profileId"] = "sergio-duplicate"
+        package["readerProfiles"].append(clone)
+
+        self.assert_validation_error(package, "exactly one canonical Sergio profile")
+
+    def test_every_candidate_references_canonical_sergio_profile(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["profileRelevance"] = [{
+            "profileId": "unknown-reader",
+            "relevanceRationale": "Looks relevant to another reader, not Sergio.",
+            "relevanceScore": 0.5,
+        }]
+
+        self.assert_validation_error(package, "canonical Sergio relevance")
+
+    def test_reader_profiles_may_have_multiple_roles(self) -> None:
+        roles = self.sample["readerProfiles"][0]["roles"]
+
+        self.assertGreaterEqual(len(roles), 2)
+        self.validator.validate_ingestion_package(self.sample)
+
+    def test_selected_signals_require_sergio_profile_rationale(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["selectedSignals"] = [{
+            "selectionId": "sel-01",
+            "signalId": "sig-01",
+            "roleInBriefing": "radar",
+            "selectionRationale": "Representative signal for the briefing radar.",
+            "sourceCoverageSummary": "Backed by the sample source record.",
+            "profileRationale": "   ",
+        }]
+        package["run"]["selectedCount"] = 1
+
+        self.assert_validation_error(package, "profileRationale")
+
 
 if __name__ == "__main__":
     unittest.main()
