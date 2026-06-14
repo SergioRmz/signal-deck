@@ -77,17 +77,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Add tests requiring `editorialRationale` and `educationalValue.learningRationale` for every candidate in `tests/test_validate_ingestion_package.py`
-- [ ] T021 [P] [US2] Add tests rejecting candidates whose `educationalValue.teachingMechanisms` is empty in `tests/test_validate_ingestion_package.py`
-- [ ] T022 [P] [US2] Add tests for valid `deepDivePotential` and educational score range in `tests/test_validate_ingestion_package.py`
+- [x] T020 [P] [US2] Add tests requiring `editorialRationale` and `educationalValue.learningRationale` for every candidate in `tests/test_validate_ingestion_package.py`
+- [x] T021 [P] [US2] Add tests rejecting candidates whose `educationalValue.teachingMechanisms` is empty in `tests/test_validate_ingestion_package.py`
+- [x] T022 [P] [US2] Add tests for valid `deepDivePotential` and educational score range in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Populate `data/ingestion-package.sample.json` with educational value scores, teaching mechanisms, and learning rationales for every candidate
-- [ ] T024 [US2] Implement educational value semantic validation in `scripts/validate_ingestion_package.py`
-- [ ] T025 [US2] Implement weak-learning rejection/downgrade checks in `scripts/validate_ingestion_package.py`
-- [ ] T026 [US2] Document educational value assessment semantics in `docs/briefing-ingestion-v2.md`
-- [ ] T027 [US2] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T023 [US2] Populate `data/ingestion-package.sample.json` with educational value scores, teaching mechanisms, and learning rationales for every candidate
+- [x] T024 [US2] Implement educational value semantic validation in `scripts/validate_ingestion_package.py`
+- [x] T025 [US2] Implement weak-learning rejection/downgrade checks in `scripts/validate_ingestion_package.py`
+- [x] T026 [US2] Document educational value assessment semantics in `docs/briefing-ingestion-v2.md`
+- [x] T027 [US2] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US2 is independently complete when the validator distinguishes factual relevance from educational value.
 

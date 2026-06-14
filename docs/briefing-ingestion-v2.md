@@ -44,6 +44,18 @@ Every candidate must reference at least one known `sources[].sourceId`. Every so
 
 Candidate `auditNotes` should preserve source or publication metadata caveats so a reviewer can distinguish verified facts from placeholders, paywalled context, or missing timestamps.
 
+## Educational value assessment
+
+Educational scoring is separate from factual relevance. A candidate can be timely and still weak if it cannot teach a reusable mechanism. Every candidate must provide:
+
+- `editorialRationale`: why the item may matter for the briefing.
+- `educationalValue.score`: numeric score from `0` to `1`.
+- `educationalValue.teachingMechanisms`: at least one concrete teaching mechanism such as `causal_mechanism`, `incentive_structure`, `technical_moat`, or `risk_pattern`.
+- `educationalValue.learningRationale`: what a reader should learn from the signal.
+- `educationalValue.deepDivePotential`: `none`, `possible`, or `strong`.
+
+A candidate with educational score below `0.4` is considered weak for the product's teaching mission. It must be downgraded to `watch_item`/`merged` or rejected; if rejected specifically for weak learning value, it should use `rejectionReason: low_educational_value`.
+
 ## Validation
 
 Run the validator from the repository root:

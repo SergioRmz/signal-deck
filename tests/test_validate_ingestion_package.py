@@ -90,6 +90,38 @@ class ValidateIngestionPackageTests(unittest.TestCase):
 
         self.assert_validation_error(package, "domain coverage must include")
 
+    def test_candidate_requires_editorial_rationale_with_real_text(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["editorialRationale"] = "   "
+
+        self.assert_validation_error(package, "editorialRationale")
+
+    def test_candidate_requires_learning_rationale_with_real_text(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["learningRationale"] = "   "
+
+        self.assert_validation_error(package, "learningRationale")
+
+    def test_candidate_rejects_empty_teaching_mechanisms(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["teachingMechanisms"] = []
+
+        self.assert_validation_error(package, "teachingMechanisms")
+
+    def test_candidate_rejects_invalid_educational_score_and_deep_dive_potential(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["score"] = 1.2
+        package["candidates"][1]["educationalValue"]["deepDivePotential"] = "viral"
+
+        self.assert_validation_error(package, "score")
+
+    def test_weak_learning_candidate_must_be_downgraded_or_rejected(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["score"] = 0.2
+        package["candidates"][0]["educationalValue"]["deepDivePotential"] = "none"
+
+        self.assert_validation_error(package, "weak educational value")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -237,6 +237,25 @@ def _validate_candidate_metadata(candidates: list[Any]) -> None:
             fail(f"candidate {signal_id} must include source or publication metadata audit notes")
 
 
+def _validate_educational_value(candidates: list[Any]) -> None:
+    for index, item in enumerate(candidates, start=1):
+        candidate = expect_dict(item, f"candidates[{index}]")
+        signal_id = expect_non_empty_string(candidate.get("signalId"), f"candidates[{index}].signalId")
+        value = expect_dict(candidate.get("educationalValue"), f"candidate {signal_id}.educationalValue")
+        score = value.get("score")
+        if not isinstance(score, (int, float)) or isinstance(score, bool) or not 0 <= score <= 1:
+            fail(f"candidate {signal_id}.educationalValue.score must be between 0 and 1")
+        expect_non_empty_list(value.get("teachingMechanisms"), f"candidate {signal_id}.educationalValue.teachingMechanisms")
+        expect_non_empty_string(value.get("learningRationale"), f"candidate {signal_id}.educationalValue.learningRationale")
+        deep_dive = expect_non_empty_string(value.get("deepDivePotential"), f"candidate {signal_id}.educationalValue.deepDivePotential")
+        if deep_dive not in {"none", "possible", "strong"}:
+            fail(f"candidate {signal_id}.educationalValue.deepDivePotential must be none, possible, or strong")
+        if score < 0.4 and candidate.get("status") not in {"rejected", "watch_item", "merged"}:
+            fail(f"candidate {signal_id} has weak educational value and must be downgraded or rejected")
+        if score < 0.4 and candidate.get("status") == "rejected" and candidate.get("rejectionReason") != "low_educational_value":
+            fail(f"candidate {signal_id} rejected for weak educational value must use rejectionReason low_educational_value")
+
+
 def validate_shared_semantics(package: dict[str, Any]) -> None:
     sources = expect_non_empty_list(package.get("sources"), "sources")
     candidates = expect_non_empty_list(package.get("candidates"), "candidates")
@@ -244,6 +263,7 @@ def validate_shared_semantics(package: dict[str, Any]) -> None:
     _validate_domain_coverage(package)
     _validate_source_metadata(sources)
     _validate_candidate_metadata(candidates)
+    _validate_educational_value(candidates)
 
     source_ids = _collect_unique_ids(sources, "sourceId", "sources")
     candidate_ids = _collect_unique_ids(candidates, "signalId", "candidates")
