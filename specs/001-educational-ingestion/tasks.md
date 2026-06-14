@@ -175,17 +175,17 @@
 
 ### Tests for User Story 6
 
-- [ ] T054 [P] [US6] Add pipeline test requiring `ingestion-package.json` in run artifacts in `tests/test_run_briefing_pipeline.py`
-- [ ] T055 [P] [US6] Add pipeline test requiring `manifest.json` to reference the ingestion package in `tests/test_run_briefing_pipeline.py`
-- [ ] T056 [P] [US6] Add pipeline test proving renderer build still consumes final briefing and composition artifacts in `tests/test_run_briefing_pipeline.py`
+- [x] T054 [P] [US6] Add pipeline test requiring `ingestion-package.json` in run artifacts in `tests/test_run_briefing_pipeline.py`
+- [x] T055 [P] [US6] Add pipeline test requiring `manifest.json` to reference the ingestion package in `tests/test_run_briefing_pipeline.py`
+- [x] T056 [P] [US6] Add pipeline test proving renderer build still consumes final briefing and composition artifacts in `tests/test_run_briefing_pipeline.py`
 
 ### Implementation for User Story 6
 
-- [ ] T057 [US6] Add `--ingestion-package` CLI argument and default path in `scripts/run_briefing_pipeline.py`
-- [ ] T058 [US6] Validate and snapshot the ingestion package into `runs/YYYY-MM-DD/ingestion-package.json` in `scripts/run_briefing_pipeline.py`
-- [ ] T059 [US6] Add `ingestionPackage` to the run manifest in `scripts/run_briefing_pipeline.py`
-- [ ] T060 [US6] Update `README.md` validation commands and run artifact list for the v2 ingestion package
-- [ ] T061 [US6] Run `python3 -m unittest tests/test_run_briefing_pipeline.py -v` and `python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer`
+- [x] T057 [US6] Add `--ingestion-package` CLI argument and default path in `scripts/run_briefing_pipeline.py`
+- [x] T058 [US6] Validate and snapshot the ingestion package into `runs/YYYY-MM-DD/ingestion-package.json` in `scripts/run_briefing_pipeline.py`
+- [x] T059 [US6] Add `ingestionPackage` to the run manifest in `scripts/run_briefing_pipeline.py`
+- [x] T060 [US6] Update `README.md` validation commands and run artifact list for the v2 ingestion package
+- [x] T061 [US6] Run `python3 -m unittest tests/test_run_briefing_pipeline.py -v` and `python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer`
 
 **Checkpoint**: US6 is independently complete when a dated run is fully traceable from ingestion package to briefing output.
 
@@ -195,15 +195,15 @@
 
 **Purpose**: Validate the full feature, update docs, and prepare the PR for review.
 
-- [ ] T062 [P] Update `specs/001-educational-ingestion/quickstart.md` if implementation paths differ from the plan
-- [ ] T063 [P] Add any missing validator edge-case notes to `docs/briefing-ingestion-v2.md`
-- [ ] T064 Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
-- [ ] T065 Run `python3 -m unittest tests/test_generate_briefing.py -v`
-- [ ] T066 Run `python3 -m unittest tests/test_run_briefing_pipeline.py -v`
-- [ ] T067 Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json`
-- [ ] T068 Run `python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer`
-- [ ] T069 Run `git diff --check` from repository root
-- [ ] T070 Commit all completed implementation work and push `001-educational-ingestion`
+- [x] T062 [P] Update `specs/001-educational-ingestion/quickstart.md` if implementation paths differ from the plan
+- [x] T063 [P] Add any missing validator edge-case notes to `docs/briefing-ingestion-v2.md`
+- [x] T064 Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T065 Run `python3 -m unittest tests/test_generate_briefing.py -v`
+- [x] T066 Run `python3 -m unittest tests/test_run_briefing_pipeline.py -v`
+- [x] T067 Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json`
+- [x] T068 Run `python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer`
+- [x] T069 Run `git diff --check` from repository root
+- [x] T070 Commit all completed implementation work and push `001-educational-ingestion`
 - [ ] T071 Update PR #25 summary and validation notes using `specs/001-educational-ingestion/tasks.md` as the implementation checklist source
 
 ---
