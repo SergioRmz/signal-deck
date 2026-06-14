@@ -20,10 +20,10 @@
 
 **Purpose**: Move the planned v2 ingestion package contract into canonical implementation locations without changing runtime behavior yet.
 
-- [ ] T001 Copy `specs/001-educational-ingestion/contracts/ingestion-package-v2.schema.json` to `data/ingestion-package.schema.json`
-- [ ] T002 [P] Create placeholder documentation shell for `docs/briefing-ingestion-v2.md` from `specs/001-educational-ingestion/data-model.md`
-- [ ] T003 [P] Create validation test skeleton in `tests/test_validate_ingestion_package.py`
-- [ ] T004 Create validator script skeleton in `scripts/validate_ingestion_package.py` with CLI argument parsing for `data/ingestion-package.sample.json`
+- [x] T001 Copy `specs/001-educational-ingestion/contracts/ingestion-package-v2.schema.json` to `data/ingestion-package.schema.json`
+- [x] T002 [P] Create placeholder documentation shell for `docs/briefing-ingestion-v2.md` from `specs/001-educational-ingestion/data-model.md`
+- [x] T003 [P] Create validation test skeleton in `tests/test_validate_ingestion_package.py`
+- [x] T004 Create validator script skeleton in `scripts/validate_ingestion_package.py` with CLI argument parsing for `data/ingestion-package.sample.json`
 
 ---
 
@@ -33,12 +33,12 @@
 
 **⚠️ CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T005 Add JSON loading, object expectation, and schema validation helpers in `scripts/validate_ingestion_package.py`
-- [ ] T006 Add shared uniqueness and cross-reference helper functions in `scripts/validate_ingestion_package.py`
-- [ ] T007 [P] Add a minimal valid package fixture with 15 candidate shells in `data/ingestion-package.sample.json`
-- [ ] T008 [P] Add documentation for package top-level shape in `docs/briefing-ingestion-v2.md`
-- [ ] T009 Add base passing validation test for `data/ingestion-package.sample.json` in `tests/test_validate_ingestion_package.py`
-- [ ] T010 Run `python3 -m unittest tests/test_validate_ingestion_package.py -v` and confirm the base fixture validation passes
+- [x] T005 Add JSON loading, object expectation, and schema validation helpers in `scripts/validate_ingestion_package.py`
+- [x] T006 Add shared uniqueness and cross-reference helper functions in `scripts/validate_ingestion_package.py`
+- [x] T007 [P] Add a minimal valid package fixture with 15 candidate shells in `data/ingestion-package.sample.json`
+- [x] T008 [P] Add documentation for package top-level shape in `docs/briefing-ingestion-v2.md`
+- [x] T009 Add base passing validation test for `data/ingestion-package.sample.json` in `tests/test_validate_ingestion_package.py`
+- [x] T010 Run `python3 -m unittest tests/test_validate_ingestion_package.py -v` and confirm the base fixture validation passes
 
 **Checkpoint**: Foundation ready — user story implementation can now begin.
 
@@ -52,18 +52,18 @@
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add candidate count validation tests for underfilled and overfilled normal runs in `tests/test_validate_ingestion_package.py`
-- [ ] T012 [P] [US1] Add source reference cross-reference tests for missing `sourceIds` in `tests/test_validate_ingestion_package.py`
-- [ ] T013 [P] [US1] Add domain coverage test for technology, AI, and economy tags in `tests/test_validate_ingestion_package.py`
+- [x] T011 [P] [US1] Add candidate count validation tests for underfilled and overfilled normal runs in `tests/test_validate_ingestion_package.py`
+- [x] T012 [P] [US1] Add source reference cross-reference tests for missing `sourceIds` in `tests/test_validate_ingestion_package.py`
+- [x] T013 [P] [US1] Add domain coverage test for technology, AI, and economy tags in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Expand `data/ingestion-package.sample.json` to 15-30 realistic candidate signals with source metadata and factual summaries
-- [ ] T015 [US1] Implement candidate volume and underfilled-run validation in `scripts/validate_ingestion_package.py`
-- [ ] T016 [US1] Implement source ID existence validation for every candidate in `scripts/validate_ingestion_package.py`
-- [ ] T017 [US1] Implement required candidate metadata checks for domain tags, factual summary, source notes, and publication metadata notes in `scripts/validate_ingestion_package.py`
-- [ ] T018 [US1] Document candidate pool semantics and source metadata requirements in `docs/briefing-ingestion-v2.md`
-- [ ] T019 [US1] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T014 [US1] Expand `data/ingestion-package.sample.json` to 15-30 realistic candidate signals with source metadata and factual summaries
+- [x] T015 [US1] Implement candidate volume and underfilled-run validation in `scripts/validate_ingestion_package.py`
+- [x] T016 [US1] Implement source ID existence validation for every candidate in `scripts/validate_ingestion_package.py`
+- [x] T017 [US1] Implement required candidate metadata checks for domain tags, factual summary, source notes, and publication metadata notes in `scripts/validate_ingestion_package.py`
+- [x] T018 [US1] Document candidate pool semantics and source metadata requirements in `docs/briefing-ingestion-v2.md`
+- [x] T019 [US1] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US1 is independently complete when broad candidate pool validation passes without changing briefing transformation.
 
@@ -77,17 +77,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Add tests requiring `editorialRationale` and `educationalValue.learningRationale` for every candidate in `tests/test_validate_ingestion_package.py`
-- [ ] T021 [P] [US2] Add tests rejecting candidates whose `educationalValue.teachingMechanisms` is empty in `tests/test_validate_ingestion_package.py`
-- [ ] T022 [P] [US2] Add tests for valid `deepDivePotential` and educational score range in `tests/test_validate_ingestion_package.py`
+- [x] T020 [P] [US2] Add tests requiring `editorialRationale` and `educationalValue.learningRationale` for every candidate in `tests/test_validate_ingestion_package.py`
+- [x] T021 [P] [US2] Add tests rejecting candidates whose `educationalValue.teachingMechanisms` is empty in `tests/test_validate_ingestion_package.py`
+- [x] T022 [P] [US2] Add tests for valid `deepDivePotential` and educational score range in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Populate `data/ingestion-package.sample.json` with educational value scores, teaching mechanisms, and learning rationales for every candidate
-- [ ] T024 [US2] Implement educational value semantic validation in `scripts/validate_ingestion_package.py`
-- [ ] T025 [US2] Implement weak-learning rejection/downgrade checks in `scripts/validate_ingestion_package.py`
-- [ ] T026 [US2] Document educational value assessment semantics in `docs/briefing-ingestion-v2.md`
-- [ ] T027 [US2] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T023 [US2] Populate `data/ingestion-package.sample.json` with educational value scores, teaching mechanisms, and learning rationales for every candidate
+- [x] T024 [US2] Implement educational value semantic validation in `scripts/validate_ingestion_package.py`
+- [x] T025 [US2] Implement weak-learning rejection/downgrade checks in `scripts/validate_ingestion_package.py`
+- [x] T026 [US2] Document educational value assessment semantics in `docs/briefing-ingestion-v2.md`
+- [x] T027 [US2] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US2 is independently complete when the validator distinguishes factual relevance from educational value.
 
@@ -101,17 +101,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T028 [P] [US3] Add test requiring one canonical Sergio profile in `tests/test_validate_ingestion_package.py`
-- [ ] T029 [P] [US3] Add test requiring canonical Sergio relevance on every selected signal in `tests/test_validate_ingestion_package.py`
-- [ ] T030 [P] [US3] Add test allowing multiple roles in a reader profile in `tests/test_validate_ingestion_package.py`
+- [x] T028 [P] [US3] Add test requiring one canonical Sergio profile in `tests/test_validate_ingestion_package.py`
+- [x] T029 [P] [US3] Add test requiring canonical Sergio relevance on every selected signal in `tests/test_validate_ingestion_package.py`
+- [x] T030 [P] [US3] Add test allowing multiple roles in a reader profile in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Populate `readerProfiles` and `profileRelevance` in `data/ingestion-package.sample.json`
-- [ ] T032 [US3] Implement canonical profile and multi-role validation in `scripts/validate_ingestion_package.py`
-- [ ] T033 [US3] Ensure selected signals expose `profileRationale` for Sergio in `data/ingestion-package.sample.json`
-- [ ] T034 [US3] Document reader profile lens semantics in `docs/briefing-ingestion-v2.md`
-- [ ] T035 [US3] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T031 [US3] Populate `readerProfiles` and `profileRelevance` in `data/ingestion-package.sample.json`
+- [x] T032 [US3] Implement canonical profile and multi-role validation in `scripts/validate_ingestion_package.py`
+- [x] T033 [US3] Ensure selected signals expose `profileRationale` for Sergio in `data/ingestion-package.sample.json`
+- [x] T034 [US3] Document reader profile lens semantics in `docs/briefing-ingestion-v2.md`
+- [x] T035 [US3] Run `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US3 is independently complete when canonical Sergio relevance is enforced without blocking future multi-role profiles.
 
@@ -125,19 +125,19 @@
 
 ### Tests for User Story 4
 
-- [ ] T036 [P] [US4] Add cluster cross-reference tests for unknown `signalIds` in `tests/test_validate_ingestion_package.py`
-- [ ] T037 [P] [US4] Add selected-signal count tests for normal completed runs in `tests/test_validate_ingestion_package.py`
-- [ ] T038 [P] [US4] Add deep dive educational density tests in `tests/test_validate_ingestion_package.py`
-- [ ] T039 [P] [US4] Add transformation tests proving selected/deep-dive package signals can feed `generate_briefing.py` in `tests/test_generate_briefing.py`
+- [x] T036 [P] [US4] Add cluster cross-reference tests for unknown `signalIds` in `tests/test_validate_ingestion_package.py`
+- [x] T037 [P] [US4] Add selected-signal count tests for normal completed runs in `tests/test_validate_ingestion_package.py`
+- [x] T038 [P] [US4] Add deep dive educational density tests in `tests/test_validate_ingestion_package.py`
+- [x] T039 [P] [US4] Add transformation tests proving selected/deep-dive package signals can feed `generate_briefing.py` in `tests/test_generate_briefing.py`
 
 ### Implementation for User Story 4
 
-- [ ] T040 [US4] Populate `clusters` in `data/ingestion-package.sample.json` with thesis candidates, shared mechanisms, and key tensions
-- [ ] T041 [US4] Populate `selectedSignals` in `data/ingestion-package.sample.json` with 5-8 selected signals and 2-3 deep dive roles
-- [ ] T042 [US4] Implement cluster and selected-signal semantic validation in `scripts/validate_ingestion_package.py`
-- [ ] T043 [US4] Add package-to-v1 transformation adapter in `scripts/generate_briefing.py` without breaking existing `signal-input.sample.json` flow
-- [ ] T044 [US4] Document clustering, selection, and deep dive rules in `docs/briefing-ingestion-v2.md`
-- [ ] T045 [US4] Run `python3 -m unittest tests/test_generate_briefing.py -v` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T040 [US4] Populate `clusters` in `data/ingestion-package.sample.json` with thesis candidates, shared mechanisms, and key tensions
+- [x] T041 [US4] Populate `selectedSignals` in `data/ingestion-package.sample.json` with 5-8 selected signals and 2-3 deep dive roles
+- [x] T042 [US4] Implement cluster and selected-signal semantic validation in `scripts/validate_ingestion_package.py`
+- [x] T043 [US4] Add package-to-v1 transformation adapter in `scripts/generate_briefing.py` without breaking existing `signal-input.sample.json` flow
+- [x] T044 [US4] Document clustering, selection, and deep dive rules in `docs/briefing-ingestion-v2.md`
+- [x] T045 [US4] Run `python3 -m unittest tests/test_generate_briefing.py -v` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US4 is independently complete when package-selected signals can drive downstream briefing transformation.
 
@@ -151,17 +151,17 @@
 
 ### Tests for User Story 5
 
-- [ ] T046 [P] [US5] Add test requiring `rejectionReason` for every rejected candidate in `tests/test_validate_ingestion_package.py`
-- [ ] T047 [P] [US5] Add test requiring `duplicateOfSignalId` or `mergedIntoSignalId` for merged/redundant coverage in `tests/test_validate_ingestion_package.py`
-- [ ] T048 [P] [US5] Add test preventing watch items from being selected as factual deep dives in `tests/test_validate_ingestion_package.py`
+- [x] T046 [P] [US5] Add test requiring `rejectionReason` for every rejected candidate in `tests/test_validate_ingestion_package.py`
+- [x] T047 [P] [US5] Add test requiring `duplicateOfSignalId` or `mergedIntoSignalId` for merged/redundant coverage in `tests/test_validate_ingestion_package.py`
+- [x] T048 [P] [US5] Add test preventing watch items from being selected as factual deep dives in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 5
 
-- [ ] T049 [US5] Populate `rejectedSignals` and `watchItems` in `data/ingestion-package.sample.json`
-- [ ] T050 [US5] Implement rejection reason, merged-signal, and watch-item validation in `scripts/validate_ingestion_package.py`
-- [ ] T051 [US5] Add CLI failure messages that identify the exact invalid signal ID in `scripts/validate_ingestion_package.py`
-- [ ] T052 [US5] Document rejection reasons and watch-item semantics in `docs/briefing-ingestion-v2.md`
-- [ ] T053 [US5] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T049 [US5] Populate `rejectedSignals` and `watchItems` in `data/ingestion-package.sample.json`
+- [x] T050 [US5] Implement rejection reason, merged-signal, and watch-item validation in `scripts/validate_ingestion_package.py`
+- [x] T051 [US5] Add CLI failure messages that identify the exact invalid signal ID in `scripts/validate_ingestion_package.py`
+- [x] T052 [US5] Document rejection reasons and watch-item semantics in `docs/briefing-ingestion-v2.md`
+- [x] T053 [US5] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US5 is independently complete when noise rejection and watch-item retention are auditable.
 

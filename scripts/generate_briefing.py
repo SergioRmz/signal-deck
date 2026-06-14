@@ -341,6 +341,131 @@ def build_watchlist(packet: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def transform_ingestion_package_to_signal_input(package: dict[str, Any]) -> dict[str, Any]:
+    """Adapt an educational ingestion package v2 into the existing v1 signal-input contract."""
+    candidates_by_id = {candidate["signalId"]: candidate for candidate in package["candidates"]}
+    clusters_by_id = {cluster["clusterId"]: cluster for cluster in package.get("clusters", [])}
+    sources_by_id = {source["sourceId"]: source for source in package["sources"]}
+    selected = package["selectedSignals"]
+    canonical_profile = next(
+        (profile for profile in package["readerProfiles"] if profile.get("profileId") == "sergio-canonical"),
+        package["readerProfiles"][0],
+    )
+
+    signals: list[dict[str, Any]] = []
+    radar_order: list[str] = []
+    deep_dive_ids: list[str] = []
+    supporting_themes: list[str] = []
+    contradictions: list[str] = []
+
+    for selection in selected:
+        role = selection["roleInBriefing"]
+        if selection.get("signalId"):
+            signal_id = selection["signalId"]
+            candidate = candidates_by_id[signal_id]
+            title = candidate["title"]
+            statement = candidate["factualSummary"]
+            category = candidate["domainTags"][0]
+            evidence = candidate["educationalValue"]["learningRationale"]
+            source_ids = candidate["sourceIds"]
+            implications = [candidate["editorialRationale"], selection["profileRationale"]]
+            counterpoints = candidate.get("auditNotes", [])[:1]
+        else:
+            cluster = clusters_by_id[selection["clusterId"]]
+            signal_id = cluster["clusterId"]
+            title = cluster["title"]
+            statement = cluster["thesisCandidate"]
+            category = "market-structure"
+            evidence = cluster["sharedMechanism"]
+            cluster_candidates = [candidates_by_id[item] for item in cluster["signalIds"]]
+            source_ids = unique_preserving_order(
+                [source_id for candidate in cluster_candidates for source_id in candidate["sourceIds"]]
+            )
+            implications = [cluster["educationalRationale"], selection["profileRationale"]]
+            counterpoints = [cluster["keyTension"]] if cluster.get("keyTension") else []
+            supporting_themes.append(cluster["title"])
+            if cluster.get("keyTension"):
+                contradictions.append(cluster["keyTension"])
+
+        priority = "high" if role == "deep_dive" else "medium" if role in {"radar", "market_map"} else "low"
+        signals.append(
+            {
+                "signalId": signal_id,
+                "statement": clean_sentence(title if role == "radar" else statement),
+                "category": category,
+                "priority": priority,
+                "sourceIds": source_ids,
+                "evidence": clean_sentence(evidence),
+                "implications": [clean_sentence(item) for item in implications],
+                "counterpoints": [clean_sentence(item) for item in counterpoints] or [clean_sentence(selection["selectionRationale"])],
+            }
+        )
+        radar_order.append(signal_id)
+        if role == "deep_dive":
+            deep_dive_ids.append(signal_id)
+
+    if not supporting_themes:
+        supporting_themes = [signal["category"] for signal in signals[:3]]
+    thesis = (
+        clusters_by_id[selected[0]["clusterId"]]["thesisCandidate"]
+        if selected and selected[0].get("clusterId")
+        else signals[0]["statement"]
+    )
+
+    return {
+        "meta": {
+            "schemaVersion": "1.0",
+            "inputId": package["meta"]["packageId"],
+            "createdAt": package["meta"]["createdAt"],
+            "language": package["meta"].get("language", "es"),
+            "owners": ["signal-deck"],
+            "tags": package["meta"].get("domains", []),
+        },
+        "brief": {
+            "topic": "Educational technology, AI, and economy briefing",
+            "objective": "Convertir señales de tecnología, IA y economía en una mini master class ejecutiva para Sergio.",
+            "audience": canonical_profile.get("displayName", "Sergio Ramirez"),
+            "timeHorizon": package["run"]["runDate"],
+            "readerProfile": {
+                "roles": canonical_profile.get("roles", []),
+                "interests": canonical_profile.get("interests", []),
+                "desiredUpgrade": "; ".join(canonical_profile.get("advantageTargets", [])),
+            },
+        },
+        "sources": [
+            {
+                "sourceId": source_id,
+                "title": sources_by_id[source_id]["title"],
+                "sourceType": sources_by_id[source_id]["sourceType"],
+                "publisher": sources_by_id[source_id]["publisher"],
+            }
+            for source_id in unique_preserving_order([source_id for signal in signals for source_id in signal["sourceIds"]])
+        ],
+        "signals": signals,
+        "synthesis": {
+            "workingThesis": clean_sentence(thesis),
+            "supportingThemes": unique_preserving_order(supporting_themes)[:3],
+            "openQuestions": ["¿Qué evidencia confirmaría que esta tesis mejora resultados operativos y no solo narrativa?"],
+            "contradictions": unique_preserving_order(contradictions)[:3],
+            "missingInformation": ["Replace sample source URLs with retrieved live evidence during a production run."],
+        },
+        "editorialDecisions": {
+            "heroFrame": "La ventaja se mueve hacia quien controla el mecanismo, no solo la noticia",
+            "topLineThesis": clean_sentence(thesis),
+            "radarOrder": radar_order,
+            "deepDiveSignalIds": deep_dive_ids,
+            "marketMapFrames": ["Infraestructura", "Confianza", "Economía"],
+            "watchlistSeeds": ["Confirmar si las señales seleccionadas generan adopción, margen o poder de distribución medible"],
+            "dominantPedagogicalFunction": "reusable_mental_model",
+            "readerTranslationLenses": canonical_profile.get("roles", []),
+        },
+    }
+
+
+def transform_ingestion_package(package: dict[str, Any]) -> dict[str, Any]:
+    return transform_packet(transform_ingestion_package_to_signal_input(package))
+
+
 def transform_packet(packet: dict[str, Any]) -> dict[str, Any]:
     editorial = packet["editorialDecisions"]
     signals = packet["signals"]
@@ -379,8 +504,11 @@ def main() -> None:
         raise SystemExit(f"ERROR: Invalid JSON in {input_path}: {exc}") from exc
 
     packet = expect_dict(data, "signal-input")
-    validate_input_packet(packet)
-    briefing = transform_packet(packet)
+    if packet.get("meta", {}).get("schemaVersion") == "2.0" and "selectedSignals" in packet:
+        briefing = transform_ingestion_package(packet)
+    else:
+        validate_input_packet(packet)
+        briefing = transform_packet(packet)
     validate_briefing(briefing)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
