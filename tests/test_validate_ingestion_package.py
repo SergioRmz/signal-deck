@@ -1,0 +1,237 @@
+from __future__ import annotations
+
+import copy
+import importlib.util
+import subprocess
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT_PATH = ROOT / "scripts" / "validate_ingestion_package.py"
+SAMPLE_PATH = ROOT / "data" / "ingestion-package.sample.json"
+SCHEMA_PATH = ROOT / "data" / "ingestion-package.schema.json"
+
+
+def load_validator_module():
+    spec = importlib.util.spec_from_file_location("validate_ingestion_package", SCRIPT_PATH)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load {SCRIPT_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class ValidateIngestionPackageTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.validator = load_validator_module()
+        self.sample = self.validator.load_json(SAMPLE_PATH)
+
+    def assert_validation_error(self, package: dict, expected: str) -> None:
+        with self.assertRaisesRegex(self.validator.ValidationError, expected):
+            self.validator.validate_ingestion_package(package)
+
+    def test_canonical_schema_is_available(self) -> None:
+        self.assertTrue(SCHEMA_PATH.exists(), "canonical v2 ingestion schema should exist under data/")
+
+    def test_sample_package_passes_validator_function(self) -> None:
+        self.validator.validate_ingestion_package(self.sample)
+
+    def test_sample_package_passes_cli(self) -> None:
+        result = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), str(SAMPLE_PATH)],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("OK:", result.stdout)
+
+    def test_complete_run_rejects_underfilled_candidate_pool(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"] = package["candidates"][:14]
+        package["run"]["candidateCount"] = 14
+
+        self.assert_validation_error(package, "complete run must contain 15-30 candidates")
+
+    def test_complete_run_rejects_overfilled_candidate_pool(self) -> None:
+        package = copy.deepcopy(self.sample)
+        extra = copy.deepcopy(package["candidates"][-1])
+        for index in range(16, 32):
+            clone = copy.deepcopy(extra)
+            clone["signalId"] = f"sig-{index:02d}"
+            clone["title"] = f"Candidate signal {index:02d}"
+            package["candidates"].append(clone)
+        package["run"]["candidateCount"] = len(package["candidates"])
+
+        self.assert_validation_error(package, "complete run must contain 15-30 candidates")
+
+    def test_underfilled_run_allows_smaller_pool_with_quality_note(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"] = package["candidates"][:12]
+        for candidate in package["candidates"]:
+            if candidate["status"] in {"rejected", "watch_item", "merged"}:
+                candidate["status"] = "candidate"
+                candidate.pop("rejectionReason", None)
+                candidate.pop("duplicateOfSignalId", None)
+        package["clusters"] = []
+        package["selectedSignals"] = []
+        package["rejectedSignals"] = []
+        package["watchItems"] = []
+        package["run"]["candidateCount"] = 12
+        package["run"]["selectedCount"] = 0
+        package["run"]["rejectedCount"] = 0
+        package["run"]["watchItemCount"] = 0
+        package["run"]["status"] = "underfilled"
+        package["qualityNotes"] = [{"code": "UNDERFILLED", "message": "Only 12 credible candidates found.", "severity": "warning"}]
+
+        self.validator.validate_ingestion_package(package)
+
+    def test_missing_candidate_source_reference_is_rejected(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["sourceIds"] = ["src-does-not-exist"]
+
+        self.assert_validation_error(package, "unknown sourceId: src-does-not-exist")
+
+    def test_complete_run_requires_technology_ai_and_economy_domain_coverage(self) -> None:
+        package = copy.deepcopy(self.sample)
+        for candidate in package["candidates"]:
+            candidate["domainTags"] = ["technology"]
+        package["run"]["sourceDiversity"]["domainCounts"] = {"technology": 15}
+
+        self.assert_validation_error(package, "domain coverage must include")
+
+    def test_candidate_requires_editorial_rationale_with_real_text(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["editorialRationale"] = "   "
+
+        self.assert_validation_error(package, "editorialRationale")
+
+    def test_candidate_requires_learning_rationale_with_real_text(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["learningRationale"] = "   "
+
+        self.assert_validation_error(package, "learningRationale")
+
+    def test_candidate_rejects_empty_teaching_mechanisms(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["teachingMechanisms"] = []
+
+        self.assert_validation_error(package, "teachingMechanisms")
+
+    def test_candidate_rejects_invalid_educational_score_and_deep_dive_potential(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["score"] = 1.2
+        package["candidates"][1]["educationalValue"]["deepDivePotential"] = "viral"
+
+        self.assert_validation_error(package, "score")
+
+    def test_weak_learning_candidate_must_be_downgraded_or_rejected(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["educationalValue"]["score"] = 0.2
+        package["candidates"][0]["educationalValue"]["deepDivePotential"] = "none"
+
+        self.assert_validation_error(package, "weak educational value")
+
+    def test_requires_exactly_one_canonical_sergio_profile(self) -> None:
+        package = copy.deepcopy(self.sample)
+        clone = copy.deepcopy(package["readerProfiles"][0])
+        clone["profileId"] = "sergio-duplicate"
+        package["readerProfiles"].append(clone)
+
+        self.assert_validation_error(package, "exactly one canonical Sergio profile")
+
+    def test_every_candidate_references_canonical_sergio_profile(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["candidates"][0]["profileRelevance"] = [{
+            "profileId": "unknown-reader",
+            "relevanceRationale": "Looks relevant to another reader, not Sergio.",
+            "relevanceScore": 0.5,
+        }]
+
+        self.assert_validation_error(package, "canonical Sergio relevance")
+
+    def test_reader_profiles_may_have_multiple_roles(self) -> None:
+        roles = self.sample["readerProfiles"][0]["roles"]
+
+        self.assertGreaterEqual(len(roles), 2)
+        self.validator.validate_ingestion_package(self.sample)
+
+    def test_selected_signals_require_sergio_profile_rationale(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["selectedSignals"] = [{
+            "selectionId": "sel-01",
+            "signalId": "sig-01",
+            "roleInBriefing": "radar",
+            "selectionRationale": "Representative signal for the briefing radar.",
+            "sourceCoverageSummary": "Backed by the sample source record.",
+            "profileRationale": "   ",
+        }]
+        package["run"]["selectedCount"] = 1
+
+        self.assert_validation_error(package, "profileRationale")
+
+    def test_cluster_rejects_unknown_signal_reference(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["clusters"][0]["signalIds"].append("sig-does-not-exist")
+
+        self.assert_validation_error(package, "clusters\[1\] references unknown signalId")
+
+    def test_complete_run_requires_five_to_eight_selected_signals(self) -> None:
+        package = copy.deepcopy(self.sample)
+        package["selectedSignals"] = package["selectedSignals"][:4]
+        package["run"]["selectedCount"] = 4
+
+        self.assert_validation_error(package, "complete run must contain 5-8 selected signals")
+
+    def test_complete_run_requires_two_to_three_deep_dives_with_strong_density(self) -> None:
+        package = copy.deepcopy(self.sample)
+        for selected in package["selectedSignals"]:
+            if selected["roleInBriefing"] == "deep_dive":
+                selected["roleInBriefing"] = "radar"
+
+        self.assert_validation_error(package, "complete run must contain 2-3 deep dive selections")
+
+    def test_deep_dive_selection_requires_strong_educational_density(self) -> None:
+        package = copy.deepcopy(self.sample)
+        deep_dive = next(
+            selected for selected in package["selectedSignals"] if selected["roleInBriefing"] == "deep_dive" and selected.get("signalId")
+        )
+        target = next(candidate for candidate in package["candidates"] if candidate["signalId"] == deep_dive["signalId"])
+        target["educationalValue"]["score"] = 0.55
+        target["educationalValue"]["deepDivePotential"] = "possible"
+
+        self.assert_validation_error(package, "deep dive .* strong educational density")
+
+    def test_rejected_candidates_require_rejection_reason_with_signal_id(self) -> None:
+        package = copy.deepcopy(self.sample)
+        rejected = next(candidate for candidate in package["candidates"] if candidate["status"] == "rejected")
+        rejected.pop("rejectionReason", None)
+
+        self.assert_validation_error(package, f"candidate {rejected['signalId']}.*rejectionReason")
+
+    def test_merged_or_redundant_rejections_require_target_signal_id(self) -> None:
+        package = copy.deepcopy(self.sample)
+        merged = next(candidate for candidate in package["candidates"] if candidate["status"] == "merged")
+        merged.pop("duplicateOfSignalId", None)
+
+        self.assert_validation_error(package, f"candidate {merged['signalId']}.*duplicateOfSignalId")
+
+    def test_watch_items_cannot_be_selected_as_deep_dives(self) -> None:
+        package = copy.deepcopy(self.sample)
+        watch_item = next(item for item in package["watchItems"] if item["potentialFutureUse"] == "future_deep_dive")
+        package["selectedSignals"][0] = {
+            "selectionId": "sel-invalid-watch",
+            "signalId": watch_item["signalId"],
+            "roleInBriefing": "deep_dive",
+            "selectionRationale": "This should stay on the watchlist until corroborated.",
+            "sourceCoverageSummary": "Insufficient for factual deep-dive selection.",
+            "profileRationale": "Would be useful for Sergio only after corroboration.",
+        }
+
+        self.assert_validation_error(package, f"watch item {watch_item['signalId']} cannot be selected as a deep dive")
+
+
+if __name__ == "__main__":
+    unittest.main()

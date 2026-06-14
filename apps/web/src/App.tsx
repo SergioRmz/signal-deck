@@ -1,5 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ArrowRight, Compass, Orbit, Sparkles, Telescope, Users2 } from 'lucide-react';
+import { type ReactElement, useEffect, useMemo, useState } from 'react';
+import {
+  ArrowRight,
+  BrainCircuit,
+  Compass,
+  Crosshair,
+  Eye,
+  GitBranch,
+  Layers3,
+  Orbit,
+  Radar,
+  Route,
+  Sparkles,
+  Telescope,
+  Users2,
+  Zap,
+} from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,16 +25,74 @@ type RendererState =
   | { status: 'error'; message: string }
   | { status: 'ready'; briefing: BriefingData; composition: VisualComposition };
 
+type BriefingContext = {
+  briefing: BriefingData;
+  composition: VisualComposition;
+  modulesById: Map<string, CompositionModule>;
+  heroModule?: CompositionModule;
+  topLineModule?: CompositionModule;
+  readerTranslationModule?: CompositionModule;
+  radarModule?: CompositionModule;
+  deepDivesModule?: CompositionModule;
+  marketMapModule?: CompositionModule;
+  reusableLessonModule?: CompositionModule;
+  watchlistModule?: CompositionModule;
+  moduleOrder: string[];
+  readerUpgrade: string;
+};
+
+type ModuleRenderer = (context: BriefingContext) => ReactElement | null;
+
+const MODULE_FALLBACKS: Record<string, string> = {
+  'mod-hero': 'Tesis central',
+  'mod-topline': 'Núcleo estratégico',
+  'mod-reader-translation': 'Traducción por rol',
+  'mod-radar': 'Radar de evidencia',
+  'mod-deep-dives': 'Laboratorio de mecanismos',
+  'mod-market-map': 'Mapa de poder',
+  'mod-reusable-lesson': 'Lección reutilizable',
+  'mod-watchlist': 'Sensores próximos',
+};
+
 function moduleHeadline(kind: string, fallback: string, compositionHeadline?: string) {
   return compositionHeadline || fallback || kind;
 }
 
-function roleLabel(role?: string) {
-  if (!role) {
-    return 'signal';
+const LABELS_ES: Record<string, string> = {
+  'software-engineer': 'Ingeniería de software',
+  founder: 'Fundador',
+  operator: 'Operaciones',
+  'supports-thesis': 'apoya la tesis',
+  monitor: 'vigilar',
+  primary: 'principal',
+  secondary: 'secundario',
+  supporting: 'soporte',
+  accent: 'acento',
+  contrast: 'contraste',
+  heat: 'tensión',
+  base: 'base',
+  'role-translation-grid': 'lentes por rol',
+  'signal-ribbons': 'cintas de señal',
+  'collectible-triptych': 'tríptico de mecanismos',
+  'pressure-ladder': 'escalera de presión',
+  'pattern-lift': 'patrón reutilizable',
+  'question-steps': 'preguntas activas',
+  question: 'pregunta',
+  distribution: 'Distribución',
+  workflow: 'Flujo de trabajo',
+  product: 'Producto',
+};
+
+function toSpanishLabel(value?: string) {
+  if (!value) {
+    return '';
   }
 
-  return role.replaceAll('-', ' ');
+  return LABELS_ES[value.toLowerCase()] || value.replaceAll('-', ' ');
+}
+
+function roleLabel(role?: string) {
+  return toSpanishLabel(role) || 'señal';
 }
 
 function moduleMeta(module?: CompositionModule) {
@@ -27,22 +100,405 @@ function moduleMeta(module?: CompositionModule) {
     return [];
   }
 
-  return [module.priority, module.variant, module.accentMode].filter(Boolean) as string[];
+  return [module.priority, module.variant, module.accentMode].filter(Boolean).map((item) => toSpanishLabel(item)) as string[];
 }
 
 function watchTypeLabel(type?: string) {
-  if (!type) {
-    return 'watch';
+  return toSpanishLabel(type) || 'vigilar';
+}
+
+function splitSignalText(value?: string) {
+  if (!value) {
+    return [];
   }
 
-  return type.replaceAll('-', ' ');
+  return value
+    .split(/(?<=[.!?])\s+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 3);
 }
+
+function moduleLabel(moduleId: string, module?: CompositionModule) {
+  return module?.headline || MODULE_FALLBACKS[moduleId] || moduleId.replace('mod-', '').replaceAll('-', ' ');
+}
+
+function LoadingState() {
+  return (
+    <main className="editorial-shell flex min-h-screen items-center justify-center px-6 py-20">
+      <Card className="canvas-card w-full max-w-2xl">
+        <CardHeader className="gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge>signal-deck</Badge>
+            <Badge variant="accent">cargando</Badge>
+          </div>
+          <CardTitle className="display-title text-4xl md:text-6xl">Preparando la edición</CardTitle>
+          <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
+            Estamos montando la composición editorial, no solo cargando texto.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    </main>
+  );
+}
+
+function ErrorState({ message }: { message: string }) {
+  return (
+    <main className="editorial-shell flex min-h-screen items-center justify-center px-6 py-20">
+      <Card className="canvas-card w-full max-w-2xl border-accent/30">
+        <CardHeader className="gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge>signal-deck</Badge>
+            <Badge variant="accent">error de carga</Badge>
+          </div>
+          <CardTitle className="display-title text-4xl md:text-6xl">No se pudo cargar la edición</CardTitle>
+          <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
+            Verifica que el paso de sincronización haya copiado los archivos JSON a <code>public/data</code> antes de desplegar.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-2xl border border-border/80 bg-background/40 p-4 font-mono text-sm leading-7 text-foreground/90">
+            {message}
+          </div>
+        </CardContent>
+      </Card>
+    </main>
+  );
+}
+
+function ThesisHero({ briefing, composition, heroModule, topLineModule, readerUpgrade }: BriefingContext) {
+  const thesisFragments = splitSignalText(briefing.hero.thesis || briefing.topLine.body);
+
+  return (
+    <section className="hero-stage" data-module-id="mod-hero">
+      <div className="hero-copy">
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge>signal-deck</Badge>
+          <Badge variant="muted">{briefing.meta.editionDate}</Badge>
+          <Badge variant="accent">{composition.experience?.visualTone || 'dark editorial'}</Badge>
+        </div>
+        <p className="eyebrow mt-8">{moduleHeadline('hero', 'Tesis de apertura', heroModule?.headline)}</p>
+        <h1 className="hero-title">{briefing.hero.title}</h1>
+        <p className="hero-lede">{briefing.hero.lede}</p>
+      </div>
+
+      <aside className="thesis-instrument" aria-label="Instrumento editorial de la tesis">
+        <div className="instrument-orbit">
+          <span />
+          <span />
+          <span />
+        </div>
+        <p className="eyebrow">Núcleo de lectura</p>
+        <h2>{briefing.topLine.title}</h2>
+        <p>{briefing.topLine.stakes || readerUpgrade}</p>
+        <div className="instrument-metrics">
+          <div>
+            <strong>{briefing.radar?.items.length || 0}</strong>
+            <span>señales</span>
+          </div>
+          <div>
+            <strong>{briefing.deepDives?.items.length || 0}</strong>
+            <span>mecanismos</span>
+          </div>
+          <div>
+            <strong>{briefing.watchlist?.items.length || 0}</strong>
+            <span>sensores</span>
+          </div>
+        </div>
+      </aside>
+
+      <div className="hero-briefing-strip">
+        {(thesisFragments.length ? thesisFragments : [briefing.hero.signal, briefing.hero.tension, briefing.hero.promise]).filter(Boolean).map((fragment, index) => (
+          <article key={`${fragment}-${index}`}>
+            <span>0{index + 1}</span>
+            <p>{fragment}</p>
+          </article>
+        ))}
+        <article className="strip-emphasis">
+          <span>{toSpanishLabel(topLineModule?.priority) || 'núcleo'}</span>
+          <p>{topLineModule?.interactionCue || 'Primero entiende el cambio estructural; después juzga la evidencia.'}</p>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function StrategyPath(context: BriefingContext) {
+  const { moduleOrder, modulesById, composition } = context;
+
+  return (
+    <section className="reading-path" data-module-id="mod-topline">
+      <div>
+        <p className="eyebrow">Ruta ensamblada</p>
+        <h2 className="section-title">La página se arma como una clase, no como un feed</h2>
+      </div>
+      <div className="path-rail" aria-label="Ruta editorial">
+        {moduleOrder.map((moduleId, index) => {
+          const module = modulesById.get(moduleId);
+          return (
+            <article key={moduleId} className="path-node">
+              <span className="path-index">{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <strong>{moduleLabel(moduleId, module)}</strong>
+                <p>{module?.interactionCue || composition.experience?.engagementGoal}</p>
+              </div>
+              <ArrowRight className="h-4 w-4" />
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function ReaderLensLab({ briefing, readerTranslationModule, readerUpgrade }: BriefingContext) {
+  const items = briefing.readerTranslation?.items || [];
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <section className="module-section lens-lab" data-module-id="mod-reader-translation">
+      <div className="section-kicker">
+        <Users2 className="h-5 w-5" />
+        <span>{moduleHeadline('readerTranslation', 'Traducción por rol', readerTranslationModule?.headline)}</span>
+      </div>
+      <div className="section-heading-row">
+        <div>
+          <h2 className="section-title">{briefing.readerTranslation?.title || 'Qué cambia para ti'}</h2>
+          <p className="section-copy">{readerTranslationModule?.interactionCue || readerUpgrade}</p>
+        </div>
+        <MetaBadges module={readerTranslationModule} />
+      </div>
+
+      <div className="lens-grid">
+        {items.map((item, index) => (
+          <article key={`${item.role}-${index}`} className="lens-card">
+            <div className="lens-card__topline">
+              <Badge variant="muted">Rol {index + 1}</Badge>
+              <span>{typeof item.weight === 'number' ? `${Math.round(item.weight * 100)}% peso` : 'lente'}</span>
+            </div>
+            <h3>{roleLabel(item.role)}</h3>
+            <strong>{item.headline}</strong>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function EvidenceOrbit({ briefing, radarModule }: BriefingContext) {
+  const items = briefing.radar?.items || [];
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <section className="module-section evidence-orbit" data-module-id="mod-radar">
+      <div className="section-kicker">
+        <Orbit className="h-5 w-5" />
+        <span>{moduleHeadline('radar', 'Radar de evidencia', radarModule?.headline)}</span>
+      </div>
+      <div className="section-heading-row">
+        <div>
+          <h2 className="section-title">{briefing.radar?.title || 'Radar de evidencia'}</h2>
+          <p className="section-copy">{radarModule?.interactionCue}</p>
+        </div>
+        <MetaBadges module={radarModule} />
+      </div>
+
+      <div className="orbit-board">
+        <div className="orbit-core">
+          <Radar className="h-8 w-8" />
+          <span>tesis bajo prueba</span>
+        </div>
+        {items.map((item, index) => (
+          <article key={`${item.label}-${item.text}`} className={`orbit-signal orbit-signal-${(index % 6) + 1}`}>
+            <Badge variant={item.role === 'monitor' ? 'muted' : 'accent'}>{roleLabel(item.role)}</Badge>
+            <h3>{item.label}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MechanismStudio({ briefing, deepDivesModule }: BriefingContext) {
+  const items = briefing.deepDives?.items || [];
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <section className="module-section mechanism-studio" data-module-id="mod-deep-dives">
+      <div className="section-kicker">
+        <Telescope className="h-5 w-5" />
+        <span>{moduleHeadline('deepDive', 'Laboratorio de mecanismos', deepDivesModule?.headline)}</span>
+      </div>
+      <div className="section-heading-row">
+        <div>
+          <h2 className="section-title">{briefing.deepDives?.title || 'Laboratorio de mecanismos'}</h2>
+          <p className="section-copy">{deepDivesModule?.interactionCue}</p>
+        </div>
+        <MetaBadges module={deepDivesModule} />
+      </div>
+
+      <div className="mechanism-grid">
+        {items.map((item, index) => (
+          <article key={`${item.title}-${index}`} className="mechanism-card">
+            <div className="mechanism-card__index">0{index + 1}</div>
+            <div>
+              <Badge>{item.mechanism || 'mecanismo'}</Badge>
+              <h3>{item.title}</h3>
+            </div>
+            <div className="mechanism-flow" aria-label="Mapa causal del análisis">
+              <div>
+                <span>Tesis</span>
+                <p>{item.claim || item.title}</p>
+              </div>
+              <GitBranch className="h-5 w-5" />
+              <div>
+                <span>Mecanismo</span>
+                <p>{item.explanation || item.body}</p>
+              </div>
+              <Zap className="h-5 w-5" />
+              <div>
+                <span>Implicación</span>
+                <p>{item.implication || item.body}</p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PowerMap({ briefing, marketMapModule }: BriefingContext) {
+  const items = briefing.marketMap?.items || [];
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <section className="module-section power-map" data-module-id="mod-market-map">
+      <div className="section-kicker">
+        <Compass className="h-5 w-5" />
+        <span>{moduleHeadline('marketMap', 'Mapa de poder', marketMapModule?.headline)}</span>
+      </div>
+      <div className="section-heading-row">
+        <div>
+          <h2 className="section-title">{briefing.marketMap?.title || 'Dónde se mueve la ventaja'}</h2>
+          <p className="section-copy">No es una lista de actores: es un cambio de palancas, presión y oportunidad.</p>
+        </div>
+        <MetaBadges module={marketMapModule} />
+      </div>
+
+      <div className="power-grid">
+        {items.map((item, index) => (
+          <article key={`${item.label}-${index}`} className="power-cell">
+            <span className="power-cell__axis">Eje {index + 1}</span>
+            <h3>{item.label}</h3>
+            <p>{item.text}</p>
+            {item.powerShift ? <strong>{item.powerShift}</strong> : null}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ReusableLesson({ briefing, reusableLessonModule }: BriefingContext) {
+  if (!briefing.reusableLesson) {
+    return null;
+  }
+
+  return (
+    <section className="lesson-panel" data-module-id="mod-reusable-lesson">
+      <div className="section-kicker">
+        <BrainCircuit className="h-5 w-5" />
+        <span>{moduleHeadline('reusableLesson', 'Lección reutilizable', reusableLessonModule?.headline)}</span>
+      </div>
+      <div className="lesson-panel__body">
+        <div>
+          <h2>{briefing.reusableLesson.title}</h2>
+          <p>{briefing.reusableLesson.pattern}</p>
+        </div>
+        <div className="lesson-panel__rules">
+          {(briefing.reusableLesson.applyWhen || []).map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </div>
+        <strong>{briefing.reusableLesson.takeaway}</strong>
+      </div>
+    </section>
+  );
+}
+
+function WatchSensors({ briefing, watchlistModule }: BriefingContext) {
+  const items = briefing.watchlist?.items || [];
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <section className="watch-sensors" data-module-id="mod-watchlist">
+      <div>
+        <div className="section-kicker">
+          <Eye className="h-5 w-5" />
+          <span>{moduleHeadline('watchlist', 'Sensores próximos', watchlistModule?.headline)}</span>
+        </div>
+        <h2 className="section-title">{briefing.watchlist?.title || 'Qué vigilar ahora'}</h2>
+      </div>
+      <div className="sensor-stack">
+        {items.map((item, index) => (
+          <article key={`${item.text}-${index}`}>
+            <Crosshair className="h-5 w-5" />
+            <div>
+              <span>{watchTypeLabel(item.type)}</span>
+              <p>{item.text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MetaBadges({ module }: { module?: CompositionModule }) {
+  const items = moduleMeta(module);
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <div className="meta-badges">
+      {items.map((item) => (
+        <Badge key={item} variant="muted">
+          {item}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
+const MODULE_RENDERERS: Record<string, ModuleRenderer> = {
+  'mod-topline': StrategyPath,
+  'mod-reader-translation': ReaderLensLab,
+  'mod-radar': EvidenceOrbit,
+  'mod-deep-dives': MechanismStudio,
+  'mod-market-map': PowerMap,
+  'mod-reusable-lesson': ReusableLesson,
+  'mod-watchlist': WatchSensors,
+};
 
 export default function App() {
   const [state, setState] = useState<RendererState>({ status: 'loading' });
 
   useEffect(() => {
-    document.title = 'signal-deck / Vite renderer';
+    document.title = 'signal-deck';
 
     let active = true;
 
@@ -68,583 +524,57 @@ export default function App() {
     };
   }, []);
 
-  const derived = useMemo(() => {
+  const context = useMemo<BriefingContext | null>(() => {
     if (state.status !== 'ready') {
       return null;
     }
 
     const { briefing, composition } = state;
-
-    const heroModule = composition.modules?.find((module) => module.moduleId === 'mod-hero');
-    const topLineModule = composition.modules?.find((module) => module.moduleId === 'mod-topline');
-    const readerTranslationModule = composition.modules?.find(
-      (module) => module.moduleId === 'mod-reader-translation' || module.sourceKey === 'readerTranslation',
-    );
-    const radarModule = composition.modules?.find((module) => module.moduleId === 'mod-radar');
-    const deepDivesModule = composition.modules?.find((module) => module.moduleId === 'mod-deep-dives');
-    const marketMapModule = composition.modules?.find((module) => module.moduleId === 'mod-market-map');
-    const reusableLessonModule = composition.modules?.find(
-      (module) => module.moduleId === 'mod-reusable-lesson' || module.sourceKey === 'reusableLesson',
-    );
-    const watchlistModule = composition.modules?.find((module) => module.moduleId === 'mod-watchlist');
-    const radarItems = briefing.radar?.items || [];
-    const deepDiveItems = briefing.deepDives?.items || [];
-    const marketMapItems = briefing.marketMap?.items || [];
-    const readerTranslationItems = briefing.readerTranslation?.items || [];
-    const watchlistItems = briefing.watchlist?.items || [];
-    const moduleOrder = composition.page?.moduleOrder || [];
+    const modules = composition.modules || [];
+    const modulesById = new Map(modules.map((module) => [module.moduleId, module]));
+    const moduleOrder = composition.page?.moduleOrder?.length
+      ? composition.page.moduleOrder
+      : ['mod-hero', 'mod-topline', 'mod-reader-translation', 'mod-radar', 'mod-deep-dives', 'mod-market-map', 'mod-reusable-lesson', 'mod-watchlist'];
     const readerUpgrade =
-      briefing.meta.readerContext?.desiredUpgrade || briefing.readerTranslation?.items?.[0]?.body || briefing.topLine.stakes;
+      briefing.meta.readerContext?.desiredUpgrade || briefing.readerTranslation?.items?.[0]?.body || briefing.topLine.stakes || briefing.hero.promise || '';
 
     return {
       briefing,
       composition,
-      heroModule,
-      topLineModule,
-      readerTranslationModule,
-      radarModule,
-      deepDivesModule,
-      marketMapModule,
-      reusableLessonModule,
-      watchlistModule,
-      radarItems,
-      deepDiveItems,
-      marketMapItems,
-      readerTranslationItems,
-      watchlistItems,
+      modulesById,
+      heroModule: modulesById.get('mod-hero'),
+      topLineModule: modulesById.get('mod-topline'),
+      readerTranslationModule: modulesById.get('mod-reader-translation'),
+      radarModule: modulesById.get('mod-radar'),
+      deepDivesModule: modulesById.get('mod-deep-dives'),
+      marketMapModule: modulesById.get('mod-market-map'),
+      reusableLessonModule: modulesById.get('mod-reusable-lesson'),
+      watchlistModule: modulesById.get('mod-watchlist'),
       moduleOrder,
       readerUpgrade,
     };
   }, [state]);
 
-  if (state.status === 'loading' || !derived) {
-    return (
-      <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 py-20 md:px-10">
-        <Card className="w-full max-w-2xl border-primary/25 bg-signal-grid">
-          <CardHeader className="gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / vite renderer</Badge>
-              <Badge variant="accent">loading</Badge>
-            </div>
-            <CardTitle className="text-3xl md:text-4xl">Preparing the briefing surface</CardTitle>
-            <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
-              The React + Vite renderer is loading the briefing payload and visual composition artifacts into a static, deployable reading surface.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </main>
-    );
+  if (state.status === 'loading' || !context) {
+    return <LoadingState />;
   }
 
   if (state.status === 'error') {
-    return (
-      <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-6 py-20 md:px-10">
-        <Card className="w-full max-w-2xl border-accent/30 bg-accent/5">
-          <CardHeader className="gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / vite renderer</Badge>
-              <Badge variant="accent">load error</Badge>
-            </div>
-            <CardTitle className="text-3xl md:text-4xl">The renderer could not load its data artifacts</CardTitle>
-            <CardDescription className="max-w-xl text-base leading-8 text-muted-foreground">
-              Make sure the sync step copied the JSON payloads into <code>public/data</code> before starting the app.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-2xl border border-border/80 bg-background/40 p-4 font-mono text-sm leading-7 text-foreground/90">
-              {state.message}
-            </div>
-          </CardContent>
-        </Card>
-      </main>
-    );
+    return <ErrorState message={state.message} />;
   }
 
-  const {
-    briefing,
-    composition,
-    heroModule,
-    topLineModule,
-    readerTranslationModule,
-    radarModule,
-    deepDivesModule,
-    marketMapModule,
-    reusableLessonModule,
-    watchlistModule,
-    radarItems,
-    deepDiveItems,
-    marketMapItems,
-    readerTranslationItems,
-    watchlistItems,
-    moduleOrder,
-    readerUpgrade,
-  } = derived;
-
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8 px-6 py-8 md:px-10 lg:px-12">
-      <section className="grid gap-6 lg:grid-cols-[1.5fr_0.8fr]">
-        <Card className="overflow-hidden bg-signal-grid">
-          <CardHeader className="gap-5">
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge>signal-deck / vite renderer</Badge>
-              <Badge variant="muted">{briefing.meta.editionDate}</Badge>
-              <Badge variant="accent">{composition.experience?.visualTone || 'dark tone'}</Badge>
-            </div>
-            <div className="space-y-4">
-              <CardDescription className="max-w-2xl text-sm uppercase tracking-[0.22em] text-primary/80">
-                {moduleHeadline('hero', 'Opening thesis', heroModule?.headline)}
-              </CardDescription>
-              <CardTitle className="max-w-4xl text-4xl font-semibold leading-tight md:text-6xl">
-                {briefing.hero.title}
-              </CardTitle>
-              <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{briefing.hero.lede}</p>
-            </div>
-          </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-primary/15 bg-background/30 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Signal</p>
-              <p className="text-sm leading-6 text-foreground/90">{briefing.hero.signal}</p>
-            </div>
-            <div className="rounded-2xl border border-primary/15 bg-background/30 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Thesis</p>
-              <p className="text-sm leading-6 text-foreground/90">{briefing.hero.thesis}</p>
-            </div>
-            <div className="rounded-2xl border border-primary/15 bg-background/30 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Tension</p>
-              <p className="text-sm leading-6 text-foreground/90">{briefing.hero.tension}</p>
-            </div>
-            <div className="rounded-2xl border border-primary/15 bg-background/30 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Promise</p>
-              <p className="text-sm leading-6 text-foreground/90">{briefing.hero.promise}</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardDescription>Reader context</CardDescription>
-            <CardTitle className="text-2xl">Who this edition is trying to upgrade</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5 text-sm text-muted-foreground">
-            <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Roles</p>
-              <div className="flex flex-wrap gap-2">
-                {briefing.meta.readerContext?.roles?.map((role) => (
-                  <Badge key={role} variant="muted">
-                    {role}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Interests</p>
-              <div className="flex flex-wrap gap-2">
-                {briefing.meta.readerContext?.interests?.map((interest) => (
-                  <Badge key={interest}>{interest}</Badge>
-                ))}
-              </div>
-            </div>
-            <div className="rounded-2xl border border-border/80 bg-background/40 p-4 leading-7 text-foreground/85">
-              {readerUpgrade}
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <Card>
-          <CardHeader>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <CardDescription>{moduleHeadline('topLine', 'Top line', topLineModule?.headline)}</CardDescription>
-                <CardTitle className="mt-2 text-3xl leading-tight md:text-4xl">{briefing.topLine.title}</CardTitle>
-              </div>
-              <Sparkles className="mt-1 h-6 w-6 text-primary" />
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{briefing.topLine.body}</p>
-            <div className="rounded-2xl border border-accent/20 bg-accent/10 p-5">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Strategic stakes</p>
-              <p className="text-base leading-7 text-foreground">{briefing.topLine.stakes}</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardDescription>Composition signal</CardDescription>
-            <CardTitle className="text-2xl">How the Vite renderer is sequencing the reading path</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="rounded-2xl border border-border/80 bg-background/40 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Engagement goal</p>
-              <p className="text-sm leading-7 text-foreground/85">{composition.experience?.engagementGoal}</p>
-            </div>
-            <ul className="space-y-3">
-              {moduleOrder.slice(0, 8).map((moduleId) => (
-                <li
-                  key={moduleId}
-                  className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/35 px-4 py-3 text-sm text-muted-foreground"
-                >
-                  <span>{moduleId}</span>
-                  <ArrowRight className="h-4 w-4 text-primary" />
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </section>
-
-      {readerTranslationItems.length ? (
-        <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <Card className="overflow-hidden border-accent/20 bg-[linear-gradient(180deg,rgba(12,26,47,0.95),rgba(7,17,31,0.98))]">
-            <CardHeader className="gap-4 border-b border-border/60 pb-5">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <CardDescription className="flex items-center gap-2 text-primary/80">
-                    <Users2 className="h-4 w-4" />
-                    {moduleHeadline('readerTranslation', 'Reader translation', readerTranslationModule?.headline)}
-                  </CardDescription>
-                  <CardTitle className="mt-2 text-3xl md:text-4xl">
-                    {briefing.readerTranslation?.title || 'What this changes for you'}
-                  </CardTitle>
-                </div>
-                <div className="flex flex-wrap justify-end gap-2">
-                  {moduleMeta(readerTranslationModule).map((item) => (
-                    <Badge key={item} variant="accent">
-                      {item}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <p className="max-w-3xl text-sm leading-7 text-muted-foreground">{readerTranslationModule?.interactionCue}</p>
-            </CardHeader>
-            <CardContent className="grid gap-4 pt-6 md:grid-cols-2 xl:grid-cols-3">
-              {readerTranslationItems.map((item, index) => (
-                <Card
-                  key={`${item.role}-${index}`}
-                  className="border-accent/20 bg-background/45 shadow-[0_18px_48px_rgba(9,19,37,0.24)]"
-                >
-                  <CardHeader className="gap-3 border-b border-border/60 pb-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <Badge variant="muted">Role {index + 1}</Badge>
-                      <Badge>{roleLabel(item.role)}</Badge>
-                    </div>
-                    <CardTitle className="text-2xl leading-tight">{item.headline}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 pt-5">
-                    <p className="text-sm leading-7 text-foreground/90">{item.body}</p>
-                    {typeof item.weight === 'number' ? (
-                      <div className="rounded-2xl border border-accent/20 bg-accent/10 px-4 py-3 text-sm text-foreground">
-                        <p className="text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Priority weight</p>
-                        <p className="mt-1 leading-7">{item.weight}</p>
-                      </div>
-                    ) : null}
-                  </CardContent>
-                </Card>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardDescription>Composition cue</CardDescription>
-              <CardTitle className="text-2xl">Why the page now translates the thesis by role</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm text-muted-foreground">
-              <p className="leading-7 text-foreground/85">
-                Reader Translation turns the edition from a generic argument into a role-aware upgrade path before the evidence modules ask for deeper attention.
-              </p>
-              <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
-                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
-                <div className="flex flex-wrap gap-2">
-                  {(readerTranslationModule?.layoutHints || []).map((hint) => (
-                    <Badge key={hint} variant="muted">
-                      {hint}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <div className="rounded-2xl border border-accent/20 bg-accent/10 p-4">
-                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Migration status</p>
-                <p className="leading-7 text-foreground">
-                  Reader Translation is now rendered from the real briefing payload instead of remaining an unused optional layer in the contract.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-      ) : null}
-
-      <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <Card className="overflow-hidden border-primary/20 bg-primary/5">
-          <CardHeader className="gap-4 border-b border-border/60 pb-5">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <CardDescription className="flex items-center gap-2 text-primary/80">
-                  <Orbit className="h-4 w-4" />
-                  {moduleHeadline('radar', 'Radar', radarModule?.headline)}
-                </CardDescription>
-                <CardTitle className="mt-2 text-3xl md:text-4xl">{briefing.radar?.title || 'Evidence radar'}</CardTitle>
-              </div>
-              <div className="flex flex-wrap justify-end gap-2">
-                {moduleMeta(radarModule).map((item) => (
-                  <Badge key={item} variant="muted">
-                    {item}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <p className="max-w-3xl text-sm leading-7 text-muted-foreground">{radarModule?.interactionCue}</p>
-          </CardHeader>
-          <CardContent className="grid gap-4 pt-6 md:grid-cols-3">
-            {radarItems.map((item) => (
-              <article
-                key={`${item.label}-${item.text}`}
-                className="rounded-3xl border border-primary/20 bg-background/55 p-5 shadow-[0_20px_60px_rgba(19,33,64,0.24)]"
-              >
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <Badge>{item.label}</Badge>
-                  <Badge variant={item.role === 'monitor' ? 'muted' : 'accent'}>{roleLabel(item.role)}</Badge>
-                </div>
-                <p className="text-base leading-7 text-foreground/90">{item.text}</p>
-              </article>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardDescription>Reading cue</CardDescription>
-            <CardTitle className="text-2xl">Why the radar exists at this point in the page</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-sm text-muted-foreground">
-            <p className="leading-7 text-foreground/85">
-              The composition wants the reader to test the thesis quickly before committing to the heavier argument.
-            </p>
-            <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
-              <div className="flex flex-wrap gap-2">
-                {(radarModule?.layoutHints || []).map((hint) => (
-                  <Badge key={hint} variant="muted">
-                    {hint}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div className="rounded-2xl border border-accent/20 bg-accent/10 p-4">
-              <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/70">Migration status</p>
-              <p className="leading-7 text-foreground">
-                Radar is now rendered from the real briefing payload instead of staying implicit in the composition sample.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      <section className="space-y-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-3">
-            <CardDescription className="flex items-center gap-2 text-primary/80">
-              <Telescope className="h-4 w-4" />
-              {moduleHeadline('deepDive', 'Deep dives', deepDivesModule?.headline)}
-            </CardDescription>
-            <h2 className="text-3xl font-semibold leading-tight text-foreground md:text-5xl">
-              {briefing.deepDives?.title || 'Mechanism breakdown'}
-            </h2>
-            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{deepDivesModule?.interactionCue}</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {moduleMeta(deepDivesModule).map((item) => (
-              <Badge key={item} variant="accent">
-                {item}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-5 xl:grid-cols-3">
-          {deepDiveItems.map((item, index) => (
-            <Card
-              key={`${item.title}-${index}`}
-              className="group relative overflow-hidden border-primary/15 bg-[linear-gradient(180deg,rgba(15,29,51,0.96),rgba(7,17,31,0.92))]"
-            >
-              <CardHeader className="gap-4 border-b border-border/60 pb-5">
-                <div className="flex items-center justify-between gap-3">
-                  <Badge variant="muted">Deep dive {index + 1}</Badge>
-                  {item.mechanism ? <Badge>{item.mechanism}</Badge> : null}
-                </div>
-                <CardTitle className="text-2xl leading-tight">{item.title}</CardTitle>
-                <CardDescription className="text-sm leading-7 text-muted-foreground">
-                  {item.claim || item.explanation || item.body}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-5 pt-6">
-                <div className="space-y-3 text-sm leading-7 text-foreground/85">
-                  {item.explanation ? (
-                    <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Why it matters</p>
-                      <p>{item.explanation}</p>
-                    </div>
-                  ) : null}
-                  <p>{item.body}</p>
-                </div>
-                {item.implication ? (
-                  <div className="rounded-2xl border border-accent/25 bg-accent/10 p-4">
-                    <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Implication</p>
-                    <p className="text-sm leading-7 text-foreground">{item.implication}</p>
-                  </div>
-                ) : null}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <Card className="overflow-hidden border-primary/20 bg-[linear-gradient(180deg,rgba(15,29,51,0.92),rgba(9,17,31,0.98))]">
-          <CardHeader className="gap-4 border-b border-border/60 pb-5">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <CardDescription className="flex items-center gap-2 text-primary/80">
-                  <Compass className="h-4 w-4" />
-                  {moduleHeadline('marketMap', 'Market map', marketMapModule?.headline)}
-                </CardDescription>
-                <CardTitle className="mt-2 text-3xl md:text-4xl">{briefing.marketMap?.title || 'Where leverage is moving'}</CardTitle>
-              </div>
-              <div className="flex flex-wrap justify-end gap-2">
-                {moduleMeta(marketMapModule).map((item) => (
-                  <Badge key={item} variant="accent">
-                    {item}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <p className="max-w-3xl text-sm leading-7 text-muted-foreground">{marketMapModule?.interactionCue}</p>
-          </CardHeader>
-          <CardContent className="grid gap-4 pt-6">
-            {marketMapItems.map((item) => (
-              <article
-                key={`${item.label}-${item.text}`}
-                className="rounded-3xl border border-primary/15 bg-background/45 p-5 shadow-[0_18px_60px_rgba(9,19,37,0.26)]"
-              >
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="space-y-3">
-                    <Badge>{item.label}</Badge>
-                    <p className="max-w-2xl text-base leading-7 text-foreground/90">{item.text}</p>
-                  </div>
-                  {item.powerShift ? (
-                    <div className="max-w-sm rounded-2xl border border-accent/25 bg-accent/10 p-4 text-sm leading-7 text-foreground">
-                      <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Power shift</p>
-                      <p>{item.powerShift}</p>
-                    </div>
-                  ) : null}
-                </div>
-              </article>
-            ))}
-          </CardContent>
-        </Card>
-
-        <div className="grid gap-6">
-          {briefing.reusableLesson ? (
-            <Card className="overflow-hidden border-accent/30 bg-accent/5">
-              <CardHeader className="gap-4 border-b border-border/60 pb-5">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <CardDescription>{moduleHeadline('reusableLesson', 'Reusable lesson', reusableLessonModule?.headline)}</CardDescription>
-                    <CardTitle className="mt-2 text-2xl leading-tight md:text-3xl">{briefing.reusableLesson.title}</CardTitle>
-                  </div>
-                  <div className="flex flex-wrap justify-end gap-2">
-                    {moduleMeta(reusableLessonModule).map((item) => (
-                      <Badge key={item} variant="muted">
-                        {item}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-5 pt-6">
-                <div className="rounded-2xl border border-border/70 bg-background/35 p-4">
-                  <p className="mb-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">Pattern</p>
-                  <p className="text-sm leading-7 text-foreground/90">{briefing.reusableLesson.pattern}</p>
-                </div>
-                <div className="rounded-2xl border border-accent/25 bg-accent/10 p-4">
-                  <p className="mb-2 text-xs uppercase tracking-[0.18em] text-accent-foreground/75">Takeaway</p>
-                  <p className="text-sm leading-7 text-foreground">{briefing.reusableLesson.takeaway}</p>
-                </div>
-                {briefing.reusableLesson.applyWhen?.length ? (
-                  <div>
-                    <p className="mb-3 text-xs uppercase tracking-[0.18em] text-foreground/60">Apply when</p>
-                    <div className="flex flex-wrap gap-2">
-                      {briefing.reusableLesson.applyWhen.map((item) => (
-                        <Badge key={item} variant="accent">
-                          {item}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-              </CardContent>
-            </Card>
-          ) : null}
-
-          <Card>
-            <CardHeader>
-              <CardDescription>Composition cue</CardDescription>
-              <CardTitle className="text-2xl">How the closing modules turn argument into posture</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm text-muted-foreground">
-              <p className="leading-7 text-foreground/85">
-                Market map turns the thesis into strategic positioning, then the reusable lesson and watchlist convert that positioning into a repeatable operating lens.
-              </p>
-              <div className="rounded-2xl border border-border/70 bg-background/40 p-4">
-                <p className="mb-2 text-xs uppercase tracking-[0.18em] text-foreground/60">Layout hints</p>
-                <div className="flex flex-wrap gap-2">
-                  {[...(marketMapModule?.layoutHints || []), ...(watchlistModule?.layoutHints || [])].map((hint) => (
-                    <Badge key={hint} variant="muted">
-                      {hint}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-3">
-            <CardDescription>{moduleHeadline('watchlist', 'Watchlist', watchlistModule?.headline)}</CardDescription>
-            <h2 className="text-3xl font-semibold leading-tight text-foreground md:text-5xl">
-              {briefing.watchlist?.title || 'Watch framework'}
-            </h2>
-            <p className="max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">{watchlistModule?.interactionCue}</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {moduleMeta(watchlistModule).map((item) => (
-              <Badge key={item}>{item}</Badge>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {watchlistItems.map((item, index) => (
-            <Card key={`${item.text}-${index}`} className="border-border/80 bg-background/45">
-              <CardHeader className="gap-3 border-b border-border/60 pb-4">
-                <div className="flex items-center justify-between gap-3">
-                  <Badge variant="muted">Question {index + 1}</Badge>
-                  <Badge variant={item.type === 'metric' ? 'accent' : 'muted'}>{watchTypeLabel(item.type)}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-5">
-                <p className="text-sm leading-7 text-foreground/90">{item.text}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
+    <main className="editorial-shell">
+      <div className="editorial-chrome" aria-hidden="true" />
+      <div className="editorial-container">
+        <ThesisHero {...context} />
+        {context.moduleOrder
+          .filter((moduleId) => moduleId !== 'mod-hero')
+          .map((moduleId) => {
+            const Renderer = MODULE_RENDERERS[moduleId];
+            return Renderer ? <Renderer key={moduleId} {...context} /> : null;
+          })}
+      </div>
     </main>
   );
 }

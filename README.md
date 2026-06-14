@@ -50,12 +50,48 @@ The goal is not complexity for its own sake. The goal is a system that can produ
 - **Scalable editorial structure**  
   The repository should grow cleanly as the system evolves from prototype to repeatable publishing workflow.
 
+## Development method
+
+This repository now uses **GitHub Spec Kit** for spec-driven development. Product and architecture changes should move from ambiguity → spec → clarification → plan → tasks → implementation, rather than jumping directly from an idea into code.
+
+Spec Kit was initialized with the Codex integration in skills mode. The core workflow is:
+
+```text
+$speckit-specify
+  → $speckit-clarify
+  → $speckit-checklist
+  → $speckit-plan
+  → $speckit-tasks
+  → $speckit-analyze
+  → $speckit-implement
+```
+
+Before starting a new spec, clarify the scope with Sergio. The governing principles live in:
+
+```text
+.specify/memory/constitution.md
+```
+
+The project-specific workflow is documented in:
+
+```text
+docs/spec-driven-workflow.md
+```
+
 ## Current repository structure
 
 ```text
 signal-deck/
 ├── README.md
+├── AGENTS.md
 ├── .gitignore
+├── .specify/
+│   ├── memory/
+│   │   └── constitution.md
+│   ├── scripts/
+│   └── templates/
+├── .agents/
+│   └── skills/
 ├── data/
 │   ├── briefing.sample.json
 │   ├── briefing.schema.json
@@ -84,6 +120,7 @@ signal-deck/
     ├── briefing-transformation-v1.md
     ├── visual-composition-contract-v1.md
     ├── product-brief.md
+    ├── spec-driven-workflow.md
     └── deployment/
         └── cloudflare-pages.md
 ```
@@ -98,7 +135,8 @@ This first foundation includes:
 - a briefing contract that supports richer pedagogical fields and optional learning modules
 - a **dark-theme React + Vite single-page renderer**
 - a component renderer foundation that keeps shadcn/ui-compatible primitives available
-- a **composition-aware renderer** that reads both briefing content and visual-composition intent from local JSON files
+- a **composition-aware React editorial canvas** that assembles semantic modules from the visual-composition contract instead of forcing every briefing into a generic card/list page
+- visual teaching modules for thesis framing, reader-role lenses, evidence orbit, mechanism flow, power map, reusable lesson, and watch sensors
 - a **ported Radar + Deep Dives layer** in React + Vite that already renders real evidence signals and mechanism cards from the briefing payload
 - a **ported Reader Translation layer** in React + Vite that renders role-specific takeaways from the real briefing + composition artifacts
 - a **ported closing layer** in React + Vite that renders Market Map, Reusable Lesson, and Watchlist modules from the real briefing + composition artifacts
@@ -115,7 +153,8 @@ This first foundation includes:
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
-- initial documentation for **product direction**, **architecture**, **contracts**, and **deployment**
+- initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, and **Spec Kit workflow**
+- GitHub Spec Kit infrastructure with a signal-deck constitution for future ambiguous work
 
 That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
 
@@ -189,9 +228,11 @@ It is part of the operational thesis behind how a system like **signal-deck** ca
 From the repository root:
 
 ```bash
+python3 -m unittest tests/test_validate_ingestion_package.py -v
 python3 -m unittest tests/test_generate_briefing.py -v
-python3 scripts/validate_signal_input.py
-python3 scripts/generate_briefing.py
+python3 -m unittest tests/test_run_briefing_pipeline.py -v
+python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json
+python3 scripts/generate_briefing.py data/ingestion-package.sample.json
 python3 scripts/validate_briefing.py
 python3 scripts/validate_visual_composition.py
 python3 scripts/run_briefing_pipeline.py
@@ -200,16 +241,16 @@ python3 scripts/run_briefing_pipeline.py
 To execute a full local trial run and build the renderer from generated run artifacts:
 
 ```bash
-python3 scripts/run_briefing_pipeline.py --run-date 2026-06-11 --build-renderer
+python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer
 ```
 
 The pipeline writes local-only artifacts under `runs/YYYY-MM-DD/`:
 
-- `signal-input.json`
+- `ingestion-package.json`
 - `briefing.final.json`
 - `visual-composition.json`
 - `telegram-message.md`
-- `manifest.json`
+- `manifest.json` with an `ingestionPackage` pointer back to the validated package snapshot
 
 ## Running the React + Vite renderer locally
 
@@ -239,15 +280,18 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 
 ## Key contract documents
 
-- `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
-- `data/signal-input.schema.json` — ingestion schema
+- `docs/briefing-ingestion-v2.md` — educational ingestion package contract for candidate scouting, scoring, selection, rejection, and auditability
+- `data/ingestion-package.schema.json` — educational ingestion package schema
+- `docs/briefing-ingestion-v1.md` — legacy editorial contract for upstream signal packets
+- `data/signal-input.schema.json` — legacy signal-input schema
 - `docs/briefing-contract-v1.md` — editorial contract for final briefings
 - `data/briefing.schema.json` — briefing schema
 - `docs/briefing-transformation-v1.md` — deterministic mapping rules from ingestion to briefing
-- `scripts/validate_signal_input.py` — ingestion validator
+- `scripts/validate_ingestion_package.py` — educational ingestion package validator
+- `scripts/validate_signal_input.py` — legacy signal-input validator
 - `scripts/validate_briefing.py` — briefing validator
-- `scripts/generate_briefing.py` — briefing generator
-- `scripts/run_briefing_pipeline.py` — local run orchestrator for generated briefing, composition, Telegram draft, and optional renderer build
+- `scripts/generate_briefing.py` — briefing generator for v2 ingestion packages and legacy v1 signal inputs
+- `scripts/run_briefing_pipeline.py` — local run orchestrator for validated ingestion package snapshots, generated briefing, composition, Telegram draft, and optional renderer build
 
 ## Near-term roadmap
 

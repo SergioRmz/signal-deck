@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://signal-deck.local/schemas/ingestion-package-v2.schema.json",
+  "title": "signal-deck educational ingestion package v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "meta",
+    "run",
+    "readerProfiles",
+    "sources",
+    "candidates",
+    "clusters",
+    "selectedSignals",
+    "rejectedSignals",
+    "watchItems",
+    "qualityNotes"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "packageId", "createdAt", "language"],
+      "properties": {
+        "schemaVersion": { "type": "string", "const": "2.0" },
+        "packageId": { "type": "string", "minLength": 1 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "language": { "type": "string", "minLength": 2 },
+        "domains": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runId", "runDate", "status", "candidateCount", "selectedCount", "rejectedCount", "watchItemCount", "sourceDiversity"],
+      "properties": {
+        "runId": { "type": "string", "minLength": 1 },
+        "runDate": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "status": { "type": "string", "enum": ["complete", "underfilled", "needs_review", "failed"] },
+        "candidateCount": { "type": "integer", "minimum": 0 },
+        "selectedCount": { "type": "integer", "minimum": 0 },
+        "rejectedCount": { "type": "integer", "minimum": 0 },
+        "watchItemCount": { "type": "integer", "minimum": 0 },
+        "sourceDiversity": { "$ref": "#/$defs/sourceDiversity" }
+      }
+    },
+    "readerProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/readerProfile" }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "clusters": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/cluster" }
+    },
+    "selectedSignals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/selectedSignal" }
+    },
+    "rejectedSignals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/rejectedSignal" }
+    },
+    "watchItems": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/watchItem" }
+    },
+    "qualityNotes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/qualityNote" }
+    }
+  },
+  "$defs": {
+    "readerProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileId", "displayName", "roles"],
+      "properties": {
+        "profileId": { "type": "string", "minLength": 1 },
+        "displayName": { "type": "string", "minLength": 1 },
+        "canonical": { "type": "boolean" },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "interests": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "advantageTargets": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "title", "publisher", "sourceType", "sourceRole"],
+      "properties": {
+        "sourceId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "publisher": { "type": "string", "minLength": 1 },
+        "sourceType": { "type": "string", "minLength": 1 },
+        "sourceRole": {
+          "type": "string",
+          "enum": ["primary", "source_of_record", "technical_analysis", "economic_analysis", "market_context", "regulatory_context", "critical_contrast", "secondary_coverage"]
+        },
+        "url": { "type": "string", "minLength": 1 },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "accessLimitations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "credibilityNotes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signalId", "title", "factualSummary", "domainTags", "sourceIds", "status", "editorialRationale", "educationalValue", "profileRelevance", "confidence", "corroborationStatus"],
+      "properties": {
+        "signalId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "factualSummary": { "type": "string", "minLength": 1 },
+        "domainTags": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "sourceIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "status": { "type": "string", "enum": ["candidate", "selected", "rejected", "watch_item", "merged"] },
+        "editorialRationale": { "type": "string", "minLength": 1 },
+        "educationalValue": { "$ref": "#/$defs/educationalValue" },
+        "profileRelevance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/profileRelevance" }
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "clusterId": { "type": "string", "minLength": 1 },
+        "duplicateOfSignalId": { "type": "string", "minLength": 1 },
+        "rejectionReason": { "$ref": "#/$defs/rejectionReason" },
+        "corroborationStatus": { "type": "string", "enum": ["corroborated", "partially_corroborated", "uncertain", "requires_follow_up"] },
+        "auditNotes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "educationalValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "teachingMechanisms", "learningRationale", "deepDivePotential"],
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "teachingMechanisms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["causal_mechanism", "incentive_structure", "reusable_mental_model", "second_order_effect", "technical_moat", "market_structure", "strategic_judgment", "risk_pattern"]
+          },
+          "uniqueItems": true
+        },
+        "learningRationale": { "type": "string", "minLength": 1 },
+        "deepDivePotential": { "type": "string", "enum": ["none", "possible", "strong"] }
+      }
+    },
+    "profileRelevance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileId", "relevanceRationale"],
+      "properties": {
+        "profileId": { "type": "string", "minLength": 1 },
+        "relevanceRationale": { "type": "string", "minLength": 1 },
+        "relevanceScore": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "cluster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clusterId", "title", "signalIds", "thesisCandidate", "sharedMechanism", "educationalRationale"],
+      "properties": {
+        "clusterId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "signalIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "thesisCandidate": { "type": "string", "minLength": 1 },
+        "sharedMechanism": { "type": "string", "minLength": 1 },
+        "keyTension": { "type": "string", "minLength": 1 },
+        "educationalRationale": { "type": "string", "minLength": 1 },
+        "concentrationNotes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "selectedSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selectionId", "roleInBriefing", "selectionRationale", "sourceCoverageSummary", "profileRationale"],
+      "oneOf": [
+        { "required": ["signalId"] },
+        { "required": ["clusterId"] }
+      ],
+      "properties": {
+        "selectionId": { "type": "string", "minLength": 1 },
+        "signalId": { "type": "string", "minLength": 1 },
+        "clusterId": { "type": "string", "minLength": 1 },
+        "roleInBriefing": { "type": "string", "enum": ["radar", "deep_dive", "market_map", "reader_translation", "watchlist_seed"] },
+        "selectionRationale": { "type": "string", "minLength": 1 },
+        "sourceCoverageSummary": { "type": "string", "minLength": 1 },
+        "profileRationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "rejectedSignal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signalId", "reason", "auditNote"],
+      "properties": {
+        "signalId": { "type": "string", "minLength": 1 },
+        "reason": { "$ref": "#/$defs/rejectionReason" },
+        "auditNote": { "type": "string", "minLength": 1 },
+        "mergedIntoSignalId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "watchItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signalId", "watchReason", "neededCorroboration", "potentialFutureUse"],
+      "properties": {
+        "signalId": { "type": "string", "minLength": 1 },
+        "watchReason": { "type": "string", "minLength": 1 },
+        "neededCorroboration": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "potentialFutureUse": { "type": "string", "enum": ["future_deep_dive", "contextual_follow_up", "discard_if_unconfirmed"] }
+      }
+    },
+    "sourceDiversity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domainCounts", "publisherCounts", "concentrationRisk"],
+      "properties": {
+        "domainCounts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "publisherCounts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "actorCounts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "narrativeCounts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "concentrationRisk": { "type": "string", "enum": ["low", "medium", "high"] },
+        "concentrationRationale": { "type": "string", "minLength": 1 },
+        "alternativeSearchNotes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "qualityNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "severity": { "type": "string", "enum": ["info", "warning", "error"] }
+      }
+    },
+    "rejectionReason": {
+      "type": "string",
+      "enum": ["duplicate_or_redundant_coverage", "weak_source_or_insufficient_corroboration", "pr_or_marketing_noise", "low_educational_value", "outside_scope", "stale_information", "excessive_concentration"]
+    }
+  }
+}

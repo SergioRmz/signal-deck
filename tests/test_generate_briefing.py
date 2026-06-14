@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from generate_briefing import transform_packet  # noqa: E402
+from generate_briefing import transform_ingestion_package, transform_packet  # noqa: E402
 
 
 class EditorialTransformationV2Test(unittest.TestCase):
@@ -33,26 +33,37 @@ class EditorialTransformationV2Test(unittest.TestCase):
         self.assertEqual([item["role"] for item in items], ["operator", "founder", "software-engineer"])
         self.assertEqual([item["weight"] for item in items], [0.7, 0.2, 0.1])
         bodies_by_role = {item["role"]: item["body"] for item in items}
-        self.assertIn("operating cadence", bodies_by_role["operator"])
-        self.assertIn("distribution", bodies_by_role["founder"])
-        self.assertIn("architecture", bodies_by_role["software-engineer"])
+        self.assertIn("sistema crítico", bodies_by_role["operator"])
+        self.assertIn("unit economics", bodies_by_role["founder"])
+        self.assertIn("restricciones reales", bodies_by_role["software-engineer"])
 
     def test_deep_dives_explain_mechanism_implication_and_tension_explicitly(self) -> None:
         briefing = transform_packet(self.packet)
         first = briefing["deepDives"]["items"][0]
 
-        self.assertIn("Mechanism:", first["body"])
-        self.assertIn("Why it matters:", first["body"])
-        self.assertIn("Second-order effect:", first["body"])
-        self.assertIn("Watch the tension:", first["body"])
+        self.assertIn("Mecanismo:", first["body"])
+        self.assertIn("Por qué importa:", first["body"])
+        self.assertIn("Efecto de segundo orden:", first["body"])
+        self.assertIn("Tensión a vigilar:", first["body"])
 
     def test_top_line_surfaces_stakes_second_order_effect_and_open_question(self) -> None:
         briefing = transform_packet(self.packet)
         top_line = briefing["topLine"]
 
-        self.assertIn("Second-order effect:", top_line["body"])
-        self.assertIn("Question to track:", top_line["body"])
+        self.assertIn("Efecto de segundo orden:", top_line["body"])
+        self.assertIn("Pregunta a vigilar:", top_line["body"])
         self.assertIn("Switching costs may rise", top_line["stakes"])
+
+    def test_ingestion_package_selected_signals_feed_briefing_transformation(self) -> None:
+        package = json.loads((ROOT / "data" / "ingestion-package.sample.json").read_text())
+
+        briefing = transform_ingestion_package(package)
+
+        self.assertEqual(briefing["meta"]["language"], "es")
+        self.assertGreaterEqual(len(briefing["radar"]["items"]), 5)
+        self.assertEqual(len(briefing["deepDives"]["items"]), 2)
+        self.assertIn("Mecanismo:", briefing["deepDives"]["items"][0]["body"])
+        self.assertIn("Qué cambia para ti", briefing["readerTranslation"]["title"])
 
 
 if __name__ == "__main__":
