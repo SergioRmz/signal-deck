@@ -227,9 +227,11 @@ It is part of the operational thesis behind how a system like **signal-deck** ca
 From the repository root:
 
 ```bash
+python3 -m unittest tests/test_validate_ingestion_package.py -v
 python3 -m unittest tests/test_generate_briefing.py -v
-python3 scripts/validate_signal_input.py
-python3 scripts/generate_briefing.py
+python3 -m unittest tests/test_run_briefing_pipeline.py -v
+python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json
+python3 scripts/generate_briefing.py data/ingestion-package.sample.json
 python3 scripts/validate_briefing.py
 python3 scripts/validate_visual_composition.py
 python3 scripts/run_briefing_pipeline.py
@@ -238,16 +240,16 @@ python3 scripts/run_briefing_pipeline.py
 To execute a full local trial run and build the renderer from generated run artifacts:
 
 ```bash
-python3 scripts/run_briefing_pipeline.py --run-date 2026-06-11 --build-renderer
+python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer
 ```
 
 The pipeline writes local-only artifacts under `runs/YYYY-MM-DD/`:
 
-- `signal-input.json`
+- `ingestion-package.json`
 - `briefing.final.json`
 - `visual-composition.json`
 - `telegram-message.md`
-- `manifest.json`
+- `manifest.json` with an `ingestionPackage` pointer back to the validated package snapshot
 
 ## Running the React + Vite renderer locally
 
@@ -277,15 +279,18 @@ Before `npm run dev` and `npm run build`, the renderer runs `apps/web/scripts/sy
 
 ## Key contract documents
 
-- `docs/briefing-ingestion-v1.md` — editorial contract for upstream signal packets
-- `data/signal-input.schema.json` — ingestion schema
+- `docs/briefing-ingestion-v2.md` — educational ingestion package contract for candidate scouting, scoring, selection, rejection, and auditability
+- `data/ingestion-package.schema.json` — educational ingestion package schema
+- `docs/briefing-ingestion-v1.md` — legacy editorial contract for upstream signal packets
+- `data/signal-input.schema.json` — legacy signal-input schema
 - `docs/briefing-contract-v1.md` — editorial contract for final briefings
 - `data/briefing.schema.json` — briefing schema
 - `docs/briefing-transformation-v1.md` — deterministic mapping rules from ingestion to briefing
-- `scripts/validate_signal_input.py` — ingestion validator
+- `scripts/validate_ingestion_package.py` — educational ingestion package validator
+- `scripts/validate_signal_input.py` — legacy signal-input validator
 - `scripts/validate_briefing.py` — briefing validator
-- `scripts/generate_briefing.py` — briefing generator
-- `scripts/run_briefing_pipeline.py` — local run orchestrator for generated briefing, composition, Telegram draft, and optional renderer build
+- `scripts/generate_briefing.py` — briefing generator for v2 ingestion packages and legacy v1 signal inputs
+- `scripts/run_briefing_pipeline.py` — local run orchestrator for validated ingestion package snapshots, generated briefing, composition, Telegram draft, and optional renderer build
 
 ## Near-term roadmap
 

@@ -92,7 +92,6 @@ The run folder contains the existing artifacts plus the new ingestion package ar
 ```text
 runs/2026-06-14/
 ├── ingestion-package.json
-├── signal-input.json
 ├── briefing.final.json
 ├── visual-composition.json
 ├── telegram-message.md

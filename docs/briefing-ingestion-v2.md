@@ -83,6 +83,18 @@ A normal `complete` run must promote **5-8 selected signals**. It must include *
 
 `generate_briefing.py` now accepts either the legacy v1 `signal-input` packet or the v2 ingestion package. For v2 packages, it adapts selected signals and clusters into the existing v1 transformation layer so downstream renderer behavior remains compatible while the richer ingestion artifact matures.
 
+## Pipeline artifact semantics
+
+`run_briefing_pipeline.py` uses `data/ingestion-package.sample.json` as the default upstream artifact via `--ingestion-package`. During a local run it must:
+
+1. load and validate the v2 package with `scripts/validate_ingestion_package.py` semantics;
+2. snapshot the exact validated package to `runs/YYYY-MM-DD/ingestion-package.json`;
+3. transform selected signals and clusters into the final briefing payload;
+4. write `briefing.final.json`, `visual-composition.json`, and `telegram-message.md`; and
+5. write `manifest.json` with an `ingestionPackage` field pointing at the package snapshot.
+
+The manifest pointer is the audit bridge between the polished briefing and the upstream candidate pool, selection rationales, rejected signals, and watch items. The legacy `--input` path remains available for v1 packets, but educational-ingestion runs should be traceable through `ingestion-package.json`.
+
 ## Rejection and watch-item semantics
 
 The package must preserve the negative editorial decision trail, not just the promoted signals. This makes the run auditable when a reviewer asks why a signal was excluded, merged, downgraded, or held for later.

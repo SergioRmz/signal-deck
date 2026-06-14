@@ -18,13 +18,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from generate_briefing import transform_packet
+from generate_briefing import transform_ingestion_package, transform_packet
 from validate_briefing import validate_briefing
+from validate_ingestion_package import validate_ingestion_package
 from validate_signal_input import expect_dict, validate_input_packet
 from validate_visual_composition import validate_visual_composition
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "data" / "signal-input.sample.json"
+DEFAULT_INGESTION_PACKAGE = ROOT / "data" / "ingestion-package.sample.json"
 DEFAULT_COMPOSITION = ROOT / "data" / "visual-composition.sample.json"
 DEFAULT_RUNS_DIR = ROOT / "runs"
 WEB_ROOT = ROOT / "apps" / "web"
@@ -147,28 +149,40 @@ def run_renderer_build(briefing_path: Path, composition_path: Path) -> None:
 
 def run_pipeline(args: argparse.Namespace) -> dict[str, Any]:
     input_path = args.input.resolve()
+    ingestion_package_arg = getattr(args, "ingestion_package", DEFAULT_INGESTION_PACKAGE)
+    ingestion_package_path = ingestion_package_arg.resolve() if ingestion_package_arg else None
     composition_template_path = args.composition_template.resolve()
     runs_dir = args.runs_dir.resolve()
 
-    packet = expect_dict(load_json(input_path, "signal input"), "signal-input")
-    validate_input_packet(packet)
+    ingestion_package: dict[str, Any] | None = None
+    if ingestion_package_path:
+        ingestion_package = expect_dict(load_json(ingestion_package_path, "ingestion package"), "ingestion-package")
+        validate_ingestion_package(ingestion_package)
+        run_date = derive_run_date(ingestion_package, args.run_date)
+        briefing = transform_ingestion_package(ingestion_package)
+    else:
+        packet = expect_dict(load_json(input_path, "signal input"), "signal-input")
+        validate_input_packet(packet)
+        run_date = derive_run_date(packet, args.run_date)
+        briefing = transform_packet(packet)
+    validate_briefing(briefing)
 
-    run_date = derive_run_date(packet, args.run_date)
     run_dir = runs_dir / run_date
+    ingestion_snapshot_path = run_dir / "ingestion-package.json"
     input_snapshot_path = run_dir / "signal-input.json"
     briefing_path = run_dir / "briefing.final.json"
     composition_path = run_dir / "visual-composition.json"
     telegram_path = run_dir / "telegram-message.md"
     manifest_path = run_dir / "manifest.json"
 
-    briefing = transform_packet(packet)
-    validate_briefing(briefing)
-
     composition_template = load_json(composition_template_path, "visual composition template")
     composition = sync_composition_to_briefing(composition_template, briefing)
     validate_visual_composition(composition)
 
-    write_json(input_snapshot_path, packet)
+    if ingestion_package is not None:
+        write_json(ingestion_snapshot_path, ingestion_package)
+    else:
+        write_json(input_snapshot_path, packet)
     write_json(briefing_path, briefing)
     write_json(composition_path, composition)
     telegram_message = append_public_link(build_telegram_message(briefing), args.public_url)
@@ -182,19 +196,28 @@ def run_pipeline(args: argparse.Namespace) -> dict[str, Any]:
     manifest = {
         "status": "ok",
         "runDate": run_date,
-        "input": display_path(input_snapshot_path),
         "briefing": display_path(briefing_path),
         "visualComposition": display_path(composition_path),
         "telegramMessage": display_path(telegram_path),
         "rendererBuild": build_status,
     }
+    if ingestion_package is not None:
+        manifest["ingestionPackage"] = display_path(ingestion_snapshot_path)
+    else:
+        manifest["input"] = display_path(input_snapshot_path)
     write_json(manifest_path, manifest)
     return manifest
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the local signal-deck briefing pipeline.")
-    parser.add_argument("--input", type=Path, default=DEFAULT_INPUT, help="Input packet JSON path.")
+    parser.add_argument("--input", type=Path, default=DEFAULT_INPUT, help="Legacy v1 signal input packet JSON path.")
+    parser.add_argument(
+        "--ingestion-package",
+        type=Path,
+        default=DEFAULT_INGESTION_PACKAGE,
+        help="Educational ingestion package v2 JSON path to validate, snapshot, and transform.",
+    )
     parser.add_argument(
         "--composition-template",
         type=Path,
