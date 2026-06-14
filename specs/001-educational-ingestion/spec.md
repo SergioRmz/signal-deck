@@ -8,6 +8,16 @@
 
 **Input**: User description: "Improve signal-deck data ingestion so the system gathers multiple candidate signals across technology, AI, and economy; evaluates relevance and educational value for Sergio as the canonical reader while remaining extensible to multiple reader profiles; clusters related signals; rejects noise explicitly; and produces an auditable ingestion package with 15-30 candidate signals, 5-8 selected signals, and 2-3 potential deep dives focused on reusable mental models, causality, incentives, and strategic judgment."
 
+## Clarifications
+
+### Session 2026-06-13
+
+- Q: What source discovery model and minimum evidence depth should the ingestion system require? → A: Use a hybrid discovery model: broad discovery is allowed, but strong selected signals must be supported by source roles where available, including primary/source-of-record material, technical or economic analysis, market/regulatory context, and critical contrast when possible.
+- Q: How should the system decide when a theme deserves a deep dive? → A: Prioritize educational density and reusable thesis quality. A deep dive should be selected when the theme can teach a durable causal mechanism, incentive structure, reusable mental model, second-order effect, or strategic implication—not merely because it is the biggest or most viral news item.
+- Q: What should happen when a run finds good signals but they are highly concentrated in one domain, actor, source, or narrative? → A: Use intelligent balance with an explicit concentration flag: prioritize quality, detect concentration, search for strong alternatives, diversify only when alternatives have enough educational value, and justify any decision to keep the briefing concentrated.
+- Q: What auditability level should the system preserve for each signal? → A: Use structured, debuggable auditability: each signal should retain editorial rationale, educational value, confidence or score, sources used, related cluster, rejection reason when applicable, and notes for concentration or corroboration without requiring exhaustive reasoning traces.
+- Q: What should the system do with an uncertain but potentially high-value signal? → A: Retain it as a conditioned candidate or watch item rather than using it as a strong factual basis. It may be followed if it gains corroboration, reveals a strategic tension, or could become a future deep dive; otherwise it should remain marked as uncertain and not contaminate the final briefing.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Build a Broad Educational Signal Pool (Priority: P1)
@@ -71,6 +81,7 @@ As the publisher, I want the ingestion layer to group related signals into theme
 1. **Given** multiple candidates about AI distribution, regulation, infrastructure, or enterprise adoption, **When** clustering runs, **Then** related candidates are grouped under a coherent theme rather than treated as unrelated fragments.
 2. **Given** a cluster, **When** the system summarizes it, **Then** it states the thesis candidate, shared mechanism, key tension, and why the theme could educate the reader.
 3. **Given** the full candidate pool, **When** selection completes, **Then** the system produces 5-8 selected signals and 2-3 potential deep dives with rationale.
+4. **Given** multiple selected themes, **When** deep dive candidates are chosen, **Then** the system prioritizes themes with educational density and a reusable thesis over themes that are merely popular, viral, or heavily covered.
 
 ---
 
@@ -113,7 +124,7 @@ As the operator, I need each ingestion run to produce a durable package that dow
 - If a source is inaccessible, paywalled, incomplete, or missing publication metadata, the system must retain the limitation in source notes rather than inventing facts.
 - If a candidate is interesting but outside the briefing's strategic/educational scope, the system must reject it with a scope reason instead of forcing it into the package.
 - If selected signals over-concentrate in one domain, source type, vendor, or narrative, the package must flag concentration risk.
-- If a signal has uncertain factual status, the package must label it as unconfirmed or requiring corroboration before it can become a deep dive.
+- If a signal has uncertain factual status, the package must label it as unconfirmed or requiring corroboration before it can become a deep dive; high-value uncertain signals may be retained as conditioned candidates or watch items, but must not be used as strong factual foundations for the final briefing until corroborated.
 - If a candidate is highly relevant to a future reader profile but weak for Sergio's canonical profile, the package may retain it as a profile-specific opportunity without selecting it for the default briefing.
 
 ## Requirements *(mandatory)*
@@ -123,6 +134,7 @@ As the operator, I need each ingestion run to produce a durable package that dow
 - **FR-001**: The system MUST collect a broad candidate pool of 15-30 candidate signals for a normal daily ingestion run.
 - **FR-002**: The system MUST support technology, artificial intelligence, and economy as first-class ingestion domains, while allowing candidates to belong to multiple domains.
 - **FR-003**: Each candidate signal MUST include source reference, title or source-provided heading, publication timestamp when available, domain tags, factual summary, and source notes.
+- **FR-003a**: The system MUST use a hybrid discovery model: broad discovery MAY surface candidates, but selected or deep-dive signals SHOULD be backed by source-role coverage where available, including primary/source-of-record material, technical or economic analysis, market/regulatory context, and critical contrast.
 - **FR-004**: Each candidate signal MUST include an editorial relevance assessment explaining why it may matter beyond recency.
 - **FR-005**: Each candidate signal MUST include an educational value assessment explaining what reusable concept, mechanism, incentive, causal chain, technical moat, market structure, or strategic judgment it could teach.
 - **FR-006**: The system MUST evaluate relevance for the canonical reader profile: Sergio as an ambitious technology/AI/economy reader seeking labor-market advantage, strategic judgment, and deeper understanding.
@@ -131,12 +143,16 @@ As the operator, I need each ingestion run to produce a durable package that dow
 - **FR-009**: The system MUST cluster related candidates into themes when they share an event, mechanism, market tension, technology shift, regulation, actor, or strategic implication.
 - **FR-010**: The system MUST identify 5-8 selected signals from the candidate pool for downstream briefing transformation.
 - **FR-011**: The system MUST identify 2-3 potential deep dive candidates when the candidate pool contains sufficient educational depth.
+- **FR-011a**: Deep dive selection MUST prioritize educational density and reusable thesis quality, including durable causal mechanisms, incentive structures, reusable mental models, second-order effects, or strategic implications; it MUST NOT select deep dives solely because a topic is the largest, most viral, or most covered item of the day.
 - **FR-012**: The system MUST record rejected or downgraded signals with explicit reasons.
 - **FR-013**: Rejection reasons MUST distinguish at least: duplicate/redundant coverage, weak source or insufficient corroboration, PR/marketing noise, low educational value, outside scope, stale information, and excessive concentration.
 - **FR-014**: The system MUST report source diversity across selected signals and flag concentration risk when selected signals depend too heavily on one source, actor, domain, or narrative.
+- **FR-014a**: When concentration risk is detected, the system MUST search for strong alternative signals or clusters and diversify only when alternatives meet the minimum educational value threshold; if the final selection remains concentrated, the ingestion package MUST justify why concentration was editorially warranted.
 - **FR-015**: The system MUST produce a durable ingestion package per run that downstream transformation can consume without scraping implementation logs.
 - **FR-016**: The ingestion package MUST separate candidate signals, selected signals, rejected signals, clusters/themes, profile relevance, educational scoring, and run-level quality notes.
+- **FR-016a**: Each signal's audit record MUST preserve structured, debuggable decision data, including editorial rationale, educational value, confidence or score, source references used, related cluster, rejection or downgrade reason when applicable, and concentration or corroboration notes; exhaustive chain-of-thought or full internal deliberation traces are not required.
 - **FR-017**: The system MUST mark underfilled runs when fewer than 15 credible candidates are available and explain the fallback decision.
+- **FR-017a**: The system MUST support a conditioned-candidate or watch-item status for uncertain but potentially high-value signals; these signals MAY be tracked for follow-up, but MUST NOT be used as strong factual foundations for the final briefing until sufficiently corroborated.
 - **FR-018**: The system MUST avoid treating sample fixtures, dry-run artifacts, or placeholder content as live source material.
 - **FR-019**: The system MUST preserve enough audit information to explain why a final briefing was built from the chosen signals.
 - **FR-020**: The system MUST be usable independently of renderer changes; improving ingestion quality MUST NOT require changing the public page design in this spec.
