@@ -83,6 +83,23 @@ A normal `complete` run must promote **5-8 selected signals**. It must include *
 
 `generate_briefing.py` now accepts either the legacy v1 `signal-input` packet or the v2 ingestion package. For v2 packages, it adapts selected signals and clusters into the existing v1 transformation layer so downstream renderer behavior remains compatible while the richer ingestion artifact matures.
 
+## Rejection and watch-item semantics
+
+The package must preserve the negative editorial decision trail, not just the promoted signals. This makes the run auditable when a reviewer asks why a signal was excluded, merged, downgraded, or held for later.
+
+Rejected or merged candidates use candidate-level status plus run-level audit records:
+
+- A candidate with `status: rejected` must include `rejectionReason` and a matching `rejectedSignals[]` entry.
+- A candidate with `status: merged` must include `duplicateOfSignalId` and a matching `rejectedSignals[]` entry.
+- A `rejectedSignals[]` entry with `reason: duplicate_or_redundant_coverage` must include `mergedIntoSignalId` so the reviewer can see which stronger signal absorbed the coverage.
+- Validator errors name the exact invalid `signalId` where possible, for example `candidate sig-14.duplicateOfSignalId`.
+
+Watch items are not selected facts. They preserve potentially useful signals that still need corroboration:
+
+- A candidate with `status: watch_item` must have a matching `watchItems[]` entry.
+- `watchItems[]` must state `watchReason`, `neededCorroboration`, and `potentialFutureUse`.
+- Watch items cannot be promoted as `deep_dive` selections until corroborated; the validator rejects direct or cluster-based deep dives containing watch-item signal IDs.
+
 ## Validation
 
 Run the validator from the repository root:

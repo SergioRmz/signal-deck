@@ -295,12 +295,56 @@ def _candidate_by_id(candidates: list[Any]) -> dict[str, dict[str, Any]]:
     return {expect_dict(candidate, "candidate")["signalId"]: candidate for candidate in candidates}
 
 
+def _validate_rejection_and_watch_semantics(package: dict[str, Any], candidates: list[Any]) -> None:
+    candidates_by_id = _candidate_by_id(candidates)
+    rejected_entries = expect_list(package.get("rejectedSignals"), "rejectedSignals")
+    watch_entries = expect_list(package.get("watchItems"), "watchItems")
+    rejected_entry_ids = {expect_dict(entry, "rejectedSignal").get("signalId") for entry in rejected_entries}
+    watch_entry_ids = {expect_dict(entry, "watchItem").get("signalId") for entry in watch_entries}
+
+    for candidate in candidates:
+        signal_id = expect_non_empty_string(candidate.get("signalId"), "candidate.signalId")
+        status = candidate.get("status")
+        if status == "rejected":
+            expect_non_empty_string(candidate.get("rejectionReason"), f"candidate {signal_id}.rejectionReason")
+            if signal_id not in rejected_entry_ids:
+                fail(f"candidate {signal_id} is rejected but missing from rejectedSignals")
+        if status == "merged":
+            expect_non_empty_string(candidate.get("duplicateOfSignalId"), f"candidate {signal_id}.duplicateOfSignalId")
+            if candidate["duplicateOfSignalId"] not in candidates_by_id:
+                fail(f"candidate {signal_id} references unknown duplicateOfSignalId: {candidate['duplicateOfSignalId']}")
+            if signal_id not in rejected_entry_ids:
+                fail(f"candidate {signal_id} is merged but missing from rejectedSignals")
+        if status == "watch_item" and signal_id not in watch_entry_ids:
+            fail(f"candidate {signal_id} is watch_item but missing from watchItems")
+
+    for index, rejected in enumerate(rejected_entries, start=1):
+        entry = expect_dict(rejected, f"rejectedSignals[{index}]")
+        signal_id = expect_non_empty_string(entry.get("signalId"), f"rejectedSignals[{index}].signalId")
+        reason = expect_non_empty_string(entry.get("reason"), f"rejectedSignals[{index}].reason")
+        if signal_id not in candidates_by_id:
+            fail(f"rejectedSignals[{index}] references unknown signalId: {signal_id}")
+        if reason == "duplicate_or_redundant_coverage" and not entry.get("mergedIntoSignalId"):
+            fail(f"rejectedSignals[{index}] for {signal_id} requires mergedIntoSignalId")
+        if entry.get("mergedIntoSignalId") and entry["mergedIntoSignalId"] not in candidates_by_id:
+            fail(f"rejectedSignals[{index}] references unknown mergedIntoSignalId: {entry['mergedIntoSignalId']}")
+
+    for index, item in enumerate(watch_entries, start=1):
+        entry = expect_dict(item, f"watchItems[{index}]")
+        signal_id = expect_non_empty_string(entry.get("signalId"), f"watchItems[{index}].signalId")
+        if signal_id not in candidates_by_id:
+            fail(f"watchItems[{index}] references unknown signalId: {signal_id}")
+        if candidates_by_id[signal_id].get("status") != "watch_item":
+            fail(f"watch item {signal_id} must reference a candidate with status watch_item")
+
+
 def _validate_selection_semantics(package: dict[str, Any], candidates: list[Any]) -> None:
     run = expect_dict(package.get("run"), "run")
     selected_signals = expect_list(package.get("selectedSignals"), "selectedSignals")
     clusters = expect_list(package.get("clusters"), "clusters")
     candidates_by_id = _candidate_by_id(candidates)
     clusters_by_id = {expect_dict(cluster, "cluster")["clusterId"]: cluster for cluster in clusters}
+    watch_signal_ids = {candidate["signalId"] for candidate in candidates if candidate.get("status") == "watch_item"}
 
     if run.get("status") == "complete" and not 5 <= len(selected_signals) <= 8:
         fail("complete run must contain 5-8 selected signals")
@@ -324,6 +368,10 @@ def _validate_selection_semantics(package: dict[str, Any], candidates: list[Any]
 
         if item.get("roleInBriefing") != "deep_dive":
             continue
+
+        watch_candidates = [signal_id for signal_id in candidate_ids if signal_id in watch_signal_ids]
+        if watch_candidates:
+            fail(f"watch item {watch_candidates[0]} cannot be selected as a deep dive")
 
         dense_candidates = []
         for signal_id in candidate_ids:
@@ -351,6 +399,7 @@ def validate_shared_semantics(package: dict[str, Any]) -> None:
     _validate_source_metadata(sources)
     _validate_candidate_metadata(candidates)
     _validate_educational_value(candidates)
+    _validate_rejection_and_watch_semantics(package, candidates)
     _validate_profile_relevance(candidates, canonical_profile_id)
     _validate_selected_profile_rationales(expect_list(package.get("selectedSignals"), "selectedSignals"))
 

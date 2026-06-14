@@ -70,10 +70,19 @@ class ValidateIngestionPackageTests(unittest.TestCase):
     def test_underfilled_run_allows_smaller_pool_with_quality_note(self) -> None:
         package = copy.deepcopy(self.sample)
         package["candidates"] = package["candidates"][:12]
+        for candidate in package["candidates"]:
+            if candidate["status"] in {"rejected", "watch_item", "merged"}:
+                candidate["status"] = "candidate"
+                candidate.pop("rejectionReason", None)
+                candidate.pop("duplicateOfSignalId", None)
         package["clusters"] = []
         package["selectedSignals"] = []
+        package["rejectedSignals"] = []
+        package["watchItems"] = []
         package["run"]["candidateCount"] = 12
         package["run"]["selectedCount"] = 0
+        package["run"]["rejectedCount"] = 0
+        package["run"]["watchItemCount"] = 0
         package["run"]["status"] = "underfilled"
         package["qualityNotes"] = [{"code": "UNDERFILLED", "message": "Only 12 credible candidates found.", "severity": "warning"}]
 
@@ -194,6 +203,34 @@ class ValidateIngestionPackageTests(unittest.TestCase):
         target["educationalValue"]["deepDivePotential"] = "possible"
 
         self.assert_validation_error(package, "deep dive .* strong educational density")
+
+    def test_rejected_candidates_require_rejection_reason_with_signal_id(self) -> None:
+        package = copy.deepcopy(self.sample)
+        rejected = next(candidate for candidate in package["candidates"] if candidate["status"] == "rejected")
+        rejected.pop("rejectionReason", None)
+
+        self.assert_validation_error(package, f"candidate {rejected['signalId']}.*rejectionReason")
+
+    def test_merged_or_redundant_rejections_require_target_signal_id(self) -> None:
+        package = copy.deepcopy(self.sample)
+        merged = next(candidate for candidate in package["candidates"] if candidate["status"] == "merged")
+        merged.pop("duplicateOfSignalId", None)
+
+        self.assert_validation_error(package, f"candidate {merged['signalId']}.*duplicateOfSignalId")
+
+    def test_watch_items_cannot_be_selected_as_deep_dives(self) -> None:
+        package = copy.deepcopy(self.sample)
+        watch_item = next(item for item in package["watchItems"] if item["potentialFutureUse"] == "future_deep_dive")
+        package["selectedSignals"][0] = {
+            "selectionId": "sel-invalid-watch",
+            "signalId": watch_item["signalId"],
+            "roleInBriefing": "deep_dive",
+            "selectionRationale": "This should stay on the watchlist until corroborated.",
+            "sourceCoverageSummary": "Insufficient for factual deep-dive selection.",
+            "profileRationale": "Would be useful for Sergio only after corroboration.",
+        }
+
+        self.assert_validation_error(package, f"watch item {watch_item['signalId']} cannot be selected as a deep dive")
 
 
 if __name__ == "__main__":

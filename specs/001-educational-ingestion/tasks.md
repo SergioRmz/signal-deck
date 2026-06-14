@@ -151,17 +151,17 @@
 
 ### Tests for User Story 5
 
-- [ ] T046 [P] [US5] Add test requiring `rejectionReason` for every rejected candidate in `tests/test_validate_ingestion_package.py`
-- [ ] T047 [P] [US5] Add test requiring `duplicateOfSignalId` or `mergedIntoSignalId` for merged/redundant coverage in `tests/test_validate_ingestion_package.py`
-- [ ] T048 [P] [US5] Add test preventing watch items from being selected as factual deep dives in `tests/test_validate_ingestion_package.py`
+- [x] T046 [P] [US5] Add test requiring `rejectionReason` for every rejected candidate in `tests/test_validate_ingestion_package.py`
+- [x] T047 [P] [US5] Add test requiring `duplicateOfSignalId` or `mergedIntoSignalId` for merged/redundant coverage in `tests/test_validate_ingestion_package.py`
+- [x] T048 [P] [US5] Add test preventing watch items from being selected as factual deep dives in `tests/test_validate_ingestion_package.py`
 
 ### Implementation for User Story 5
 
-- [ ] T049 [US5] Populate `rejectedSignals` and `watchItems` in `data/ingestion-package.sample.json`
-- [ ] T050 [US5] Implement rejection reason, merged-signal, and watch-item validation in `scripts/validate_ingestion_package.py`
-- [ ] T051 [US5] Add CLI failure messages that identify the exact invalid signal ID in `scripts/validate_ingestion_package.py`
-- [ ] T052 [US5] Document rejection reasons and watch-item semantics in `docs/briefing-ingestion-v2.md`
-- [ ] T053 [US5] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
+- [x] T049 [US5] Populate `rejectedSignals` and `watchItems` in `data/ingestion-package.sample.json`
+- [x] T050 [US5] Implement rejection reason, merged-signal, and watch-item validation in `scripts/validate_ingestion_package.py`
+- [x] T051 [US5] Add CLI failure messages that identify the exact invalid signal ID in `scripts/validate_ingestion_package.py`
+- [x] T052 [US5] Document rejection reasons and watch-item semantics in `docs/briefing-ingestion-v2.md`
+- [x] T053 [US5] Run `python3 scripts/validate_ingestion_package.py data/ingestion-package.sample.json` and `python3 -m unittest tests/test_validate_ingestion_package.py -v`
 
 **Checkpoint**: US5 is independently complete when noise rejection and watch-item retention are auditable.
 
