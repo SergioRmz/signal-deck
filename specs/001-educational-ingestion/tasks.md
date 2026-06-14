@@ -204,7 +204,7 @@
 - [x] T068 Run `python3 scripts/run_briefing_pipeline.py --run-date 2026-06-14 --build-renderer`
 - [x] T069 Run `git diff --check` from repository root
 - [x] T070 Commit all completed implementation work and push `001-educational-ingestion`
-- [ ] T071 Update PR #25 summary and validation notes using `specs/001-educational-ingestion/tasks.md` as the implementation checklist source
+- [x] T071 Update PR #27 summary and validation notes using `specs/001-educational-ingestion/tasks.md` as the implementation checklist source
 
 ---
 
