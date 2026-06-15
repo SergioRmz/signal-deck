@@ -120,6 +120,7 @@ signal-deck/
 │   ├── validate_visual_composition.py
 │   ├── validate_signal_input.py
 │   ├── generate_briefing.py
+│   ├── prepare_daily_run.py
 │   └── run_briefing_pipeline.py
 ├── docs/
 │   ├── architecture.md
@@ -162,6 +163,7 @@ This first foundation includes:
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
+- a run-preparation utility that creates the daily `run-timeline.json` and date-scoped phase prompt copies before cron scheduling
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
 - a daily operations runbook that formalizes the staggered scout → synthesis → build/deploy → final delivery flow
 - versioned daily prompt contracts for scout, dedupe, synthesis, build/deploy, and final-delivery cron phases

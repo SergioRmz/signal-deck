@@ -186,6 +186,15 @@ Every real-flow run should write:
 runs/YYYY-MM-DD/run-timeline.json
 ```
 
+Prepare the run folder and phase prompt copies with:
+
+```bash
+python3 scripts/prepare_daily_run.py \
+  --edition-date YYYY-MM-DD \
+  --delivery-time 09:00 \
+  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/
+```
+
 Minimum shape:
 
 ```json
