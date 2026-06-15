@@ -1,0 +1,88 @@
+{
+  "status": "ok",
+  "deliveryTime": "09:00",
+  "publicUrl": "https://signal-deck.sergio-ramirez-mtz.workers.dev/",
+  "workdir": "/root/workspace/signal-deck",
+  "jobs": [
+    {
+      "name": "signal-deck daily 01 scout broad",
+      "phase": "scout broad",
+      "schedule": "0 2 * * *",
+      "deliver": "local",
+      "workdir": "/root/workspace/signal-deck",
+      "enabledToolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "phasePrompt": "01-scout-broad.md",
+      "expectedArtifact": "runs/${EDITION_DATE}/scout-broad.json",
+      "description": "Collect broad candidate signals and write the first scouting artifact.",
+      "prompt": "You are running Signal Deck daily phase 01 \u2014 scout broad.\n\nThis is a durable Hermes cron job. Do not create, update, remove, or recursively schedule cron jobs from inside this run.\n\nRepository/workdir:\n/root/workspace/signal-deck\n\nDaily schedule context:\n- final delivery slot: 09:00\n- public URL: https://signal-deck.sergio-ramirez-mtz.workers.dev/\n- phase prompt file: runs/${EDITION_DATE}/phase-prompts/01-scout-broad.md\n- expected artifact: runs/${EDITION_DATE}/scout-broad.json\n\nRuntime date rule:\n1. Compute EDITION_DATE as today's date in YYYY-MM-DD using the live system date.\n2. Work inside `/root/workspace/signal-deck`.\n3. Ensure the run folder and self-contained phase prompts exist by running:\n\n```bash\npython3 scripts/prepare_daily_run.py \\\n  --edition-date ${EDITION_DATE} \\\n  --delivery-time 09:00 \\\n  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/\n```\n\nPhase execution:\n1. Read `runs/${EDITION_DATE}/phase-prompts/01-scout-broad.md`.\n2. Follow that prompt exactly, including its Role, Mission, Reasoning posture, Anti-patterns, Failure behavior, and Output contract.\n3. Read any prior artifacts required by that phase from `runs/${EDITION_DATE}/`.\n4. Write or update `runs/${EDITION_DATE}/scout-broad.json`.\n5. Update `runs/${EDITION_DATE}/run-timeline.json` for phase `scout broad` to `completed` or `blocked`.\n6. If possible, verify the artifact exists and is non-empty before finishing.\n\nDelivery rule:\nDo not send Telegram messages. Return a compact completion note for local cron logs only.\nIf the phase is blocked, write the blocked artifact/status and return a compact local blocker note.\n\nOperational note:\nUse tools only as needed to complete this phase. Preserve artifact discipline over conversational verbosity.\n"
+    },
+    {
+      "name": "signal-deck daily 02 scout update dedupe",
+      "phase": "scout update / dedupe",
+      "schedule": "30 4 * * *",
+      "deliver": "local",
+      "workdir": "/root/workspace/signal-deck",
+      "enabledToolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "phasePrompt": "02-scout-update-dedupe.md",
+      "expectedArtifact": "runs/${EDITION_DATE}/scout-updated.json",
+      "description": "Read broad scouting, dedupe, criticize sources, and promote/watch/reject candidates.",
+      "prompt": "You are running Signal Deck daily phase 02 \u2014 scout update / dedupe.\n\nThis is a durable Hermes cron job. Do not create, update, remove, or recursively schedule cron jobs from inside this run.\n\nRepository/workdir:\n/root/workspace/signal-deck\n\nDaily schedule context:\n- final delivery slot: 09:00\n- public URL: https://signal-deck.sergio-ramirez-mtz.workers.dev/\n- phase prompt file: runs/${EDITION_DATE}/phase-prompts/02-scout-update-dedupe.md\n- expected artifact: runs/${EDITION_DATE}/scout-updated.json\n\nRuntime date rule:\n1. Compute EDITION_DATE as today's date in YYYY-MM-DD using the live system date.\n2. Work inside `/root/workspace/signal-deck`.\n3. Ensure the run folder and self-contained phase prompts exist by running:\n\n```bash\npython3 scripts/prepare_daily_run.py \\\n  --edition-date ${EDITION_DATE} \\\n  --delivery-time 09:00 \\\n  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/\n```\n\nPhase execution:\n1. Read `runs/${EDITION_DATE}/phase-prompts/02-scout-update-dedupe.md`.\n2. Follow that prompt exactly, including its Role, Mission, Reasoning posture, Anti-patterns, Failure behavior, and Output contract.\n3. Read any prior artifacts required by that phase from `runs/${EDITION_DATE}/`.\n4. Write or update `runs/${EDITION_DATE}/scout-updated.json`.\n5. Update `runs/${EDITION_DATE}/run-timeline.json` for phase `scout update / dedupe` to `completed` or `blocked`.\n6. If possible, verify the artifact exists and is non-empty before finishing.\n\nDelivery rule:\nDo not send Telegram messages. Return a compact completion note for local cron logs only.\nIf the phase is blocked, write the blocked artifact/status and return a compact local blocker note.\n\nOperational note:\nUse tools only as needed to complete this phase. Preserve artifact discipline over conversational verbosity.\n"
+    },
+    {
+      "name": "signal-deck daily 03 editorial synthesis",
+      "phase": "editorial synthesis",
+      "schedule": "30 6 * * *",
+      "deliver": "local",
+      "workdir": "/root/workspace/signal-deck",
+      "enabledToolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "phasePrompt": "03-editorial-synthesis.md",
+      "expectedArtifact": "runs/${EDITION_DATE}/ingestion-package.json",
+      "description": "Create the editorial plan and validated ingestion package for the deterministic pipeline.",
+      "prompt": "You are running Signal Deck daily phase 03 \u2014 editorial synthesis.\n\nThis is a durable Hermes cron job. Do not create, update, remove, or recursively schedule cron jobs from inside this run.\n\nRepository/workdir:\n/root/workspace/signal-deck\n\nDaily schedule context:\n- final delivery slot: 09:00\n- public URL: https://signal-deck.sergio-ramirez-mtz.workers.dev/\n- phase prompt file: runs/${EDITION_DATE}/phase-prompts/03-editorial-synthesis.md\n- expected artifact: runs/${EDITION_DATE}/ingestion-package.json\n\nRuntime date rule:\n1. Compute EDITION_DATE as today's date in YYYY-MM-DD using the live system date.\n2. Work inside `/root/workspace/signal-deck`.\n3. Ensure the run folder and self-contained phase prompts exist by running:\n\n```bash\npython3 scripts/prepare_daily_run.py \\\n  --edition-date ${EDITION_DATE} \\\n  --delivery-time 09:00 \\\n  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/\n```\n\nPhase execution:\n1. Read `runs/${EDITION_DATE}/phase-prompts/03-editorial-synthesis.md`.\n2. Follow that prompt exactly, including its Role, Mission, Reasoning posture, Anti-patterns, Failure behavior, and Output contract.\n3. Read any prior artifacts required by that phase from `runs/${EDITION_DATE}/`.\n4. Write or update `runs/${EDITION_DATE}/ingestion-package.json`.\n5. Update `runs/${EDITION_DATE}/run-timeline.json` for phase `editorial synthesis` to `completed` or `blocked`.\n6. If possible, verify the artifact exists and is non-empty before finishing.\n\nDelivery rule:\nDo not send Telegram messages. Return a compact completion note for local cron logs only.\nIf the phase is blocked, write the blocked artifact/status and return a compact local blocker note.\n\nOperational note:\nUse tools only as needed to complete this phase. Preserve artifact discipline over conversational verbosity.\n"
+    },
+    {
+      "name": "signal-deck daily 04 build deploy",
+      "phase": "build deploy",
+      "schedule": "0 8 * * *",
+      "deliver": "local",
+      "workdir": "/root/workspace/signal-deck",
+      "enabledToolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "phasePrompt": "04-build-deploy.md",
+      "expectedArtifact": "runs/${EDITION_DATE}/deploy-result.json",
+      "description": "Run the deterministic pipeline, build, deploy, and verify the public page.",
+      "prompt": "You are running Signal Deck daily phase 04 \u2014 build deploy.\n\nThis is a durable Hermes cron job. Do not create, update, remove, or recursively schedule cron jobs from inside this run.\n\nRepository/workdir:\n/root/workspace/signal-deck\n\nDaily schedule context:\n- final delivery slot: 09:00\n- public URL: https://signal-deck.sergio-ramirez-mtz.workers.dev/\n- phase prompt file: runs/${EDITION_DATE}/phase-prompts/04-build-deploy.md\n- expected artifact: runs/${EDITION_DATE}/deploy-result.json\n\nRuntime date rule:\n1. Compute EDITION_DATE as today's date in YYYY-MM-DD using the live system date.\n2. Work inside `/root/workspace/signal-deck`.\n3. Ensure the run folder and self-contained phase prompts exist by running:\n\n```bash\npython3 scripts/prepare_daily_run.py \\\n  --edition-date ${EDITION_DATE} \\\n  --delivery-time 09:00 \\\n  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/\n```\n\nPhase execution:\n1. Read `runs/${EDITION_DATE}/phase-prompts/04-build-deploy.md`.\n2. Follow that prompt exactly, including its Role, Mission, Reasoning posture, Anti-patterns, Failure behavior, and Output contract.\n3. Read any prior artifacts required by that phase from `runs/${EDITION_DATE}/`.\n4. Write or update `runs/${EDITION_DATE}/deploy-result.json`.\n5. Update `runs/${EDITION_DATE}/run-timeline.json` for phase `build deploy` to `completed` or `blocked`.\n6. If possible, verify the artifact exists and is non-empty before finishing.\n\nDelivery rule:\nDo not send Telegram messages. Return a compact completion note for local cron logs only.\nIf the phase is blocked, write the blocked artifact/status and return a compact local blocker note.\n\nOperational note:\nUse tools only as needed to complete this phase. Preserve artifact discipline over conversational verbosity.\n"
+    },
+    {
+      "name": "signal-deck daily 05 final delivery",
+      "phase": "final delivery",
+      "schedule": "0 9 * * *",
+      "deliver": "origin",
+      "workdir": "/root/workspace/signal-deck",
+      "enabledToolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "phasePrompt": "05-final-delivery.md",
+      "expectedArtifact": "runs/${EDITION_DATE}/telegram-message.md",
+      "description": "Read verified delivery artifacts and produce the single user-facing final message.",
+      "prompt": "You are running Signal Deck daily phase 05 \u2014 final delivery.\n\nThis is a durable Hermes cron job. Do not create, update, remove, or recursively schedule cron jobs from inside this run.\n\nRepository/workdir:\n/root/workspace/signal-deck\n\nDaily schedule context:\n- final delivery slot: 09:00\n- public URL: https://signal-deck.sergio-ramirez-mtz.workers.dev/\n- phase prompt file: runs/${EDITION_DATE}/phase-prompts/05-final-delivery.md\n- expected artifact: runs/${EDITION_DATE}/telegram-message.md\n\nRuntime date rule:\n1. Compute EDITION_DATE as today's date in YYYY-MM-DD using the live system date.\n2. Work inside `/root/workspace/signal-deck`.\n3. Ensure the run folder and self-contained phase prompts exist by running:\n\n```bash\npython3 scripts/prepare_daily_run.py \\\n  --edition-date ${EDITION_DATE} \\\n  --delivery-time 09:00 \\\n  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/\n```\n\nPhase execution:\n1. Read `runs/${EDITION_DATE}/phase-prompts/05-final-delivery.md`.\n2. Follow that prompt exactly, including its Role, Mission, Reasoning posture, Anti-patterns, Failure behavior, and Output contract.\n3. Read any prior artifacts required by that phase from `runs/${EDITION_DATE}/`.\n4. Write or update `runs/${EDITION_DATE}/telegram-message.md`.\n5. Update `runs/${EDITION_DATE}/run-timeline.json` for phase `final delivery` to `completed` or `blocked`.\n6. If possible, verify the artifact exists and is non-empty before finishing.\n\nDelivery rule:\nThis is the only phase allowed to produce the user-facing delivery after verification succeeds.\nIf deployment verification failed, return one honest blocker/status message instead of the normal briefing announcement.\n\nOperational note:\nUse tools only as needed to complete this phase. Preserve artifact discipline over conversational verbosity.\n"
+    }
+  ]
+}

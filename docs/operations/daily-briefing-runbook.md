@@ -266,4 +266,20 @@ The boundary matters: prompts create auditable artifacts; code validates and ren
 
 A recurring daily setup should create staggered jobs rather than one large just-in-time job. Intermediate jobs should write artifacts locally. The final job should be the only one delivered to the user.
 
+The concrete Hermes cron contract is documented in:
+
+```text
+docs/operations/hermes-cron-orchestration.md
+```
+
+Generate the auditable job preview with:
+
+```bash
+python3 scripts/render_hermes_cron_jobs.py \
+  --delivery-time 09:00 \
+  --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/ \
+  --workdir /root/workspace/signal-deck \
+  --output docs/operations/hermes-cron-jobs.preview.json
+```
+
 The final delivery job must not assume success. It should verify the public URL and edition date before sending the normal briefing message.
