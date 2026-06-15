@@ -23,10 +23,10 @@
     ]
   },
   "experience": {
-    "visualTone": "eléctrico",
-    "readingMode": "mixto",
+    "visualTone": "electric",
+    "readingMode": "mixed",
     "engagementGoal": "Hacer que el briefing se sienta como un objeto estratégico para explorar, no como un memo que se termina.",
-    "interactionModel": "por capas",
+    "interactionModel": "layered",
     "hooks": [
       "Abrir con una tesis clara que encuadre la edición sin aplastar la lectura.",
       "Convertir el radar en una superficie de prueba, no en una lista enterrada.",
