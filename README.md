@@ -99,6 +99,14 @@ signal-deck/
 │   ├── signal-input.schema.json
 │   ├── visual-composition.sample.json
 │   └── visual-composition.schema.json
+├── prompts/
+│   └── daily/
+│       ├── README.md
+│       ├── 01-scout-broad.md
+│       ├── 02-scout-update-dedupe.md
+│       ├── 03-editorial-synthesis.md
+│       ├── 04-build-deploy.md
+│       └── 05-final-delivery.md
 ├── apps/
 │   └── web/
 │       ├── src/
@@ -156,6 +164,7 @@ This first foundation includes:
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
 - a daily operations runbook that formalizes the staggered scout → synthesis → build/deploy → final delivery flow
+- versioned daily prompt contracts for scout, dedupe, synthesis, build/deploy, and final-delivery cron phases
 - initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, **operations**, and **Spec Kit workflow**
 - GitHub Spec Kit infrastructure with a signal-deck constitution for future ambiguous work
 

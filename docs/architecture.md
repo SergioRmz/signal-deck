@@ -149,7 +149,8 @@ The product uses a static React + Vite renderer because it:
 
 - `apps/web/`: React + Vite renderer for the componentized briefing surface
 - `data/`: canonical briefing payloads, ingestion payloads, composition payloads, and schemas
-- `docs/`: vision, decisions, contracts, and operations
+- `prompts/daily/`: versioned prompt contracts for staggered editorial and delivery cron phases
+- `docs/`: vision, decisions, contracts, operations, and deployment
 - `scripts/`: lightweight local validators and future utilities
 
 ## Conventions
