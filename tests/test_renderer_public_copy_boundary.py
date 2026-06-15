@@ -27,6 +27,8 @@ class RendererPublicCopyBoundaryTest(unittest.TestCase):
             "Ruta ensamblada",
             "La página se arma como una clase, no como un feed",
             "Pausar en el cambio estructural",
+            "Muestra por qué",
+            "Shows Sergio",
             "primary: 'principal'",
             "secondary: 'secundario'",
             "supporting: 'soporte'",
