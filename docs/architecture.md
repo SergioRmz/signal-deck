@@ -57,15 +57,23 @@ The previous framework-free prototype has been removed so the Vite renderer is t
 
 The presentation layer should consume the briefing and composition contracts, not invent them.
 
-### 3. Distribution
+### 3. Distribution and operations
 
 Responsible for:
 
 - publishing externally
 - versioning releases
 - linking the artifact from Telegram or other channels
+- preserving a staggered run timeline for recurring briefing production
+- verifying the deployed public page before final user delivery
 
 Cloudflare Pages remains a strong fit here because of its simplicity, low maintenance burden, and static hosting model.
+
+The operational runbook for the recurring daily flow lives in:
+
+- `docs/operations/daily-briefing-runbook.md`
+
+That runbook is part of the architecture, not an afterthought: it defines the boundary between prompted editorial jobs, deterministic repo scripts, deployment verification, and final Telegram delivery.
 
 ## Current contract boundary
 
@@ -141,7 +149,8 @@ The product uses a static React + Vite renderer because it:
 
 - `apps/web/`: React + Vite renderer for the componentized briefing surface
 - `data/`: canonical briefing payloads, ingestion payloads, composition payloads, and schemas
-- `docs/`: vision, decisions, contracts, and operations
+- `prompts/daily/`: versioned prompt contracts for staggered editorial and delivery cron phases
+- `docs/`: vision, decisions, contracts, operations, and deployment
 - `scripts/`: lightweight local validators and future utilities
 
 ## Conventions

@@ -99,6 +99,14 @@ signal-deck/
 │   ├── signal-input.schema.json
 │   ├── visual-composition.sample.json
 │   └── visual-composition.schema.json
+├── prompts/
+│   └── daily/
+│       ├── README.md
+│       ├── 01-scout-broad.md
+│       ├── 02-scout-update-dedupe.md
+│       ├── 03-editorial-synthesis.md
+│       ├── 04-build-deploy.md
+│       └── 05-final-delivery.md
 ├── apps/
 │   └── web/
 │       ├── src/
@@ -112,17 +120,20 @@ signal-deck/
 │   ├── validate_visual_composition.py
 │   ├── validate_signal_input.py
 │   ├── generate_briefing.py
+│   ├── prepare_daily_run.py
 │   └── run_briefing_pipeline.py
-└── docs/
-    ├── architecture.md
-    ├── briefing-contract-v1.md
-    ├── briefing-ingestion-v1.md
-    ├── briefing-transformation-v1.md
-    ├── visual-composition-contract-v1.md
-    ├── product-brief.md
-    ├── spec-driven-workflow.md
-    └── deployment/
-        └── cloudflare-pages.md
+├── docs/
+│   ├── architecture.md
+│   ├── briefing-contract-v1.md
+│   ├── briefing-ingestion-v1.md
+│   ├── briefing-transformation-v1.md
+│   ├── visual-composition-contract-v1.md
+│   ├── product-brief.md
+│   ├── spec-driven-workflow.md
+│   ├── operations/
+│   │   └── daily-briefing-runbook.md
+│   └── deployment/
+│       └── cloudflare-pages.md
 ```
 
 ## What is already in place
@@ -152,8 +163,11 @@ This first foundation includes:
 - lightweight local validators for both input packets and briefing payloads
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
+- a run-preparation utility that creates the daily `run-timeline.json` and date-scoped phase prompt copies before cron scheduling
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
-- initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, and **Spec Kit workflow**
+- a daily operations runbook that formalizes the staggered scout → synthesis → build/deploy → final delivery flow
+- versioned daily prompt contracts for scout, dedupe, synthesis, build/deploy, and final-delivery cron phases
+- initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, **operations**, and **Spec Kit workflow**
 - GitHub Spec Kit infrastructure with a signal-deck constitution for future ambiguous work
 
 That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
