@@ -62,7 +62,9 @@ const LABELS_ES: Record<string, string> = {
   'software-engineer': 'Ingeniería de software',
   founder: 'Fundador',
   operator: 'Operaciones',
+  operador: 'Operaciones',
   'supports-thesis': 'apoya la tesis',
+  'complicates-thesis': 'matiza la tesis',
   monitor: 'vigilar',
   primary: 'principal',
   secondary: 'secundario',
@@ -81,6 +83,15 @@ const LABELS_ES: Record<string, string> = {
   distribution: 'Distribución',
   workflow: 'Flujo de trabajo',
   product: 'Producto',
+  editor: 'Editor estratégico',
+  'editor estratégico': 'Editor estratégico',
+  builder: 'Constructor',
+  constructor: 'Constructor',
+  learner: 'Aprendiz ejecutivo',
+  'executive learner': 'Aprendiz ejecutivo',
+  'aprendiz ejecutivo': 'Aprendiz ejecutivo',
+  electric: 'eléctrico',
+  'dark editorial': 'editorial oscuro',
 };
 
 function toSpanishLabel(value?: string) {
@@ -175,7 +186,7 @@ function ThesisHero({ briefing, composition, heroModule, topLineModule, readerUp
         <div className="flex flex-wrap items-center gap-3">
           <Badge>signal-deck</Badge>
           <Badge variant="muted">{briefing.meta.editionDate}</Badge>
-          <Badge variant="accent">{composition.experience?.visualTone || 'dark editorial'}</Badge>
+          <Badge variant="accent">{toSpanishLabel(composition.experience?.visualTone || 'dark editorial')}</Badge>
         </div>
         <p className="eyebrow mt-8">{moduleHeadline('hero', 'Tesis de apertura', heroModule?.headline)}</p>
         <h1 className="hero-title">{briefing.hero.title}</h1>
@@ -294,6 +305,39 @@ function EvidenceOrbit({ briefing, radarModule }: BriefingContext) {
     return null;
   }
 
+  if (radarModule?.variant === 'signal-ribbons') {
+    return (
+      <section className="module-section evidence-ribbons" data-module-id="mod-radar">
+        <div className="section-kicker">
+          <Orbit className="h-5 w-5" />
+          <span>{moduleHeadline('radar', 'Radar de evidencia', radarModule?.headline)}</span>
+        </div>
+        <div className="section-heading-row">
+          <div>
+            <h2 className="section-title">{briefing.radar?.title || 'Radar de evidencia'}</h2>
+            <p className="section-copy">{radarModule?.interactionCue || 'Lee cada señal como una prueba de la tesis, no como una tarjeta suelta.'}</p>
+          </div>
+          <MetaBadges module={radarModule} />
+        </div>
+
+        <div className="ribbon-stack" aria-label="Cintas de señal para probar la tesis">
+          {items.map((item, index) => (
+            <article key={`${item.label}-${item.text}`} className="signal-ribbon">
+              <div className="signal-ribbon__rail">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <Badge variant={item.role === 'monitor' ? 'muted' : 'accent'}>{roleLabel(item.role)}</Badge>
+              </div>
+              <div>
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="module-section evidence-orbit" data-module-id="mod-radar">
       <div className="section-kicker">
@@ -380,6 +424,37 @@ function PowerMap({ briefing, marketMapModule }: BriefingContext) {
   const items = briefing.marketMap?.items || [];
   if (!items.length) {
     return null;
+  }
+
+  if (marketMapModule?.variant === 'pressure-ladder') {
+    return (
+      <section className="module-section pressure-ladder" data-module-id="mod-market-map">
+        <div className="section-kicker">
+          <Compass className="h-5 w-5" />
+          <span>{moduleHeadline('marketMap', 'Mapa de poder', marketMapModule?.headline)}</span>
+        </div>
+        <div className="section-heading-row">
+          <div>
+            <h2 className="section-title">{briefing.marketMap?.title || 'Dónde se mueve la ventaja'}</h2>
+            <p className="section-copy">Aquí el formato no es una grilla: es una escalera de presión competitiva.</p>
+          </div>
+          <MetaBadges module={marketMapModule} />
+        </div>
+
+        <div className="ladder-steps" aria-label="Escalera de presión competitiva">
+          {items.map((item, index) => (
+            <article key={`${item.label}-${index}`} className="ladder-step">
+              <span className="ladder-step__index">{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+                {item.powerShift ? <strong>{item.powerShift}</strong> : null}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
   }
 
   return (

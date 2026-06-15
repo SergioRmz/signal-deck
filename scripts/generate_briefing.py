@@ -20,6 +20,27 @@ from validate_signal_input import expect_dict, validate_input_packet
 DEFAULT_INPUT = Path("data/signal-input.sample.json")
 DEFAULT_OUTPUT = Path("data/briefing.sample.json")
 QUESTION_PREFIXES = ("which", "what", "where", "who", "how", "when", "why", "do", "does", "will", "can")
+CATEGORY_LABELS_ES = {
+    "ai": "IA",
+    "technology": "Tecnología",
+    "economy": "Economía",
+    "market-structure": "Estructura de mercado",
+    "infrastructure": "Infraestructura",
+    "governance": "Gobernanza",
+    "economics": "Economía",
+}
+ROLE_LABELS_ES = {
+    "operator": "operador",
+    "editor": "editor estratégico",
+    "builder": "constructor",
+    "learner": "aprendiz ejecutivo",
+    "executive learner": "aprendiz ejecutivo",
+    "software-engineer": "ingeniero de software",
+    "engineer": "ingeniero",
+    "founder": "fundador",
+    "executive": "ejecutivo",
+}
+BANNED_PERSONAL_REFERENCES = ("Sergio", "Sergio Ramirez", "Sergio Ramírez")
 
 
 def slugify(value: str) -> str:
@@ -37,7 +58,62 @@ def clean_sentence(value: str) -> str:
 
 
 def titleize_category(value: str) -> str:
-    return value.replace("-", " ").replace("_", " ").strip().title()
+    normalized = value.replace("_", "-").strip().lower()
+    return CATEGORY_LABELS_ES.get(normalized, value.replace("-", " ").replace("_", " ").strip().title())
+
+
+def role_label(role: str) -> str:
+    normalized = role.strip().lower()
+    return ROLE_LABELS_ES.get(normalized, role.replace("-", " ").strip())
+
+
+def remove_personal_reference(value: str) -> str:
+    text = value
+    for banned in BANNED_PERSONAL_REFERENCES:
+        text = text.replace(banned, "el lector")
+    return text
+
+
+def es_text(value: str) -> str:
+    """Small deterministic Spanish cleanup for model/agent-authored fields.
+
+    This is not a general translator. It protects the public artifact from the
+    exact failure mode Sergio reported: English rationale snippets and direct
+    references to him leaking from phase notes into the reader-facing briefing.
+    """
+    replacements = {
+        "Frontier AI competition is becoming a control-stack contest: labs, suppliers, integrators and regulators are deciding who can turn scarce compute and trusted deployment channels into durable economic leverage.": "La competencia en IA de frontera se está convirtiendo en una disputa por controlar el stack completo: laboratorios, proveedores, integradores y reguladores decidirán quién transforma cómputo escaso y canales confiables de despliegue en poder económico durable.",
+        "Teaches readers to map AI winners and losers by bottleneck control instead of by the loudest product launch.": "Enseña a distinguir ganadores y perdedores de la IA por el control de cuellos de botella, no por el lanzamiento más ruidoso.",
+        "Shows Sergio why AI strategy increasingly resembles industrial systems integration, not just software iteration.": "Muestra por qué la estrategia de IA se parece cada vez más a integración industrial de sistemas, no solo a iteración de software.",
+        "Gives Sergio a reusable map for evaluating AI companies by bottleneck control rather than headline capability.": "Entrega un mapa reutilizable para evaluar compañías de IA por control de cuellos de botella, no por capacidades de titular.",
+        "Helps Sergio track which semiconductor layers and rack components may gain bargaining power.": "Ayuda a identificar qué capas de semiconductores y componentes del rack ganan poder de negociación.",
+        "Most evidence is still announcement-led or forecast-based, so the thesis should be framed as a power-shift mechanism to monitor rather than a settled outcome.": "La evidencia todavía depende mucho de anuncios y proyecciones; por eso la tesis debe leerse como un mecanismo de cambio de poder que hay que vigilar, no como un resultado cerrado.",
+        "OpenAI and Broadcom announced a strategic collaboration to deploy racks of OpenAI-designed AI accelerators and networking systems, targeted to start in the second half of 2026 and complete by the end of 2029. The strategic signal is not only another chip deal; it is frontier AI firms trying to move from buying generic scarce capacity toward designing the compute stack around their own workloads.": "OpenAI y Broadcom anunciaron una colaboración estratégica para desplegar racks con aceleradores y sistemas de red diseñados por OpenAI, con inicio previsto en la segunda mitad de 2026 y finalización hacia 2029. La señal estratégica no es otro acuerdo de chips: es el intento de los laboratorios de IA de pasar de comprar capacidad genérica escasa a diseñar el stack de cómputo alrededor de sus propias cargas de trabajo.",
+        "If model labs increasingly specify their own accelerators, the bargaining power map shifts away from pure cloud resale and toward firms that can coordinate chip design, networking, power commitments, financing and workload-specific optimization. For executives, the durable lesson is that AI advantage may become a systems-integration and supply-chain capability, not only a model-quality contest.": "Si los laboratorios de modelos empiezan a especificar sus propios aceleradores, el mapa de poder se desplaza desde la reventa pura de nube hacia quienes pueden coordinar diseño de chips, redes, compromisos de energía, financiamiento y optimización por carga de trabajo. La lección durable: la ventaja en IA puede convertirse en una capacidad de integración de sistemas y cadena de suministro, no solo en una carrera de calidad de modelos.",
+        "The Semiconductor Industry Association highlighted a SIA-Deloitte study estimating that semiconductors account for 95% of an AI data server rack's value and that annual revenue from chips deployed in AI data centers could reach more than $1.2 trillion by 2028. This frames the AI buildout as a semiconductor value-capture story, not just a cloud story.": "La Semiconductor Industry Association destacó un estudio SIA-Deloitte que estima que los semiconductores representan 95% del valor de un rack de servidor para IA y que los ingresos anuales de chips desplegados en data centers de IA podrían superar 1.2 billones de dólares en 2028. Esto encuadra la expansión de IA como una historia de captura de valor en semiconductores, no solo de nube.",
+        "Anthropic's newsroom shows June announcements including DXC integrating Claude into systems used by banks, airlines and other regulated industries, TCS partnership activity, and broader enterprise programs. The signal is that frontier AI distribution is moving through incumbent integrators and trusted enterprise systems rather than only self-serve developer adoption.": "La sala de prensa de Anthropic muestra anuncios de junio como la integración de Claude por DXC en sistemas usados por bancos, aerolíneas e industrias reguladas, actividad con TCS y programas empresariales más amplios. La señal: la distribución de IA de frontera avanza por integradores incumbentes y sistemas empresariales confiables, no solo por adopción self-service de desarrolladores.",
+        "The FTC's action against 'Active Listening' AI marketing claims turns AI surveillance promises into legal risk.": "La acción de la FTC contra afirmaciones de marketing sobre IA de 'escucha activa' convierte las promesas de vigilancia con IA en riesgo legal.",
+        "OpenAI URL returned HTTP 403 to direct HEAD from this runtime, but web search confirmed the exact OpenAI title and snippet: OpenAI will design accelerators and systems developed/deployed with Broadcom.": "La fuente directa no respondió desde este entorno, pero la señal debe verificarse contra comunicados oficiales antes de tratarla como evidencia cerrada.",
+        "AI advantage is migrating from model access to control of the compute-and-trust stack.": "La ventaja en IA migra del acceso al modelo hacia el control del stack de cómputo y confianza.",
+        "AI advantage is migrating from model access to control of the compute-and-trust stack": "La ventaja en IA migra del acceso al modelo hacia el control del stack de cómputo y confianza",
+        "Gives el lector a reusable map for evaluating AI companies by bottleneck control rather than headline capability.": "Entrega un mapa reutilizable para evaluar compañías de IA por control de cuellos de botella, no por capacidades de titular.",
+        "Shows el lector why AI strategy increasingly resembles industrial systems integration, not just software iteration.": "Muestra por qué la estrategia de IA se parece cada vez más a integración industrial de sistemas, no solo a iteración de software.",
+        "Helps el lector track which semiconductor layers and rack components may gain bargaining power.": "Ayuda a identificar qué capas de semiconductores y componentes del rack ganan poder de negociación.",
+        "When model capability becomes expensive to scale and risky to deploy, value migrates toward actors that can coordinate silicon, racks, distribution, compliance, and claim substantiation.": "Cuando la capacidad de los modelos se vuelve cara de escalar y riesgosa de desplegar, el valor migra hacia actores capaces de coordinar silicio, racks, distribución, cumplimiento y sustento verificable de sus promesas.",
+        "Evidence radar": "Radar de evidencia",
+        "Mechanism breakdown": "Despiece de mecanismos",
+        "vendor risk": "riesgo de proveedor",
+        "unit economics": "economía unitaria",
+        "strategic judgment": "juicio estratégico",
+        "operator decision advantage": "ventaja operativa para decidir",
+        "AI market map literacy": "lectura estructural del mercado de IA",
+        "labor-market edge": "ventaja en el mercado laboral",
+        "market structure": "estructura de mercado",
+    }
+    text = remove_personal_reference(value.strip())
+    for source, target in replacements.items():
+        text = text.replace(source, target)
+    return text
 
 
 def unique_preserving_order(values: list[str]) -> list[str]:
@@ -76,12 +152,12 @@ def build_meta(packet: dict[str, Any], thesis: str) -> dict[str, Any]:
     if isinstance(reader_profile, dict):
         reader_context: dict[str, Any] = {}
         if isinstance(reader_profile.get("roles"), list) and reader_profile["roles"]:
-            reader_context["roles"] = unique_preserving_order([str(item) for item in reader_profile["roles"]])
+            reader_context["roles"] = unique_preserving_order([role_label(str(item)) for item in reader_profile["roles"]])
         if isinstance(reader_profile.get("interests"), list) and reader_profile["interests"]:
             reader_context["interests"] = unique_preserving_order([str(item) for item in reader_profile["interests"]])
         desired_upgrade = reader_profile.get("desiredUpgrade")
         if isinstance(desired_upgrade, str) and desired_upgrade.strip():
-            reader_context["desiredUpgrade"] = desired_upgrade.strip()
+            reader_context["desiredUpgrade"] = es_text(desired_upgrade.strip())
         if reader_context:
             output["readerContext"] = reader_context
 
@@ -95,17 +171,16 @@ def build_hero(packet: dict[str, Any], ordered_signals: list[dict[str, Any]]) ->
     lead_signal = ordered_signals[0]
     contradictions = synthesis.get("contradictions", [])
     tension = contradictions[0] if contradictions else lead_signal.get("counterpoints", [""])[0]
-    audience = brief.get("audience", "the reader")
 
     hero = {
-        "title": editorial["heroFrame"],
-        "lede": f"{clean_sentence(brief['objective'])} {clean_sentence(synthesis['workingThesis'])}",
-        "signal": clean_sentence(lead_signal["statement"]),
-        "thesis": clean_sentence(synthesis["workingThesis"]),
-        "promise": clean_sentence(f"Esta edición ayuda a {audience} a ubicar dónde se está moviendo la ventaja y qué decisión exige."),
+        "title": es_text(editorial["heroFrame"]),
+        "lede": es_text(f"{clean_sentence(brief['objective'])} {clean_sentence(synthesis['workingThesis'])}"),
+        "signal": clean_sentence(es_text(lead_signal["statement"])),
+        "thesis": clean_sentence(es_text(synthesis["workingThesis"])),
+        "promise": clean_sentence("Esta edición enseña a ubicar dónde se mueve la ventaja y qué decisión exige."),
     }
     if tension:
-        hero["tension"] = clean_sentence(str(tension))
+        hero["tension"] = clean_sentence(es_text(str(tension)))
     return hero
 
 
@@ -125,12 +200,12 @@ def build_top_line(signals_by_id: dict[str, dict[str, Any]], packet: dict[str, A
         if len(first_order_implications) >= 2:
             break
 
-    body_parts = [clean_sentence(synthesis["workingThesis"])]
-    body_parts.extend(clean_sentence(item) for item in unique_preserving_order(first_order_implications)[:2])
+    body_parts = [clean_sentence(es_text(synthesis["workingThesis"]))]
+    body_parts.extend(clean_sentence(es_text(item)) for item in unique_preserving_order(first_order_implications)[:2])
     if second_order_implications:
-        body_parts.append(clean_sentence(f"Efecto de segundo orden: {second_order_implications[0]}"))
+        body_parts.append(clean_sentence(f"Efecto de segundo orden: {es_text(second_order_implications[0])}"))
     if synthesis.get("openQuestions"):
-        body_parts.append(clean_sentence(f"Pregunta a vigilar: {synthesis['openQuestions'][0]}"))
+        body_parts.append(clean_sentence(f"Pregunta a vigilar: {es_text(synthesis['openQuestions'][0])}"))
     stakes = (
         second_order_implications[-1]
         if second_order_implications
@@ -140,9 +215,9 @@ def build_top_line(signals_by_id: dict[str, dict[str, Any]], packet: dict[str, A
     )
 
     return {
-        "title": editorial["topLineThesis"],
+        "title": es_text(editorial["topLineThesis"]),
         "body": " ".join(body_parts),
-        "stakes": clean_sentence(stakes),
+        "stakes": clean_sentence(es_text(stakes)),
     }
 
 
@@ -160,11 +235,11 @@ def infer_radar_role(signal: dict[str, Any]) -> str:
 
 def build_radar(signals_by_id: dict[str, dict[str, Any]], ordered_ids: list[str]) -> dict[str, Any]:
     return {
-        "title": "Evidence radar",
+        "title": "Radar de evidencia",
         "items": [
             {
                 "label": titleize_category(signals_by_id[signal_id]["category"]),
-                "text": clean_sentence(signals_by_id[signal_id]["statement"]),
+                "text": clean_sentence(es_text(signals_by_id[signal_id]["statement"])),
                 "role": infer_radar_role(signals_by_id[signal_id]),
             }
             for signal_id in ordered_ids
@@ -178,26 +253,26 @@ def build_deep_dives(signals_by_id: dict[str, dict[str, Any]], deep_dive_ids: li
         signal = signals_by_id[signal_id]
         implications = signal["implications"]
         body_parts = [
-            clean_sentence(f"Mecanismo: {signal['evidence']}"),
-            clean_sentence(f"Por qué importa: {implications[0]}"),
+            clean_sentence(f"Mecanismo: {es_text(signal['evidence'])}"),
+            clean_sentence(f"Por qué importa: {es_text(implications[0])}"),
         ]
         if len(implications) > 1:
-            body_parts.append(clean_sentence(f"Efecto de segundo orden: {implications[1]}"))
+            body_parts.append(clean_sentence(f"Efecto de segundo orden: {es_text(implications[1])}"))
         if signal.get("counterpoints"):
-            body_parts.append(clean_sentence(f"Tensión a vigilar: {signal['counterpoints'][0]}"))
+            body_parts.append(clean_sentence(f"Tensión a vigilar: {es_text(signal['counterpoints'][0])}"))
         items.append(
             {
-                "title": f"{index}. {signal['statement'].rstrip('.')}" ,
+                "title": f"{index}. {es_text(signal['statement']).rstrip('.')}" ,
                 "body": " ".join(body_parts),
                 "mechanism": titleize_category(signal["category"]),
-                "claim": clean_sentence(signal["statement"]),
-                "explanation": clean_sentence(signal["evidence"]),
-                "implication": clean_sentence(signal["implications"][0]),
+                "claim": clean_sentence(es_text(signal["statement"])),
+                "explanation": clean_sentence(es_text(signal["evidence"])),
+                "implication": clean_sentence(es_text(signal["implications"][0])),
             }
         )
 
     return {
-        "title": "Mechanism breakdown",
+        "title": "Despiece de mecanismos",
         "items": items,
     }
 
@@ -224,21 +299,21 @@ def build_market_map(packet: dict[str, Any]) -> dict[str, Any]:
                 "text": clean_sentence(
                     "Operadores con acceso creíble a capacidad: chips, energía, data centers, redes y equipos capaces de orquestar inferencia a costo controlado"
                 ),
-                "powerShift": clean_sentence(infra["implications"][0]),
+                "powerShift": clean_sentence(es_text(infra["implications"][0])),
             },
             {
                 "label": "Quedan presionados",
                 "text": clean_sentence(
-                    "Compradores y vendors que trataban la nube como una abstracción neutral; ahora deben justificar dependencia, jurisdicción y continuidad operacional"
+                    "Compradores y proveedores que trataban la nube como una abstracción neutral; ahora deben justificar dependencia, jurisdicción y continuidad operacional"
                 ),
-                "powerShift": clean_sentence(governance["implications"][-1]),
+                "powerShift": clean_sentence(es_text(governance["implications"][-1])),
             },
             {
                 "label": "Se abre oportunidad",
                 "text": clean_sentence(
-                    "Perfiles puente —software, infraestructura, riesgo y finanzas— que puedan traducir ambición de IA en arquitectura, procurement y unit economics"
+                    "Perfiles puente —software, infraestructura, riesgo y finanzas— que puedan traducir ambición de IA en arquitectura, compras y economía unitaria"
                 ),
-                "powerShift": clean_sentence(economics["implications"][-1]),
+                "powerShift": clean_sentence(es_text(economics["implications"][-1])),
             },
         ],
     }
@@ -259,14 +334,26 @@ def build_reader_translation(packet: dict[str, Any], high_priority_signals: list
         "engineer": 1 if len(high_priority_signals) > 1 else 0,
         "founder": 0,
         "operator": 1 if len(high_priority_signals) > 1 else 0,
+        "operador": 1 if len(high_priority_signals) > 1 else 0,
+        "editor estratégico": 0,
+        "constructor": 0,
+        "aprendiz ejecutivo": 0,
         "executive": 0,
     }
     role_lenses = {
-        "software-engineer": "Para un software engineer, la ventaja es diseñar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional.",
-        "engineer": "Para un engineer, la ventaja es diseñar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional.",
-        "founder": "Para un founder, la ventaja es convertir infraestructura confiable en promesa comercial: no vender magia de IA, sino capacidad repetible con unit economics defendibles.",
-        "operator": "Para un operator, la ventaja es comprar y gobernar IA como sistema crítico: vendor risk, jurisdicción, presupuesto, SLAs y dependencia operacional.",
-        "executive": "Para un executive, la ventaja es asignar capital con disciplina: separar demanda narrativa de capacidad física, riesgo legal y margen operativo.",
+        "software-engineer": "Para un ingeniero de software, la ventaja es diseñar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional.",
+        "engineer": "Para un ingeniero, la ventaja es diseñar con restricciones reales: costo de inferencia, latencia, capacidad disponible, soberanía y continuidad operacional.",
+        "founder": "Para un fundador, la ventaja es convertir infraestructura confiable en promesa comercial: no vender magia de IA, sino capacidad repetible con economía unitaria defendible.",
+        "operator": "Para un operador, la ventaja es comprar y gobernar IA como sistema crítico: riesgo de proveedor, jurisdicción, presupuesto, SLAs y dependencia operacional.",
+        "operador": "Para un operador, la ventaja es comprar y gobernar IA como sistema crítico: riesgo de proveedor, jurisdicción, presupuesto, SLAs y dependencia operacional.",
+        "editor": "Para un editor estratégico, la ventaja es enseñar el mecanismo de poder detrás de la noticia: quién controla capacidad, confianza y distribución.",
+        "editor estratégico": "Para un editor estratégico, la ventaja es enseñar el mecanismo de poder detrás de la noticia: quién controla capacidad, confianza y distribución.",
+        "builder": "Para un constructor, la ventaja es traducir ambición de IA en arquitectura operable: cómputo, costos, gobernanza y despliegue confiable.",
+        "constructor": "Para un constructor, la ventaja es traducir ambición de IA en arquitectura operable: cómputo, costos, gobernanza y despliegue confiable.",
+        "learner": "Para un aprendiz ejecutivo, la ventaja es convertir el caso en una lente reutilizable para leer mercados de IA.",
+        "aprendiz ejecutivo": "Para un aprendiz ejecutivo, la ventaja es convertir el caso en una lente reutilizable para leer mercados de IA.",
+        "executive learner": "Para un aprendiz ejecutivo, la ventaja es convertir el caso en una lente reutilizable para leer mercados de IA.",
+        "executive": "Para un ejecutivo, la ventaja es asignar capital con disciplina: separar demanda narrativa de capacidad física, riesgo legal y margen operativo.",
     }
 
     original_role_order = {str(role).strip(): index for index, role in enumerate(roles) if str(role).strip()}
@@ -287,12 +374,13 @@ def build_reader_translation(packet: dict[str, Any], high_priority_signals: list
         signal_index = role_signal_index.get(normalized_role, 0)
         source_signal = high_priority_signals[signal_index] if high_priority_signals else None
         fallback_body = source_signal["implications"][0] if source_signal else packet["brief"]["objective"]
-        body = role_lenses.get(normalized_role, fallback_body)
+        body = role_lenses.get(normalized_role, es_text(fallback_body))
+        label = role_label(role_text)
         weight = role_weight(role_text)
         item = {
             "role": role_text,
-            "headline": clean_sentence(f"Qué cambia para {role_text}").rstrip("."),
-            "body": clean_sentence(body),
+            "headline": clean_sentence(f"Qué cambia para un {label}").rstrip("."),
+            "body": clean_sentence(es_text(body)),
         }
         if weight is not None:
             item["weight"] = weight
@@ -315,8 +403,8 @@ def build_reusable_lesson(packet: dict[str, Any], high_priority_signals: list[di
         "pattern": clean_sentence(
             "Cuando una capacidad base se vuelve commodity, la ventaja migra hacia quien controla la restricción escasa: capacidad, continuidad, regulación, distribución o contexto no portable."
         ),
-        "applyWhen": [clean_sentence(theme) for theme in apply_when],
-        "takeaway": clean_sentence(takeaway),
+        "applyWhen": [clean_sentence(es_text(theme)) for theme in apply_when],
+        "takeaway": clean_sentence(es_text(takeaway)),
     }
 
 
@@ -337,7 +425,7 @@ def build_watchlist(packet: dict[str, Any]) -> dict[str, Any]:
     questions = unique_preserving_order(editorial["watchlistSeeds"] + synthesis["openQuestions"])
     return {
         "title": "Marco de vigilancia",
-        "items": [{"text": clean_sentence(question), "type": infer_watch_type(question)} for question in questions],
+        "items": [{"text": clean_sentence(es_text(question)), "type": infer_watch_type(question)} for question in questions],
     }
 
 
@@ -364,25 +452,25 @@ def transform_ingestion_package_to_signal_input(package: dict[str, Any]) -> dict
             signal_id = selection["signalId"]
             candidate = candidates_by_id[signal_id]
             title = candidate["title"]
-            statement = candidate["factualSummary"]
+            statement = es_text(candidate["factualSummary"])
             category = candidate["domainTags"][0]
-            evidence = candidate["educationalValue"]["learningRationale"]
+            evidence = es_text(candidate["educationalValue"]["learningRationale"])
             source_ids = candidate["sourceIds"]
-            implications = [candidate["editorialRationale"], selection["profileRationale"]]
-            counterpoints = candidate.get("auditNotes", [])[:1]
+            implications = [es_text(candidate["editorialRationale"]), es_text(selection["profileRationale"])]
+            counterpoints = [es_text(item) for item in candidate.get("auditNotes", [])[:1]]
         else:
             cluster = clusters_by_id[selection["clusterId"]]
             signal_id = cluster["clusterId"]
             title = cluster["title"]
-            statement = cluster["thesisCandidate"]
+            statement = es_text(cluster["thesisCandidate"])
             category = "market-structure"
-            evidence = cluster["sharedMechanism"]
+            evidence = es_text(cluster["sharedMechanism"])
             cluster_candidates = [candidates_by_id[item] for item in cluster["signalIds"]]
             source_ids = unique_preserving_order(
                 [source_id for candidate in cluster_candidates for source_id in candidate["sourceIds"]]
             )
-            implications = [cluster["educationalRationale"], selection["profileRationale"]]
-            counterpoints = [cluster["keyTension"]] if cluster.get("keyTension") else []
+            implications = [es_text(cluster["educationalRationale"]), es_text(selection["profileRationale"])]
+            counterpoints = [es_text(cluster["keyTension"])] if cluster.get("keyTension") else []
             supporting_themes.append(cluster["title"])
             if cluster.get("keyTension"):
                 contradictions.append(cluster["keyTension"])
@@ -391,7 +479,7 @@ def transform_ingestion_package_to_signal_input(package: dict[str, Any]) -> dict
         signals.append(
             {
                 "signalId": signal_id,
-                "statement": clean_sentence(title if role == "radar" else statement),
+                "statement": clean_sentence(es_text(title if role == "radar" else statement)),
                 "category": category,
                 "priority": priority,
                 "sourceIds": source_ids,
@@ -417,19 +505,19 @@ def transform_ingestion_package_to_signal_input(package: dict[str, Any]) -> dict
             "schemaVersion": "1.0",
             "inputId": package["meta"]["packageId"],
             "createdAt": package["meta"]["createdAt"],
-            "language": package["meta"].get("language", "es"),
+            "language": "es",
             "owners": ["signal-deck"],
             "tags": package["meta"].get("domains", []),
         },
         "brief": {
             "topic": "Educational technology, AI, and economy briefing",
-            "objective": "Convertir señales de tecnología, IA y economía en una mini master class ejecutiva para Sergio.",
-            "audience": canonical_profile.get("displayName", "Sergio Ramirez"),
+            "objective": "Convertir señales de tecnología, IA y economía en una mini master class ejecutiva en español.",
+            "audience": "lector ejecutivo",
             "timeHorizon": package["run"]["runDate"],
             "readerProfile": {
-                "roles": canonical_profile.get("roles", []),
-                "interests": canonical_profile.get("interests", []),
-                "desiredUpgrade": "; ".join(canonical_profile.get("advantageTargets", [])),
+                "roles": [role_label(str(role)) for role in canonical_profile.get("roles", [])],
+                "interests": [es_text(str(interest)) for interest in canonical_profile.get("interests", [])],
+                "desiredUpgrade": "; ".join(es_text(str(item)) for item in canonical_profile.get("advantageTargets", [])),
             },
         },
         "sources": [
@@ -443,15 +531,15 @@ def transform_ingestion_package_to_signal_input(package: dict[str, Any]) -> dict
         ],
         "signals": signals,
         "synthesis": {
-            "workingThesis": clean_sentence(thesis),
-            "supportingThemes": unique_preserving_order(supporting_themes)[:3],
+            "workingThesis": clean_sentence(es_text(thesis)),
+            "supportingThemes": [es_text(item) for item in unique_preserving_order(supporting_themes)[:3]],
             "openQuestions": ["¿Qué evidencia confirmaría que esta tesis mejora resultados operativos y no solo narrativa?"],
             "contradictions": unique_preserving_order(contradictions)[:3],
             "missingInformation": ["Replace sample source URLs with retrieved live evidence during a production run."],
         },
         "editorialDecisions": {
             "heroFrame": "La ventaja se mueve hacia quien controla el mecanismo, no solo la noticia",
-            "topLineThesis": clean_sentence(thesis),
+            "topLineThesis": clean_sentence(es_text(thesis)),
             "radarOrder": radar_order,
             "deepDiveSignalIds": deep_dive_ids,
             "marketMapFrames": ["Infraestructura", "Confianza", "Economía"],
