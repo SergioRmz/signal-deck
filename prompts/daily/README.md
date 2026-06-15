@@ -1,17 +1,45 @@
 # Daily Prompt Contracts
 
-These prompts are versioned operating contracts for the staggered signal-deck briefing flow. They are designed for Hermes cron jobs or manual agent runs that write auditable artifacts under `runs/YYYY-MM-DD/`.
+These prompts are versioned operating contracts for the staggered Signal Deck briefing flow. They are designed for Hermes cron jobs or manual agent runs that write auditable artifacts under `runs/YYYY-MM-DD/`.
 
 The prompts do not replace the deterministic repo pipeline. They produce the editorial inputs that the pipeline validates, transforms, renders, deploys, and delivers.
+
+## Prompt architecture
+
+Daily prompts now use a two-layer structure:
+
+1. **Shared operating context** under `shared/`
+   - product philosophy
+   - reader model
+   - editorial standards
+   - evidence rules
+   - scoring rubric
+   - artifact discipline
+2. **Phase-specific expert role prompts** at the daily prompt root
+   - each phase has a distinct professional identity
+   - each phase defines mission, inputs, reasoning posture, anti-patterns, failure behavior, and output contract
+
+`prepare_daily_run.py` assembles these into self-contained phase prompts under `runs/YYYY-MM-DD/phase-prompts/` so Hermes cron sessions do not depend on hidden conversational context.
+
+## Shared modules
+
+```text
+shared/product-philosophy.md
+shared/reader-profile.md
+shared/editorial-standards.md
+shared/evidence-rules.md
+shared/scoring-rubric.md
+shared/artifact-discipline.md
+```
 
 ## Phase order
 
 ```text
-01-scout-broad.md
-02-scout-update-dedupe.md
-03-editorial-synthesis.md
-04-build-deploy.md
-05-final-delivery.md
+01-scout-broad.md                 — Strategic Intelligence Scout
+02-scout-update-dedupe.md         — Source Critic and Dedupe Editor
+03-editorial-synthesis.md         — Strategic Synthesis Editor
+04-build-deploy.md                — Release Engineer and Editorial QA Operator
+05-final-delivery.md              — Executive Delivery Editor
 ```
 
 ## Required variables
@@ -27,3 +55,7 @@ Each prompt assumes the scheduler or operator supplies:
 ## Artifact rule
 
 Every phase must write or update a date-scoped artifact. Intermediate phases should normally deliver locally only; the final delivery phase is the only phase that should produce the user-facing Telegram message.
+
+## Quality rule
+
+The goal is not to automate a generic news digest. The goal is to preserve expert editorial judgment inside an auditable system: strong role, clear mission, explicit evidence boundaries, anti-patterns, and failure behavior for every phase.

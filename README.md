@@ -102,6 +102,13 @@ signal-deck/
 ├── prompts/
 │   └── daily/
 │       ├── README.md
+│       ├── shared/
+│       │   ├── product-philosophy.md
+│       │   ├── reader-profile.md
+│       │   ├── editorial-standards.md
+│       │   ├── evidence-rules.md
+│       │   ├── scoring-rubric.md
+│       │   └── artifact-discipline.md
 │       ├── 01-scout-broad.md
 │       ├── 02-scout-update-dedupe.md
 │       ├── 03-editorial-synthesis.md
@@ -167,6 +174,7 @@ This first foundation includes:
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
 - a daily operations runbook that formalizes the staggered scout → synthesis → build/deploy → final delivery flow
 - versioned daily prompt contracts for scout, dedupe, synthesis, build/deploy, and final-delivery cron phases
+- a shared daily prompt context that encodes product philosophy, reader model, editorial standards, evidence rules, scoring, and artifact discipline before each phase-specific expert role runs
 - initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, **operations**, and **Spec Kit workflow**
 - GitHub Spec Kit infrastructure with a signal-deck constitution for future ambiguous work
 
