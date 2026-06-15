@@ -55,7 +55,9 @@ const MODULE_FALLBACKS: Record<string, string> = {
 };
 
 function moduleHeadline(kind: string, fallback: string, compositionHeadline?: string) {
-  return compositionHeadline || fallback || kind;
+  void kind;
+  void compositionHeadline;
+  return fallback;
 }
 
 const LABELS_ES: Record<string, string> = {
@@ -107,11 +109,30 @@ function roleLabel(role?: string) {
 }
 
 function moduleMeta(module?: CompositionModule) {
-  if (!module) {
-    return [];
-  }
+  void module;
+  return [];
+}
 
-  return [module.priority, module.variant, module.accentMode].filter(Boolean).map((item) => toSpanishLabel(item)) as string[];
+function topLineGuidance(briefing: BriefingData) {
+  return briefing.topLine.stakes || briefing.hero.promise || 'Primero entiende el cambio estructural; después juzga la evidencia.';
+}
+
+function radarGuidance(briefing: BriefingData) {
+  const monitor = briefing.radar?.items.find((item) => item.role === 'monitor')?.text;
+  return monitor || 'Lee cada señal como una prueba de la tesis, no como una tarjeta suelta.';
+}
+
+function deepDiveGuidance(briefing: BriefingData) {
+  const first = briefing.deepDives?.items[0];
+  return first?.implication || 'Compara los mecanismos: ahí se ve quién captura margen, poder y distribución.';
+}
+
+function readerLensGuidance(readerUpgrade: string) {
+  return readerUpgrade || 'Ubica qué decisión cambia para cada rol antes de entrar al detalle técnico.';
+}
+
+function watchlistGuidance(briefing: BriefingData) {
+  return briefing.watchlist?.items[0]?.text || 'Cierra con las preguntas que separan una tesis útil de una narrativa cómoda.';
 }
 
 function watchTypeLabel(type?: string) {
@@ -131,7 +152,8 @@ function splitSignalText(value?: string) {
 }
 
 function moduleLabel(moduleId: string, module?: CompositionModule) {
-  return module?.headline || MODULE_FALLBACKS[moduleId] || moduleId.replace('mod-', '').replaceAll('-', ' ');
+  void module;
+  return MODULE_FALLBACKS[moduleId] || moduleId.replace('mod-', '').replaceAll('-', ' ');
 }
 
 function LoadingState() {
@@ -226,37 +248,35 @@ function ThesisHero({ briefing, composition, heroModule, topLineModule, readerUp
           </article>
         ))}
         <article className="strip-emphasis">
-          <span>{toSpanishLabel(topLineModule?.priority) || 'núcleo'}</span>
-          <p>{topLineModule?.interactionCue || 'Primero entiende el cambio estructural; después juzga la evidencia.'}</p>
+          <span>clave</span>
+          <p>{topLineGuidance(briefing)}</p>
         </article>
       </div>
     </section>
   );
 }
 
-function StrategyPath(context: BriefingContext) {
-  const { moduleOrder, modulesById, composition } = context;
+function TopLineSpotlight({ briefing }: BriefingContext) {
+  const fragments = splitSignalText(briefing.topLine.body);
 
   return (
     <section className="reading-path" data-module-id="mod-topline">
       <div>
-        <p className="eyebrow">Ruta ensamblada</p>
-        <h2 className="section-title">La página se arma como una clase, no como un feed</h2>
+        <p className="eyebrow">Tesis operativa</p>
+        <h2 className="section-title">{briefing.topLine.title}</h2>
+        <p className="section-copy">{briefing.topLine.body}</p>
       </div>
-      <div className="path-rail" aria-label="Ruta editorial">
-        {moduleOrder.map((moduleId, index) => {
-          const module = modulesById.get(moduleId);
-          return (
-            <article key={moduleId} className="path-node">
-              <span className="path-index">{String(index + 1).padStart(2, '0')}</span>
-              <div>
-                <strong>{moduleLabel(moduleId, module)}</strong>
-                <p>{module?.interactionCue || composition.experience?.engagementGoal}</p>
-              </div>
-              <ArrowRight className="h-4 w-4" />
-            </article>
-          );
-        })}
+      <div className="path-rail" aria-label="Lectura guiada de la tesis">
+        {fragments.map((fragment, index) => (
+          <article key={`${fragment}-${index}`} className="path-node">
+            <span className="path-index">{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <strong>{index === 0 ? 'Cambio estructural' : index === 1 ? 'Efecto económico' : 'Pregunta crítica'}</strong>
+              <p>{fragment}</p>
+            </div>
+            <ArrowRight className="h-4 w-4" />
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -277,7 +297,7 @@ function ReaderLensLab({ briefing, readerTranslationModule, readerUpgrade }: Bri
       <div className="section-heading-row">
         <div>
           <h2 className="section-title">{briefing.readerTranslation?.title || 'Qué cambia para ti'}</h2>
-          <p className="section-copy">{readerTranslationModule?.interactionCue || readerUpgrade}</p>
+          <p className="section-copy">{readerLensGuidance(readerUpgrade)}</p>
         </div>
         <MetaBadges module={readerTranslationModule} />
       </div>
@@ -315,7 +335,7 @@ function EvidenceOrbit({ briefing, radarModule }: BriefingContext) {
         <div className="section-heading-row">
           <div>
             <h2 className="section-title">{briefing.radar?.title || 'Radar de evidencia'}</h2>
-            <p className="section-copy">{radarModule?.interactionCue || 'Lee cada señal como una prueba de la tesis, no como una tarjeta suelta.'}</p>
+            <p className="section-copy">{radarGuidance(briefing)}</p>
           </div>
           <MetaBadges module={radarModule} />
         </div>
@@ -347,7 +367,7 @@ function EvidenceOrbit({ briefing, radarModule }: BriefingContext) {
       <div className="section-heading-row">
         <div>
           <h2 className="section-title">{briefing.radar?.title || 'Radar de evidencia'}</h2>
-          <p className="section-copy">{radarModule?.interactionCue}</p>
+          <p className="section-copy">{radarGuidance(briefing)}</p>
         </div>
         <MetaBadges module={radarModule} />
       </div>
@@ -384,7 +404,7 @@ function MechanismStudio({ briefing, deepDivesModule }: BriefingContext) {
       <div className="section-heading-row">
         <div>
           <h2 className="section-title">{briefing.deepDives?.title || 'Laboratorio de mecanismos'}</h2>
-          <p className="section-copy">{deepDivesModule?.interactionCue}</p>
+          <p className="section-copy">{deepDiveGuidance(briefing)}</p>
         </div>
         <MetaBadges module={deepDivesModule} />
       </div>
@@ -560,7 +580,7 @@ function MetaBadges({ module }: { module?: CompositionModule }) {
 }
 
 const MODULE_RENDERERS: Record<string, ModuleRenderer> = {
-  'mod-topline': StrategyPath,
+  'mod-topline': TopLineSpotlight,
   'mod-reader-translation': ReaderLensLab,
   'mod-radar': EvidenceOrbit,
   'mod-deep-dives': MechanismStudio,
