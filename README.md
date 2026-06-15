@@ -138,7 +138,9 @@ signal-deck/
 │   ├── product-brief.md
 │   ├── spec-driven-workflow.md
 │   ├── operations/
-│   │   └── daily-briefing-runbook.md
+│   │   ├── daily-briefing-runbook.md
+│   │   ├── hermes-cron-orchestration.md
+│   │   └── hermes-cron-jobs.preview.json
 │   └── deployment/
 │       └── cloudflare-pages.md
 ```
@@ -173,6 +175,7 @@ This first foundation includes:
 - a run-preparation utility that creates the daily `run-timeline.json` and date-scoped phase prompt copies before cron scheduling
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
 - a daily operations runbook that formalizes the staggered scout → synthesis → build/deploy → final delivery flow
+- a Hermes cron orchestration preview that maps the five daily phases to recurring scheduler jobs with local-only intermediate delivery and final `origin` delivery
 - versioned daily prompt contracts for scout, dedupe, synthesis, build/deploy, and final-delivery cron phases
 - a shared daily prompt context that encodes product philosophy, reader model, editorial standards, evidence rules, scoring, and artifact discipline before each phase-specific expert role runs
 - initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, **operations**, and **Spec Kit workflow**
