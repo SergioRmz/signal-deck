@@ -113,16 +113,18 @@ signal-deck/
 │   ├── validate_signal_input.py
 │   ├── generate_briefing.py
 │   └── run_briefing_pipeline.py
-└── docs/
-    ├── architecture.md
-    ├── briefing-contract-v1.md
-    ├── briefing-ingestion-v1.md
-    ├── briefing-transformation-v1.md
-    ├── visual-composition-contract-v1.md
-    ├── product-brief.md
-    ├── spec-driven-workflow.md
-    └── deployment/
-        └── cloudflare-pages.md
+├── docs/
+│   ├── architecture.md
+│   ├── briefing-contract-v1.md
+│   ├── briefing-ingestion-v1.md
+│   ├── briefing-transformation-v1.md
+│   ├── visual-composition-contract-v1.md
+│   ├── product-brief.md
+│   ├── spec-driven-workflow.md
+│   ├── operations/
+│   │   └── daily-briefing-runbook.md
+│   └── deployment/
+│       └── cloudflare-pages.md
 ```
 
 ## What is already in place
@@ -153,7 +155,8 @@ This first foundation includes:
 - a validator for composition payloads that encode visual intent, hooks, and module sequencing
 - a tested deterministic generator that turns a validated input packet into a validated briefing payload with explicit second-order effects, mechanism framing, watch questions, and weighted reader translations
 - a local briefing pipeline runner that writes auditable `runs/YYYY-MM-DD/` artifacts and can build the renderer against them
-- initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, and **Spec Kit workflow**
+- a daily operations runbook that formalizes the staggered scout → synthesis → build/deploy → final delivery flow
+- initial documentation for **product direction**, **architecture**, **contracts**, **deployment**, **operations**, and **Spec Kit workflow**
 - GitHub Spec Kit infrastructure with a signal-deck constitution for future ambiguous work
 
 That may sound modest, but it is an important strategic choice: the project now has one active renderer, canonical data contracts, and a lightweight static deployment path without losing contract clarity.
