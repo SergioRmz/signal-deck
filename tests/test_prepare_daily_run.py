@@ -41,6 +41,53 @@ class PrepareDailyRunTest(unittest.TestCase):
             self.assertIn("runDir: runs/2030-01-05", phase_prompt)
             self.assertIn("publicUrl: https://signal-deck.example.com/", phase_prompt)
 
+    def test_prepared_phase_prompts_include_expert_shared_context(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            prepare_daily_run(
+                edition_date="2030-01-05",
+                delivery_time="09:00",
+                public_url="https://signal-deck.example.com/",
+                runs_dir=Path(tmpdir),
+                prompt_dir=ROOT / "prompts" / "daily",
+            )
+
+            run_dir = Path(tmpdir) / "2030-01-05"
+            scout_prompt = (run_dir / "phase-prompts" / "01-scout-broad.md").read_text()
+            synthesis_prompt = (run_dir / "phase-prompts" / "03-editorial-synthesis.md").read_text()
+
+            required_shared_markers = [
+                "Signal Deck is not a news digest",
+                "executive learning surface",
+                "Separate fact, inference, and speculation",
+                "source quality",
+                "educational density",
+                "Do not send intermediate Telegram messages",
+            ]
+            for marker in required_shared_markers:
+                self.assertIn(marker, scout_prompt)
+                self.assertIn(marker, synthesis_prompt)
+
+            self.assertIn("You are a senior strategic intelligence scout", scout_prompt)
+            self.assertIn("You are the strategic synthesis editor", synthesis_prompt)
+            self.assertIn("not merely popular stories", scout_prompt)
+            self.assertIn("issue thesis", synthesis_prompt)
+
+    def test_daily_prompt_templates_have_expert_role_sections(self) -> None:
+        expected_role_markers = {
+            "01-scout-broad.md": "You are a senior strategic intelligence scout",
+            "02-scout-update-dedupe.md": "You are a source critic and dedupe editor",
+            "03-editorial-synthesis.md": "You are the strategic synthesis editor",
+            "04-build-deploy.md": "You are a release engineer and editorial QA operator",
+            "05-final-delivery.md": "You are the executive delivery editor",
+        }
+        for filename, role_marker in expected_role_markers.items():
+            prompt = (ROOT / "prompts" / "daily" / filename).read_text()
+            self.assertIn("## Role", prompt)
+            self.assertIn("## Mission", prompt)
+            self.assertIn("## Anti-patterns", prompt)
+            self.assertIn("## Failure behavior", prompt)
+            self.assertIn(role_marker, prompt)
+
     def test_prepare_daily_run_offsets_slots_from_delivery_time(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             prepare_daily_run(

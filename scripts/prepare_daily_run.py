@@ -20,6 +20,14 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUNS_DIR = ROOT / "runs"
 DEFAULT_PROMPT_DIR = ROOT / "prompts" / "daily"
 DEFAULT_PUBLIC_URL = "https://signal-deck.sergio-ramirez-mtz.workers.dev/"
+SHARED_PROMPTS = [
+    "product-philosophy.md",
+    "reader-profile.md",
+    "editorial-standards.md",
+    "evidence-rules.md",
+    "scoring-rubric.md",
+    "artifact-discipline.md",
+]
 
 PHASES = [
     {
@@ -103,7 +111,28 @@ def build_timeline(edition_date: str, delivery_time: str, public_url: str) -> di
     }
 
 
-def render_phase_prompt(template_text: str, *, edition_date: str, run_dir: str, public_url: str, delivery_time: str) -> str:
+def load_shared_prompt_context(prompt_dir: Path) -> str:
+    shared_dir = prompt_dir / "shared"
+    if not shared_dir.exists():
+        raise PrepareRunError(f"shared prompt directory not found: {shared_dir}")
+    sections: list[str] = []
+    for filename in SHARED_PROMPTS:
+        shared_path = shared_dir / filename
+        if not shared_path.exists():
+            raise PrepareRunError(f"shared prompt template not found: {shared_path}")
+        sections.append(shared_path.read_text().rstrip())
+    return "\n\n---\n\n".join(sections)
+
+
+def render_phase_prompt(
+    template_text: str,
+    *,
+    shared_context: str,
+    edition_date: str,
+    run_dir: str,
+    public_url: str,
+    delivery_time: str,
+) -> str:
     normalized_with_slash = normalize_public_url(public_url) + "/"
     header = "\n".join(
         [
@@ -116,12 +145,26 @@ def render_phase_prompt(template_text: str, *, edition_date: str, run_dir: str, 
             "",
         ]
     )
-    return header + template_text.rstrip() + "\n"
+    return (
+        header
+        + "# Signal Deck Daily Agent Prompt\n\n"
+        + "## Run Variables\n\n"
+        + f"- editionDate: `{edition_date}`\n"
+        + f"- runDir: `{run_dir}`\n"
+        + f"- publicUrl: `{normalized_with_slash}`\n"
+        + f"- deliverySlot: `{delivery_time}`\n\n"
+        + "## Shared Operating Context\n\n"
+        + shared_context.rstrip()
+        + "\n\n---\n\n"
+        + template_text.rstrip()
+        + "\n"
+    )
 
 
 def copy_phase_prompts(prompt_dir: Path, run_dir: Path, edition_date: str, public_url: str, delivery_time: str) -> list[str]:
     if not prompt_dir.exists():
         raise PrepareRunError(f"prompt directory not found: {prompt_dir}")
+    shared_context = load_shared_prompt_context(prompt_dir)
     output_dir = run_dir / "phase-prompts"
     output_dir.mkdir(parents=True, exist_ok=True)
     written: list[str] = []
@@ -133,6 +176,7 @@ def copy_phase_prompts(prompt_dir: Path, run_dir: Path, edition_date: str, publi
         output_path.write_text(
             render_phase_prompt(
                 template_path.read_text(),
+                shared_context=shared_context,
                 edition_date=edition_date,
                 run_dir=f"runs/{edition_date}",
                 public_url=public_url,

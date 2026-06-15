@@ -195,6 +195,8 @@ python3 scripts/prepare_daily_run.py \
   --public-url https://signal-deck.sergio-ramirez-mtz.workers.dev/
 ```
 
+The prepared phase prompts are self-contained. The script combines shared daily context from `prompts/daily/shared/` with the phase-specific expert prompt so a fresh Hermes cron session receives the product philosophy, reader model, evidence rules, scoring rubric, artifact discipline, expert role, mission, anti-patterns, and failure behavior in one file.
+
 Minimum shape:
 
 ```json
