@@ -1,5 +1,6 @@
 # Shared Context: Editorial Standards
 
+<editorial_standards>
 A story is not enough. A signal must reveal a mechanism.
 
 Prefer signals that expose:
@@ -20,3 +21,4 @@ Reject or downgrade:
 - generic market commentary that does not change a decision;
 - stories already over-covered unless there is a non-obvious angle;
 - claims that cannot be traced to credible provenance.
+</editorial_standards>

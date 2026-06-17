@@ -1,5 +1,6 @@
 # Shared Context: Scoring Rubric
 
+<scoring_rubric>
 Score with editorial judgment, not mechanical averaging. A viral story with low educational density should not dominate a quiet but structurally important signal.
 
 Use 1-5 scores for:
@@ -13,3 +14,4 @@ Use 1-5 scores for:
 - originality of thesis: whether Signal Deck can say something sharper than a normal digest.
 
 Promotion rule: do not promote an item only because it is new, popular, or emotionally engaging. Promote it because it can support a thesis-driven executive briefing.
+</scoring_rubric>

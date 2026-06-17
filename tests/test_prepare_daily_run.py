@@ -67,12 +67,24 @@ class PrepareDailyRunTest(unittest.TestCase):
                 self.assertIn(marker, scout_prompt)
                 self.assertIn(marker, synthesis_prompt)
 
+            for tag in ["product_philosophy", "reader_profile", "evidence_rules", "scoring_rubric", "artifact_discipline"]:
+                self.assertIn(f"<{tag}>", scout_prompt)
+                self.assertIn(f"</{tag}>", scout_prompt)
+                self.assertIn(f"<{tag}>", synthesis_prompt)
+                self.assertIn(f"</{tag}>", synthesis_prompt)
+
+            for tag in ["role", "mission", "reasoning_posture", "anti_patterns", "failure_behavior", "output_contract"]:
+                self.assertIn(f"<{tag}>", scout_prompt)
+                self.assertIn(f"</{tag}>", scout_prompt)
+                self.assertIn(f"<{tag}>", synthesis_prompt)
+                self.assertIn(f"</{tag}>", synthesis_prompt)
+
             self.assertIn("You are a senior strategic intelligence scout", scout_prompt)
             self.assertIn("You are the strategic synthesis editor", synthesis_prompt)
             self.assertIn("not merely popular stories", scout_prompt)
             self.assertIn("issue thesis", synthesis_prompt)
 
-    def test_daily_prompt_templates_have_expert_role_sections(self) -> None:
+    def test_daily_prompt_templates_have_xml_like_expert_sections(self) -> None:
         expected_role_markers = {
             "01-scout-broad.md": "You are a senior strategic intelligence scout",
             "02-scout-update-dedupe.md": "You are a source critic and dedupe editor",
@@ -80,13 +92,36 @@ class PrepareDailyRunTest(unittest.TestCase):
             "04-build-deploy.md": "You are a release engineer and editorial QA operator",
             "05-final-delivery.md": "You are the executive delivery editor",
         }
+        required_tags = [
+            "role",
+            "mission",
+            "inputs",
+            "reasoning_posture",
+            "instructions",
+            "anti_patterns",
+            "failure_behavior",
+            "output_contract",
+        ]
         for filename, role_marker in expected_role_markers.items():
             prompt = (ROOT / "prompts" / "daily" / filename).read_text()
-            self.assertIn("## Role", prompt)
-            self.assertIn("## Mission", prompt)
-            self.assertIn("## Anti-patterns", prompt)
-            self.assertIn("## Failure behavior", prompt)
+            for tag in required_tags:
+                self.assertIn(f"<{tag}>", prompt, f"{filename} missing <{tag}>")
+                self.assertIn(f"</{tag}>", prompt, f"{filename} missing </{tag}>")
             self.assertIn(role_marker, prompt)
+
+    def test_shared_prompt_modules_have_xml_like_boundaries(self) -> None:
+        required_shared_tags = {
+            "product-philosophy.md": "product_philosophy",
+            "reader-profile.md": "reader_profile",
+            "editorial-standards.md": "editorial_standards",
+            "evidence-rules.md": "evidence_rules",
+            "scoring-rubric.md": "scoring_rubric",
+            "artifact-discipline.md": "artifact_discipline",
+        }
+        for filename, tag in required_shared_tags.items():
+            prompt = (ROOT / "prompts" / "daily" / "shared" / filename).read_text()
+            self.assertIn(f"<{tag}>", prompt, f"{filename} missing <{tag}>")
+            self.assertIn(f"</{tag}>", prompt, f"{filename} missing </{tag}>")
 
     def test_prepare_daily_run_offsets_slots_from_delivery_time(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

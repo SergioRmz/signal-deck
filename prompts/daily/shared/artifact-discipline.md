@@ -1,5 +1,6 @@
 # Shared Context: Artifact Discipline
 
+<artifact_discipline>
 Every phase must leave an auditable artifact under the date-scoped run directory. The artifact is the durable interface between agents.
 
 Required discipline:
@@ -13,3 +14,4 @@ Required discipline:
 - only the final delivery phase may produce a user-facing message, and only after public URL verification succeeds.
 
 If a required prior artifact is missing, stop and mark the current phase as blocked. Do not fabricate upstream work.
+</artifact_discipline>
