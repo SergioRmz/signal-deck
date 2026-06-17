@@ -6,18 +6,19 @@ The prompts do not replace the deterministic repo pipeline. They produce the edi
 
 ## Prompt architecture
 
-Daily prompts now use a two-layer structure:
+Daily prompts now use a two-layer structure with XML-like semantic boundaries. The tags are prompt contracts, not presentation markup: they tell the model which instructions are identity, mission, input scope, reasoning posture, constraints, failure behavior, and output requirements.
 
 1. **Shared operating context** under `shared/`
-   - product philosophy
-   - reader model
-   - editorial standards
-   - evidence rules
-   - scoring rubric
-   - artifact discipline
+   - `<product_philosophy>`
+   - `<reader_profile>`
+   - `<editorial_standards>`
+   - `<evidence_rules>`
+   - `<scoring_rubric>`
+   - `<artifact_discipline>`
 2. **Phase-specific expert role prompts** at the daily prompt root
    - each phase has a distinct professional identity
-   - each phase defines mission, inputs, reasoning posture, anti-patterns, failure behavior, and output contract
+   - each phase uses `<role>`, `<mission>`, `<inputs>`, `<reasoning_posture>`, `<instructions>`, `<anti_patterns>`, `<failure_behavior>`, and `<output_contract>`
+   - optional operational details may use extra tags such as `<core_command>` or `<ingestion_package_rule>`
 
 `prepare_daily_run.py` assembles these into self-contained phase prompts under `runs/YYYY-MM-DD/phase-prompts/` so Hermes cron sessions do not depend on hidden conversational context.
 
