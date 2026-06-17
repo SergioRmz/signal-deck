@@ -192,11 +192,11 @@ a {
 .thesis-instrument h2 {
   position: relative;
   z-index: 1;
-  margin-top: 5.5rem;
-  font-size: clamp(1.85rem, 3vw, 3.2rem);
+  margin-top: 3rem;
+  font-size: clamp(1.45rem, 2.25vw, 2.35rem);
   font-weight: 720;
   letter-spacing: -0.055em;
-  line-height: 0.95;
+  line-height: 1.02;
 }
 
 .thesis-instrument p:not(.eyebrow) {
@@ -239,13 +239,12 @@ a {
 }
 
 .instrument-metrics {
-  position: absolute;
-  right: 1.25rem;
-  bottom: 1.25rem;
-  left: 1.25rem;
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.7rem;
+  margin-top: 1.25rem;
 }
 
 .instrument-metrics div {
@@ -509,6 +508,58 @@ a {
   line-height: 1.55;
 }
 
+.evidence-ribbons {
+  background:
+    linear-gradient(135deg, rgba(133, 240, 255, 0.1), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(10, 8, 22, 0.86);
+}
+
+.ribbon-stack {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.signal-ribbon {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 0.22fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+  border: 1px solid rgba(133, 240, 255, 0.16);
+  border-radius: 1.35rem;
+  padding: 0.85rem;
+  background:
+    linear-gradient(90deg, rgba(133, 240, 255, 0.14), transparent 34%),
+    rgba(255, 255, 255, 0.045);
+}
+
+.signal-ribbon__rail {
+  display: flex;
+  min-height: 8rem;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgba(133, 240, 255, 0.16);
+  padding: 0.45rem 0.85rem 0.45rem 0.25rem;
+}
+
+.signal-ribbon__rail span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--cyan);
+}
+
+.signal-ribbon h3 {
+  color: var(--ink);
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-weight: 730;
+  letter-spacing: -0.04em;
+}
+
+.signal-ribbon p {
+  margin-top: 0.6rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
 .orbit-signal-1 { top: 5%; left: 7%; }
 .orbit-signal-2 { top: 8%; right: 8%; }
 .orbit-signal-3 { top: 38%; left: 2%; }
@@ -517,7 +568,7 @@ a {
 .orbit-signal-6 { right: 14%; bottom: 7%; }
 
 .mechanism-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
 }
 
 .mechanism-card {
@@ -545,11 +596,11 @@ a {
 
 .mechanism-card h3 {
   position: relative;
-  margin-top: 3.7rem;
-  font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+  margin-top: 2.4rem;
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
   font-weight: 760;
-  letter-spacing: -0.05em;
-  line-height: 1.02;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
 }
 
 .mechanism-flow {
@@ -606,7 +657,58 @@ a {
   display: block;
   margin-top: 1rem;
   color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+.pressure-ladder {
+  background:
+    radial-gradient(circle at 5% 12%, rgba(255, 200, 115, 0.18), transparent 24rem),
+    rgba(12, 8, 24, 0.82);
+}
+
+.ladder-steps {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ladder-step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  border: 1px solid rgba(255, 200, 115, 0.18);
+  border-radius: 1.35rem;
+  padding: 1rem;
+  background: linear-gradient(90deg, rgba(255, 200, 115, 0.13), rgba(203, 183, 251, 0.045));
+}
+
+.ladder-step__index {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  border: 1px solid rgba(255, 200, 115, 0.28);
+  border-radius: 999px;
+  color: var(--amber);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.ladder-step h3 {
+  color: var(--ink);
+  font-size: clamp(1.35rem, 2.5vw, 2.3rem);
+  font-weight: 740;
+  letter-spacing: -0.045em;
+}
+
+.ladder-step p,
+.ladder-step strong {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--ink-muted);
   line-height: 1.65;
+}
+
+.ladder-step strong {
+  color: var(--amber);
 }
 
 .power-cell strong {
@@ -760,8 +862,18 @@ a {
   .lens-grid,
   .mechanism-grid,
   .power-grid,
+  .signal-ribbon,
   .lesson-panel__body {
     grid-template-columns: 1fr;
+  }
+
+  .signal-ribbon__rail {
+    min-height: auto;
+    flex-direction: row;
+    align-items: center;
+    border-right: 0;
+    border-bottom: 1px solid rgba(133, 240, 255, 0.16);
+    padding: 0.25rem 0 0.85rem;
   }
 
   .section-heading-row {

@@ -34,7 +34,7 @@ class EditorialTransformationV2Test(unittest.TestCase):
         self.assertEqual([item["weight"] for item in items], [0.7, 0.2, 0.1])
         bodies_by_role = {item["role"]: item["body"] for item in items}
         self.assertIn("sistema crítico", bodies_by_role["operator"])
-        self.assertIn("unit economics", bodies_by_role["founder"])
+        self.assertIn("economía unitaria", bodies_by_role["founder"])
         self.assertIn("restricciones reales", bodies_by_role["software-engineer"])
 
     def test_deep_dives_explain_mechanism_implication_and_tension_explicitly(self) -> None:
@@ -64,6 +64,27 @@ class EditorialTransformationV2Test(unittest.TestCase):
         self.assertEqual(len(briefing["deepDives"]["items"]), 2)
         self.assertIn("Mecanismo:", briefing["deepDives"]["items"][0]["body"])
         self.assertIn("Qué cambia para ti", briefing["readerTranslation"]["title"])
+
+    def test_ingestion_package_public_briefing_is_spanish_and_not_personalized_meta_copy(self) -> None:
+        package = json.loads((ROOT / "runs" / "2026-06-15" / "ingestion-package.json").read_text())
+
+        briefing = transform_ingestion_package(package)
+        serialized = json.dumps(briefing, ensure_ascii=False)
+
+        self.assertEqual(briefing["meta"]["language"], "es")
+        banned_fragments = [
+            "Shows Sergio",
+            "Teaches readers",
+            "Gives Sergio",
+            "Helps Sergio",
+            "Evidence radar",
+            "Mechanism breakdown",
+            "executive learner",
+            "para Sergio",
+        ]
+        for fragment in banned_fragments:
+            self.assertNotIn(fragment, serialized)
+        self.assertIn("La competencia en IA de frontera", serialized)
 
 
 if __name__ == "__main__":

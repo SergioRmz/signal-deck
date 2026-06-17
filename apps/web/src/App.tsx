@@ -55,32 +55,32 @@ const MODULE_FALLBACKS: Record<string, string> = {
 };
 
 function moduleHeadline(kind: string, fallback: string, compositionHeadline?: string) {
-  return compositionHeadline || fallback || kind;
+  void kind;
+  void compositionHeadline;
+  return fallback;
 }
 
 const LABELS_ES: Record<string, string> = {
   'software-engineer': 'Ingeniería de software',
   founder: 'Fundador',
   operator: 'Operaciones',
+  operador: 'Operaciones',
   'supports-thesis': 'apoya la tesis',
+  'complicates-thesis': 'matiza la tesis',
   monitor: 'vigilar',
-  primary: 'principal',
-  secondary: 'secundario',
-  supporting: 'soporte',
-  accent: 'acento',
-  contrast: 'contraste',
-  heat: 'tensión',
-  base: 'base',
-  'role-translation-grid': 'lentes por rol',
-  'signal-ribbons': 'cintas de señal',
-  'collectible-triptych': 'tríptico de mecanismos',
-  'pressure-ladder': 'escalera de presión',
-  'pattern-lift': 'patrón reutilizable',
-  'question-steps': 'preguntas activas',
   question: 'pregunta',
   distribution: 'Distribución',
   workflow: 'Flujo de trabajo',
   product: 'Producto',
+  editor: 'Editor estratégico',
+  'editor estratégico': 'Editor estratégico',
+  builder: 'Constructor',
+  constructor: 'Constructor',
+  learner: 'Aprendiz ejecutivo',
+  'executive learner': 'Aprendiz ejecutivo',
+  'aprendiz ejecutivo': 'Aprendiz ejecutivo',
+  electric: 'eléctrico',
+  'dark editorial': 'editorial oscuro',
 };
 
 function toSpanishLabel(value?: string) {
@@ -96,11 +96,30 @@ function roleLabel(role?: string) {
 }
 
 function moduleMeta(module?: CompositionModule) {
-  if (!module) {
-    return [];
-  }
+  void module;
+  return [];
+}
 
-  return [module.priority, module.variant, module.accentMode].filter(Boolean).map((item) => toSpanishLabel(item)) as string[];
+function topLineGuidance(briefing: BriefingData) {
+  return briefing.topLine.stakes || briefing.hero.promise || 'Primero entiende el cambio estructural; después juzga la evidencia.';
+}
+
+function radarGuidance(briefing: BriefingData) {
+  const monitor = briefing.radar?.items.find((item) => item.role === 'monitor')?.text;
+  return monitor || 'Lee cada señal como una prueba de la tesis, no como una tarjeta suelta.';
+}
+
+function deepDiveGuidance(briefing: BriefingData) {
+  const first = briefing.deepDives?.items[0];
+  return first?.implication || 'Compara los mecanismos: ahí se ve quién captura margen, poder y distribución.';
+}
+
+function readerLensGuidance(readerUpgrade: string) {
+  return readerUpgrade || 'Ubica qué decisión cambia para cada rol antes de entrar al detalle técnico.';
+}
+
+function watchlistGuidance(briefing: BriefingData) {
+  return briefing.watchlist?.items[0]?.text || 'Cierra con las preguntas que separan una tesis útil de una narrativa cómoda.';
 }
 
 function watchTypeLabel(type?: string) {
@@ -120,7 +139,8 @@ function splitSignalText(value?: string) {
 }
 
 function moduleLabel(moduleId: string, module?: CompositionModule) {
-  return module?.headline || MODULE_FALLBACKS[moduleId] || moduleId.replace('mod-', '').replaceAll('-', ' ');
+  void module;
+  return MODULE_FALLBACKS[moduleId] || moduleId.replace('mod-', '').replaceAll('-', ' ');
 }
 
 function LoadingState() {
@@ -175,7 +195,7 @@ function ThesisHero({ briefing, composition, heroModule, topLineModule, readerUp
         <div className="flex flex-wrap items-center gap-3">
           <Badge>signal-deck</Badge>
           <Badge variant="muted">{briefing.meta.editionDate}</Badge>
-          <Badge variant="accent">{composition.experience?.visualTone || 'dark editorial'}</Badge>
+          <Badge variant="accent">{toSpanishLabel(composition.experience?.visualTone || 'dark editorial')}</Badge>
         </div>
         <p className="eyebrow mt-8">{moduleHeadline('hero', 'Tesis de apertura', heroModule?.headline)}</p>
         <h1 className="hero-title">{briefing.hero.title}</h1>
@@ -215,37 +235,35 @@ function ThesisHero({ briefing, composition, heroModule, topLineModule, readerUp
           </article>
         ))}
         <article className="strip-emphasis">
-          <span>{toSpanishLabel(topLineModule?.priority) || 'núcleo'}</span>
-          <p>{topLineModule?.interactionCue || 'Primero entiende el cambio estructural; después juzga la evidencia.'}</p>
+          <span>clave</span>
+          <p>{topLineGuidance(briefing)}</p>
         </article>
       </div>
     </section>
   );
 }
 
-function StrategyPath(context: BriefingContext) {
-  const { moduleOrder, modulesById, composition } = context;
+function TopLineSpotlight({ briefing }: BriefingContext) {
+  const fragments = splitSignalText(briefing.topLine.body);
 
   return (
     <section className="reading-path" data-module-id="mod-topline">
       <div>
-        <p className="eyebrow">Ruta ensamblada</p>
-        <h2 className="section-title">La página se arma como una clase, no como un feed</h2>
+        <p className="eyebrow">Tesis operativa</p>
+        <h2 className="section-title">{briefing.topLine.title}</h2>
+        <p className="section-copy">{briefing.topLine.body}</p>
       </div>
-      <div className="path-rail" aria-label="Ruta editorial">
-        {moduleOrder.map((moduleId, index) => {
-          const module = modulesById.get(moduleId);
-          return (
-            <article key={moduleId} className="path-node">
-              <span className="path-index">{String(index + 1).padStart(2, '0')}</span>
-              <div>
-                <strong>{moduleLabel(moduleId, module)}</strong>
-                <p>{module?.interactionCue || composition.experience?.engagementGoal}</p>
-              </div>
-              <ArrowRight className="h-4 w-4" />
-            </article>
-          );
-        })}
+      <div className="path-rail" aria-label="Lectura guiada de la tesis">
+        {fragments.map((fragment, index) => (
+          <article key={`${fragment}-${index}`} className="path-node">
+            <span className="path-index">{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <strong>{index === 0 ? 'Cambio estructural' : index === 1 ? 'Efecto económico' : 'Pregunta crítica'}</strong>
+              <p>{fragment}</p>
+            </div>
+            <ArrowRight className="h-4 w-4" />
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -266,7 +284,7 @@ function ReaderLensLab({ briefing, readerTranslationModule, readerUpgrade }: Bri
       <div className="section-heading-row">
         <div>
           <h2 className="section-title">{briefing.readerTranslation?.title || 'Qué cambia para ti'}</h2>
-          <p className="section-copy">{readerTranslationModule?.interactionCue || readerUpgrade}</p>
+          <p className="section-copy">{readerLensGuidance(readerUpgrade)}</p>
         </div>
         <MetaBadges module={readerTranslationModule} />
       </div>
@@ -294,6 +312,39 @@ function EvidenceOrbit({ briefing, radarModule }: BriefingContext) {
     return null;
   }
 
+  if (radarModule?.variant === 'signal-ribbons') {
+    return (
+      <section className="module-section evidence-ribbons" data-module-id="mod-radar">
+        <div className="section-kicker">
+          <Orbit className="h-5 w-5" />
+          <span>{moduleHeadline('radar', 'Radar de evidencia', radarModule?.headline)}</span>
+        </div>
+        <div className="section-heading-row">
+          <div>
+            <h2 className="section-title">{briefing.radar?.title || 'Radar de evidencia'}</h2>
+            <p className="section-copy">{radarGuidance(briefing)}</p>
+          </div>
+          <MetaBadges module={radarModule} />
+        </div>
+
+        <div className="ribbon-stack" aria-label="Cintas de señal para probar la tesis">
+          {items.map((item, index) => (
+            <article key={`${item.label}-${item.text}`} className="signal-ribbon">
+              <div className="signal-ribbon__rail">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <Badge variant={item.role === 'monitor' ? 'muted' : 'accent'}>{roleLabel(item.role)}</Badge>
+              </div>
+              <div>
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="module-section evidence-orbit" data-module-id="mod-radar">
       <div className="section-kicker">
@@ -303,7 +354,7 @@ function EvidenceOrbit({ briefing, radarModule }: BriefingContext) {
       <div className="section-heading-row">
         <div>
           <h2 className="section-title">{briefing.radar?.title || 'Radar de evidencia'}</h2>
-          <p className="section-copy">{radarModule?.interactionCue}</p>
+          <p className="section-copy">{radarGuidance(briefing)}</p>
         </div>
         <MetaBadges module={radarModule} />
       </div>
@@ -340,7 +391,7 @@ function MechanismStudio({ briefing, deepDivesModule }: BriefingContext) {
       <div className="section-heading-row">
         <div>
           <h2 className="section-title">{briefing.deepDives?.title || 'Laboratorio de mecanismos'}</h2>
-          <p className="section-copy">{deepDivesModule?.interactionCue}</p>
+          <p className="section-copy">{deepDiveGuidance(briefing)}</p>
         </div>
         <MetaBadges module={deepDivesModule} />
       </div>
@@ -380,6 +431,37 @@ function PowerMap({ briefing, marketMapModule }: BriefingContext) {
   const items = briefing.marketMap?.items || [];
   if (!items.length) {
     return null;
+  }
+
+  if (marketMapModule?.variant === 'pressure-ladder') {
+    return (
+      <section className="module-section pressure-ladder" data-module-id="mod-market-map">
+        <div className="section-kicker">
+          <Compass className="h-5 w-5" />
+          <span>{moduleHeadline('marketMap', 'Mapa de poder', marketMapModule?.headline)}</span>
+        </div>
+        <div className="section-heading-row">
+          <div>
+            <h2 className="section-title">{briefing.marketMap?.title || 'Dónde se mueve la ventaja'}</h2>
+            <p className="section-copy">Aquí el formato no es una grilla: es una escalera de presión competitiva.</p>
+          </div>
+          <MetaBadges module={marketMapModule} />
+        </div>
+
+        <div className="ladder-steps" aria-label="Escalera de presión competitiva">
+          {items.map((item, index) => (
+            <article key={`${item.label}-${index}`} className="ladder-step">
+              <span className="ladder-step__index">{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+                {item.powerShift ? <strong>{item.powerShift}</strong> : null}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -485,7 +567,7 @@ function MetaBadges({ module }: { module?: CompositionModule }) {
 }
 
 const MODULE_RENDERERS: Record<string, ModuleRenderer> = {
-  'mod-topline': StrategyPath,
+  'mod-topline': TopLineSpotlight,
   'mod-reader-translation': ReaderLensLab,
   'mod-radar': EvidenceOrbit,
   'mod-deep-dives': MechanismStudio,
