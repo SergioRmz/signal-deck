@@ -554,6 +554,53 @@ def transform_ingestion_package(package: dict[str, Any]) -> dict[str, Any]:
     return transform_packet(transform_ingestion_package_to_signal_input(package))
 
 
+def deduplicate_briefing_fields(briefing: dict[str, Any]) -> dict[str, Any]:
+    """Guard against the same string appearing in multiple briefing fields.
+
+    If hero.thesis, hero.signal, topLine.title, or radar items share the same
+    text, replace the duplicates with distinct fallback content so the reader
+    never sees the same sentence repeated across sections.
+    """
+    hero = briefing.get("hero", {})
+    thesis = hero.get("thesis", "")
+    signal = hero.get("signal", "")
+    top_line = briefing.get("topLine", {})
+
+    # If thesis == signal, derive signal from the first radar item instead
+    if thesis and signal and thesis.strip().lower() == signal.strip().lower():
+        radar_items = briefing.get("radar", {}).get("items", [])
+        if radar_items:
+            hero["signal"] = radar_items[0].get("text", signal)
+        else:
+            hero["signal"] = "Cada señal seleccionada aporta evidencia distinta para la tesis editorial."
+
+    # If topLine.title == thesis, derive a distinct title from implications
+    top_title = top_line.get("title", "")
+    if thesis and top_title and thesis.strip().lower() == top_title.strip().lower():
+        top_line["title"] = hero.get("title", "Lo que cambió esta semana")
+
+    # If hero.title == thesis, replace with a generic editorial frame
+    hero_title = hero.get("title", "")
+    if thesis and hero_title and thesis.strip().lower() == hero_title.strip().lower():
+        hero["title"] = "La ventaja se mueve hacia quien controla el mecanismo, no solo la noticia"
+
+    # If reusableLesson.takeaway == thesis, derive from implications
+    lesson = briefing.get("reusableLesson", {})
+    takeaway = lesson.get("takeaway", "")
+    if thesis and takeaway and thesis.strip().lower() == takeaway.strip().lower():
+        pattern = lesson.get("pattern", "")
+        lesson["takeaway"] = pattern or "La ventaja migra hacia quien controla la restricción escasa."
+
+    # Check readerTranslation items for body == thesis
+    reader_translation = briefing.get("readerTranslation", {})
+    for item in reader_translation.get("items", []):
+        body = item.get("body", "")
+        if thesis and body and body.strip().lower() == thesis.strip().lower():
+            item["body"] = "La ventaja práctica es aplicar este marco para anticipar dónde se mueve el poder en tu contexto."
+
+    return briefing
+
+
 def transform_packet(packet: dict[str, Any]) -> dict[str, Any]:
     editorial = packet["editorialDecisions"]
     signals = packet["signals"]
@@ -575,6 +622,8 @@ def transform_packet(packet: dict[str, Any]) -> dict[str, Any]:
     reader_translation = build_reader_translation(packet, high_priority_signals)
     if reader_translation:
         briefing["readerTranslation"] = reader_translation
+
+    briefing = deduplicate_briefing_fields(briefing)
 
     return briefing
 

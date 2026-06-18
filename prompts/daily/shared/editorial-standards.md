@@ -4,18 +4,15 @@
 A story is not enough. A signal must reveal a mechanism.
 
 Prefer signals that expose:
-
 - a shift in who captures economic value;
 - a change in platform, distribution, or compute power;
 - a technical capability becoming commercially usable;
-- a regulatory, legal, or capital constraint changing incentives;
-- a workflow bottleneck breaking or moving elsewhere;
+- a regulatory or capital constraint changing incentives;
 - a second-order consequence others are underweighting;
-- a reusable lesson for builders, operators, analysts, investors, or ambitious professionals.
+- a reusable lesson for builders, operators, or investors.
 
-Reject or downgrade:
-
-- launch announcements with no strategic consequence;
+Reject:
+- launch announcements with no structural consequence;
 - funding news without a structural thesis;
 - AI hype with no adoption, revenue, benchmark, infrastructure, or workflow evidence;
 - generic market commentary that does not change a decision;
