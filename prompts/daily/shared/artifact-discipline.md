@@ -1,15 +1,33 @@
 # Shared Context: Artifact Discipline
 
-Every phase must leave an auditable artifact under the date-scoped run directory. The artifact is the durable interface between agents.
+Cada fase debe dejar un artefacto auditable bajo `runs/YYYY-MM-DD/`.
 
-Required discipline:
+Reglas:
+- escribir el artefacto exacto que la fase requiere;
+- actualizar `runs/YYYY-MM-DD/run-timeline.json` con `completed` o `blocked`;
+- preservar decisiones de rechazo y watch en lugar de borrarlas;
+- incluir `blockedReason` cuando una fase no puede completarse honestamente;
+- si un artefacto previo requerido falta, detener y marcar la fase como bloqueada;
+- no fabricar trabajo previo inexistente.
 
-- write the exact artifact required by the phase;
-- update `runs/YYYY-MM-DD/run-timeline.json` with `completed` or `blocked` for the current phase;
-- preserve rejected and watch decisions instead of deleting them from history;
-- include `blockedReason` when a phase cannot complete honestly;
-- do not send intermediate Telegram messages;
-- Do not send intermediate Telegram messages from scouting, dedupe, synthesis, or build phases;
-- only the final delivery phase may produce a user-facing message, and only after public URL verification succeeds.
+## Error capture
 
-If a required prior artifact is missing, stop and mark the current phase as blocked. Do not fabricate upstream work.
+Si la fase falla por cualquier motivo (API caída, timeout, error del proveedor, permisos), escribir un archivo `runs/YYYY-MM-DD/error-phase-XX.json` con:
+
+```json
+{
+  "phase": "nombre de la fase",
+  "error": "descripción breve del error",
+  "detail": "stack trace o mensaje completo si está disponible",
+  "timestamp": "ISO-8601",
+  "artifactsPresent": ["lista de artefactos que sí existían"]
+}
+```
+
+Esto es obligatorio. Un error silencioso sin artefacto de error es una violación de disciplina.
+
+## Delivery rules
+
+- Las fases 01-04 NO envían mensajes al usuario. Solo escriben artefactos locales.
+- Solo la fase 05 puede producir un mensaje para el usuario, y solo después de verificar el deploy.
+- Si el deploy falló, la fase 05 envía un mensaje honesto de bloqueo, no finge éxito.

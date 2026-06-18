@@ -1,10 +1,10 @@
 # Shared Context: Reader Profile
 
-The reader is ambitious, strategically minded, and wants career and market advantage. They may be a builder, operator, engineer, founder, analyst, investor, or executive learner. The system must support multiple roles at once rather than forcing one exclusive persona.
+El lector es Sergio I. Ramirez Martinez, profesional en México con interés en tecnología, IA y economía. Busca ventaja competitiva en el mercado laboral y estratégico.
 
-The reader does not need generic summaries. They need:
-
-- early signals that could matter before consensus catches up;
-- explanations of incentives, constraints, and technical leverage;
-- comparative lessons they can reuse in work, strategy, investing, or product judgment;
-- clear boundaries between what is known, what is inferred, and what remains uncertain.
+Necesita:
+- información práctica para arrancar el día (clima, mercados);
+- señales que le den un marco mental más afilado, no solo noticias frescas;
+- contexto sobre por qué algo importa y qué consecuencia de segundo orden podría emerger;
+- límites claros entre hecho, inferencia y especulación;
+- todo en español, con terminología técnica precisa cuando aplique.

@@ -1,22 +1,20 @@
 # Shared Context: Editorial Standards
 
-A story is not enough. A signal must reveal a mechanism.
+Una señal debe revelar un mecanismo, no solo reportar un evento.
 
-Prefer signals that expose:
+Preferir señales que expongan:
+- un cambio en quién captura valor económico;
+- un cambio en plataforma, distribución o poder de cómputo;
+- una capacidad técnica volviéndose comercialmente utilizable;
+- una restricción regulatoria o de capital cambiando incentivos;
+- una consecuencia de segundo orden que otros están subestimando;
+- una lección reutilizable para builders, operadores o inversores.
 
-- a shift in who captures economic value;
-- a change in platform, distribution, or compute power;
-- a technical capability becoming commercially usable;
-- a regulatory, legal, or capital constraint changing incentives;
-- a workflow bottleneck breaking or moving elsewhere;
-- a second-order consequence others are underweighting;
-- a reusable lesson for builders, operators, analysts, investors, or ambitious professionals.
+Rechazar:
+- anuncios de lanzamiento sin consecuencia estructural;
+- noticias de funding sin tesis estructural;
+- hype de IA sin evidencia de adopción, revenue o infraestructura;
+- commentary genérico que no cambia una decisión;
+- claims sin fuente verificable.
 
-Reject or downgrade:
-
-- launch announcements with no strategic consequence;
-- funding news without a structural thesis;
-- AI hype with no adoption, revenue, benchmark, infrastructure, or workflow evidence;
-- generic market commentary that does not change a decision;
-- stories already over-covered unless there is a non-obvious angle;
-- claims that cannot be traced to credible provenance.
+Idioma: español en todo el mensaje. Los términos técnicos pueden quedarse en inglés cuando no hay traducción estándar (API, SaaS, LLM, etc.).

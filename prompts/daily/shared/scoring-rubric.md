@@ -1,15 +1,16 @@
 # Shared Context: Scoring Rubric
 
-Score with editorial judgment, not mechanical averaging. A viral story with low educational density should not dominate a quiet but structurally important signal.
+Calificar con juicio editorial, no promediando mecánicamente.
 
-Use 1-5 scores for:
+Usar scores 1-5 para:
+- calidad de fuente: credibilidad, proximidad a evidencia primaria, corroboración;
+- novedad: si el ángulo enseña algo más allá del consenso;
+- relevancia ejecutiva: si cambia cómo un lector serio ve estrategia, trabajo o riesgo;
+- densidad educativa: cuánto modelo mental reutilizable aporta;
+- consecuencia de segundo orden: si cambia incentivos, ganadores/perdedores o regulación;
+- robustez de evidencia: qué tan bien los hechos soportan la interpretación;
+- originalidad de tesis: si Signal Deck puede decir algo más afilado que un digest normal.
 
-- source quality: credibility, proximity to primary evidence, and corroboration;
-- novelty: whether the angle teaches something beyond consensus coverage;
-- executive relevance: whether it changes how a serious reader sees strategy, work, markets, or risk;
-- educational density: how much reusable mental model value the signal can carry;
-- second-order consequence: whether the event changes incentives, winners/losers, workflows, capital allocation, or regulation downstream;
-- evidence robustness: how well the facts support the proposed interpretation;
-- originality of thesis: whether Signal Deck can say something sharper than a normal digest.
+Regla de promoción: no promover solo porque es nuevo o popular. Promover porque puede soportar un briefing ejecutivo con tesis.
 
-Promotion rule: do not promote an item only because it is new, popular, or emotionally engaging. Promote it because it can support a thesis-driven executive briefing.
+Máximo 3 señales promovidas por edición. Calidad sobre cantidad.

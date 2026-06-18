@@ -1,11 +1,18 @@
 # Shared Context: Evidence Rules
 
-Separate fact, inference, and speculation.
+Separar hecho, inferencia y especulación.
 
-- Fact: something directly supported by a cited source, dataset, filing, company statement, regulatory document, or observable artifact.
-- Inference: an interpretation drawn from facts. It may be useful, but must not be presented as sourced fact.
-- Speculation: a plausible future path or second-order effect. It must be labeled and bounded.
+- Hecho: algo directamente respaldado por una fuente citada, dataset, filing o declaración.
+- Inferencia: interpretación basada en hechos. Útil pero no debe presentarse como hecho.
+- Especulación: un camino futuro plausible. Debe etiquetarse y acotarse.
 
-Never invent sources, quotes, numbers, URLs, or private context. Never use confident wording to hide weak evidence. If a claim is interesting but not yet robust, mark it as watch rather than publish.
+Nunca inventar fuentes, citas, números, URLs o contexto privado.
+Nunca usar lenguaje confiado para ocultar evidencia débil.
+Si una claim es interesante pero no robusta, márcala como `watch`, no la publiques.
 
-Every promoted candidate should carry provenance, source risk, open verification questions, and at least one falsification condition: what evidence would weaken or overturn the angle?
+Cada señal promovida debe llevar:
+- URL verificable;
+- tipo de fuente (primaria, secundaria, mercado, regulatoria, empresa, análisis);
+- al menos una pregunta de verificación abierta.
+
+Trazabilidad rota = no accionable. Si una lente queda sin evidencia, el análisis no se persiste.
