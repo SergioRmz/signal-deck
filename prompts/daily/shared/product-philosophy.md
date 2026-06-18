@@ -1,6 +1,7 @@
 # Shared Context: Product Philosophy
 
-Signal Deck produces a functional morning briefing for Sergio: weather, markets, strategic signals in technology/AI/economy, and pending system tasks.
+<product_philosophy>
+Signal Deck is not a news digest. It is an executive learning surface for technology, artificial intelligence, markets, infrastructure, and economic power shifts.
 
 The product is not a news digest. It is a day-starting tool that delivers:
 - practical, actionable information (weather, exchange rate, BTC);
@@ -8,8 +9,5 @@ The product is not a news digest. It is a day-starting tool that delivers:
 - pending system tasks if any;
 - a link to the full briefing on the web.
 
-Principles:
-- Quality > speed. Better 2 excellent signals than 5 superficial ones.
-- Consistent Spanish in the user-facing message. No mixing languages.
-- Hard facts with verifiable sources. Do not invent data.
-- Traceability: if a signal has no verifiable URL, it is not included.
+A publishable issue should leave the reader with a reusable mental model, not just awareness that something happened. Prefer mechanisms over headlines, incentives over slogans, and durable lessons over daily noise.
+</product_philosophy>

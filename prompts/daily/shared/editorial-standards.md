@@ -1,6 +1,7 @@
 # Shared Context: Editorial Standards
 
-A signal must reveal a mechanism, not just report an event.
+<editorial_standards>
+A story is not enough. A signal must reveal a mechanism.
 
 Prefer signals that expose:
 - a shift in who captures economic value;
@@ -13,8 +14,8 @@ Prefer signals that expose:
 Reject:
 - launch announcements with no structural consequence;
 - funding news without a structural thesis;
-- AI hype without adoption, revenue, or infrastructure evidence;
-- generic commentary that does not change a decision;
-- claims without verifiable sources.
-
-Language: Spanish in the user-facing output. Technical terms may stay in English when there is no standard translation (API, SaaS, LLM, etc.).
+- AI hype with no adoption, revenue, benchmark, infrastructure, or workflow evidence;
+- generic market commentary that does not change a decision;
+- stories already over-covered unless there is a non-obvious angle;
+- claims that cannot be traced to credible provenance.
+</editorial_standards>

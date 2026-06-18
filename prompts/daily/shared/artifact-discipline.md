@@ -1,6 +1,9 @@
 # Shared Context: Artifact Discipline
 
-Every phase must leave an auditable artifact under `runs/YYYY-MM-DD/`.
+<artifact_discipline>
+Every phase must leave an auditable artifact under the date-scoped run directory. The artifact is the durable interface between agents.
+
+Required discipline:
 
 Rules:
 - write the exact artifact required by the phase;
@@ -28,6 +31,5 @@ This is mandatory. A silent error without an error artifact is a discipline viol
 
 ## Delivery rules
 
-- Phases 01-04 do NOT send messages to the user. They only write local artifacts.
-- Only phase 05 may produce a user-facing message, and only after verifying the deploy.
-- If the deploy failed, phase 05 sends an honest blocker message, not a fake success.
+If a required prior artifact is missing, stop and mark the current phase as blocked. Do not fabricate upstream work.
+</artifact_discipline>
