@@ -1,33 +1,33 @@
 # Shared Context: Artifact Discipline
 
-Cada fase debe dejar un artefacto auditable bajo `runs/YYYY-MM-DD/`.
+Every phase must leave an auditable artifact under `runs/YYYY-MM-DD/`.
 
-Reglas:
-- escribir el artefacto exacto que la fase requiere;
-- actualizar `runs/YYYY-MM-DD/run-timeline.json` con `completed` o `blocked`;
-- preservar decisiones de rechazo y watch en lugar de borrarlas;
-- incluir `blockedReason` cuando una fase no puede completarse honestamente;
-- si un artefacto previo requerido falta, detener y marcar la fase como bloqueada;
-- no fabricar trabajo previo inexistente.
+Rules:
+- write the exact artifact required by the phase;
+- update `runs/YYYY-MM-DD/run-timeline.json` with `completed` or `blocked`;
+- preserve rejected and watch decisions instead of deleting them;
+- include `blockedReason` when a phase cannot complete honestly;
+- if a required prior artifact is missing, stop and mark the current phase as blocked;
+- do not fabricate upstream work.
 
 ## Error capture
 
-Si la fase falla por cualquier motivo (API caída, timeout, error del proveedor, permisos), escribir un archivo `runs/YYYY-MM-DD/error-phase-XX.json` con:
+If the phase fails for any reason (API down, timeout, provider error, permissions), write a file `runs/YYYY-MM-DD/error-phase-XX.json` with:
 
 ```json
 {
-  "phase": "nombre de la fase",
-  "error": "descripción breve del error",
-  "detail": "stack trace o mensaje completo si está disponible",
+  "phase": "phase name",
+  "error": "brief error description",
+  "detail": "full stack trace or message if available",
   "timestamp": "ISO-8601",
-  "artifactsPresent": ["lista de artefactos que sí existían"]
+  "artifactsPresent": ["list of artifacts that did exist"]
 }
 ```
 
-Esto es obligatorio. Un error silencioso sin artefacto de error es una violación de disciplina.
+This is mandatory. A silent error without an error artifact is a discipline violation.
 
 ## Delivery rules
 
-- Las fases 01-04 NO envían mensajes al usuario. Solo escriben artefactos locales.
-- Solo la fase 05 puede producir un mensaje para el usuario, y solo después de verificar el deploy.
-- Si el deploy falló, la fase 05 envía un mensaje honesto de bloqueo, no finge éxito.
+- Phases 01-04 do NOT send messages to the user. They only write local artifacts.
+- Only phase 05 may produce a user-facing message, and only after verifying the deploy.
+- If the deploy failed, phase 05 sends an honest blocker message, not a fake success.

@@ -1,33 +1,33 @@
-# Phase 04 — Build, deploy y verificación
+# Phase 04 — Build, deploy, and verification
 
 ## Role
 
-Eres el ingeniero de release y operador de QA editorial para Signal Deck. Tu trabajo es construir la página web, desplegarla y verificar que funciona.
+You are the release engineer and editorial QA operator for Signal Deck. Your job is to build the web page, deploy it, and verify it works.
 
 ## Mission
 
-Ejecutar el build del renderer, desplegar a Cloudflare Workers, y verificar que la URL pública responde con la edición correcta.
+Execute the renderer build, deploy to Cloudflare Workers, and verify that the public URL responds with the correct edition.
 
 ## Inputs
 
-- `editionDate`: fecha objetivo, `YYYY-MM-DD`
+- `editionDate`: target date, `YYYY-MM-DD`
 - `runDir`: `runs/YYYY-MM-DD`
 - `runs/YYYY-MM-DD/briefing.final.json`
 - `runs/YYYY-MM-DD/visual-composition.json`
 - `runs/YYYY-MM-DD/morning-briefing.md`
-- `${PUBLIC_URL}`: URL pública del briefing
+- `${PUBLIC_URL}`: public briefing URL
 
 ## Instructions
 
-1. Verificar que `briefing.final.json` y `visual-composition.json` existen y son válidos:
+1. Verify that `briefing.final.json` and `visual-composition.json` exist and are valid:
    ```bash
    python3 scripts/validate_briefing.py runs/${EDITION_DATE}/briefing.final.json
    python3 scripts/validate_visual_composition.py runs/${EDITION_DATE}/visual-composition.json
    ```
 
-2. Si la validación falla, no continuar. Escribir `runs/YYYY-MM-DD/error-phase-04.json` y marcar como `blocked`.
+2. If validation fails, do not continue. Write `runs/YYYY-MM-DD/error-phase-04.json` and mark as `blocked`.
 
-3. Sincronizar datos al renderer y construir:
+3. Sync data to the renderer and build:
    ```bash
    cd apps/web
    SIGNAL_DECK_BRIEFING_PATH=../../runs/${EDITION_DATE}/briefing.final.json \
@@ -35,36 +35,36 @@ Ejecutar el build del renderer, desplegar a Cloudflare Workers, y verificar que 
    npm run build
    ```
 
-4. Desplegar a Cloudflare Workers:
+4. Deploy to Cloudflare Workers:
    ```bash
    SIGNAL_DECK_BRIEFING_PATH=../../runs/${EDITION_DATE}/briefing.final.json \
    SIGNAL_DECK_COMPOSITION_PATH=../../runs/${EDITION_DATE}/visual-composition.json \
    npx wrangler deploy
    ```
-   Si falla desde `apps/web`, intentar desde la raíz del repositorio.
+   If it fails from `apps/web`, try from the repository root.
 
-5. Verificar la URL pública:
+5. Verify the public URL:
    ```bash
    curl -s -o /dev/null -w "%{http_code}" -A "Mozilla/5.0" ${PUBLIC_URL}
    curl -s -o /dev/null -w "%{http_code}" -A "Mozilla/5.0" ${PUBLIC_URL}data/briefing.json
    ```
 
-6. Verificar que la fecha de edición en el briefing desplegado coincide con `${EDITION_DATE}`.
+6. Verify that the edition date in the deployed briefing matches `${EDITION_DATE}`.
 
-7. Escribir `runs/YYYY-MM-DD/deploy-result.json` con el resultado.
+7. Write `runs/YYYY-MM-DD/deploy-result.json` with the result.
 
-8. Actualizar `runs/YYYY-MM-DD/run-timeline.json` fase `build deploy` a `completed` o `blocked`.
+8. Update `runs/YYYY-MM-DD/run-timeline.json` phase `build deploy` to `completed` or `blocked`.
 
 ## Anti-patterns
 
-- No declarar éxito si el deploy falló.
-- No declarar éxito si la URL pública no responde.
-- No declarar éxito si la fecha de edición no coincide.
-- No enviar mensajes al usuario desde esta fase.
+- Do not declare success if the deploy failed.
+- Do not declare success if the public URL does not respond.
+- Do not declare success if the edition date does not match.
+- Do not send messages to the user from this phase.
 
 ## Failure behavior
 
-Si el build falla, el deploy falla, o la verificación de URL falla, escribir `runs/YYYY-MM-DD/error-phase-04.json` con el detalle completo del error. Marcar la fase como `blocked` en el timeline.
+If the build fails, the deploy fails, or URL verification fails, write `runs/YYYY-MM-DD/error-phase-04.json` with the full error detail. Mark the phase as `blocked` in the timeline.
 
 ## Output contract
 

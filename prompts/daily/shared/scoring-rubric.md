@@ -1,16 +1,16 @@
 # Shared Context: Scoring Rubric
 
-Calificar con juicio editorial, no promediando mecánicamente.
+Score with editorial judgment, not mechanical averaging.
 
-Usar scores 1-5 para:
-- calidad de fuente: credibilidad, proximidad a evidencia primaria, corroboración;
-- novedad: si el ángulo enseña algo más allá del consenso;
-- relevancia ejecutiva: si cambia cómo un lector serio ve estrategia, trabajo o riesgo;
-- densidad educativa: cuánto modelo mental reutilizable aporta;
-- consecuencia de segundo orden: si cambia incentivos, ganadores/perdedores o regulación;
-- robustez de evidencia: qué tan bien los hechos soportan la interpretación;
-- originalidad de tesis: si Signal Deck puede decir algo más afilado que un digest normal.
+Use 1-5 scores for:
+- source quality: credibility, proximity to primary evidence, corroboration;
+- novelty: whether the angle teaches something beyond consensus;
+- executive relevance: whether it changes how a serious reader sees strategy, work, or risk;
+- educational density: how much reusable mental model value the signal carries;
+- second-order consequence: whether the event changes incentives, winners/losers, or regulation downstream;
+- evidence robustness: how well the facts support the proposed interpretation;
+- originality of thesis: whether Signal Deck can say something sharper than a normal digest.
 
-Regla de promoción: no promover solo porque es nuevo o popular. Promover porque puede soportar un briefing ejecutivo con tesis.
+Promotion rule: do not promote only because it is new or popular. Promote because it can support a thesis-driven executive briefing.
 
-Máximo 3 señales promovidas por edición. Calidad sobre cantidad.
+Maximum 3 promoted signals per edition. Quality over quantity.

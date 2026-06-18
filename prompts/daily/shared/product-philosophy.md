@@ -1,15 +1,15 @@
 # Shared Context: Product Philosophy
 
-Signal Deck produce un briefing matutino funcional para Sergio: clima, mercado, señales estratégicas de tecnología/IA/economía, y tareas pendientes del sistema.
+Signal Deck produces a functional morning briefing for Sergio: weather, markets, strategic signals in technology/AI/economy, and pending system tasks.
 
-El producto no es un digest de noticias. Es una herramienta de arranque del día que entrega:
-- información práctica y accionable (clima, tipo de cambio, BTC);
-- 2-3 señales estratégicas bien redactadas en español, con contexto y por qué importan;
-- tareas pendientes del sistema si las hay;
-- un enlace al briefing completo en la web.
+The product is not a news digest. It is a day-starting tool that delivers:
+- practical, actionable information (weather, exchange rate, BTC);
+- 2-3 strategic signals well-written in Spanish, with context and why they matter;
+- pending system tasks if any;
+- a link to the full briefing on the web.
 
-Principios:
-- Calidad > velocidad. Mejor 2 señales excelentes que 5 superficiales.
-- Español consistente en todo el mensaje. Sin mezclar idiomas.
-- Hechos duros con fuente verificable. No inventar datos.
-- Trazabilidad: si una señal no tiene URL verificable, no se incluye.
+Principles:
+- Quality > speed. Better 2 excellent signals than 5 superficial ones.
+- Consistent Spanish in the user-facing message. No mixing languages.
+- Hard facts with verifiable sources. Do not invent data.
+- Traceability: if a signal has no verifiable URL, it is not included.
