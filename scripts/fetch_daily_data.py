@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Fetch daily contextual data for the Signal Deck morning briefing.
+"""Recolecta datos contextuales diarios para el briefing matutino de Signal Deck.
 
-Collects:
-  - Weather for Mexico City (Open-Meteo, free, no API key)
-  - USD/MXN exchange rate (Frankfurter API, free, no API key)
-  - Bitcoin price in MXN and USD (CoinGecko, free, no API key)
-  - WTI crude oil price (fallback to web search snippet parsing)
+Recopila:
+  - Clima para CDMX (Open-Meteo, gratis, sin API key)
+  - Tipo de cambio USD/MXN (Frankfurter API, gratis, sin API key)
+  - Precio de Bitcoin en MXN y USD (CoinGecko, gratis, sin API key)
+  - Precio del petróleo WTI (fallback a búsqueda web)
 
-Writes a single JSON artifact to runs/YYYY-MM-DD/daily-data.json.
+Escribe un artefacto JSON en runs/YYYY-MM-DD/daily-data.json.
 
-Usage:
+Uso:
     python3 scripts/fetch_daily_data.py --run-date 2026-06-18
-    python3 scripts/fetch_daily_data.py  # uses today's date
+    python3 scripts/fetch_daily_data.py  # usa la fecha de hoy
 """
 
 from __future__ import annotations
@@ -28,12 +28,12 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUNS_DIR = ROOT / "runs"
 
-# Mexico City coordinates
+# Coordenadas de Ciudad de México
 CDMX_LAT = 19.4326
 CDMX_LON = -99.1332
 CDMX_TIMEZONE = "America/Mexico_City"
 
-# WMO weather code descriptions in Spanish
+# Descripciones de códigos WMO en español
 WMO_CODES = {
     0: "Despejado",
     1: "Mayormente despejado",
@@ -71,7 +71,7 @@ def describe_wmo(code: int) -> str:
 
 
 def fetch_json(url: str, timeout: int = 15) -> dict[str, Any]:
-    """Fetch JSON from a URL with a browser-like User-Agent."""
+    """Obtiene JSON de una URL con User-Agent tipo navegador."""
     req = urllib.request.Request(
         url,
         headers={
@@ -84,7 +84,7 @@ def fetch_json(url: str, timeout: int = 15) -> dict[str, Any]:
 
 
 def fetch_weather() -> dict[str, Any]:
-    """Fetch weather data for Mexico City from Open-Meteo."""
+    """Obtiene el clima de Ciudad de México desde Open-Meteo."""
     try:
         url = (
             f"https://api.open-meteo.com/v1/forecast?"
@@ -123,7 +123,7 @@ def fetch_weather() -> dict[str, Any]:
 
 
 def fetch_usd_mxn() -> dict[str, Any]:
-    """Fetch USD/MXN exchange rate from Frankfurter API."""
+    """Obtiene el tipo de cambio USD/MXN desde Frankfurter API."""
     try:
         data = fetch_json("https://api.frankfurter.app/latest?from=USD&to=MXN")
         rate = data.get("rates", {}).get("MXN")
@@ -141,7 +141,7 @@ def fetch_usd_mxn() -> dict[str, Any]:
 
 
 def fetch_btc() -> dict[str, Any]:
-    """Fetch Bitcoin price from CoinGecko."""
+    """Obtiene el precio de Bitcoin desde CoinGecko."""
     try:
         data = fetch_json(
             "https://api.coingecko.com/api/v3/simple/price?"
@@ -161,29 +161,30 @@ def fetch_btc() -> dict[str, Any]:
 
 
 def fetch_wti() -> dict[str, Any]:
-    """Fetch WTI crude oil price.
+    """Obtiene el precio del petróleo WTI.
 
-    Attempts Frankfurter (commodities) first, falls back to None if unavailable.
-    WTI is not always available on free APIs, so we mark it as optional.
+    Intenta Frankfurter (commodities) primero; si no está disponible,
+    retorna pendiente para que la fase editorial lo complete vía web_search.
+    El WTI no siempre está disponible en APIs gratuitas, así que es opcional.
     """
-    # WTI is hard to get from free APIs reliably.
-    # We'll return a placeholder and let the editorial phase fill it via web search.
+    # El WTI es difícil de obtener de APIs gratuitas de forma confiable.
+    # Retornamos pendiente para que la fase editorial lo busque vía web_search.
     return {
         "status": "pending",
         "pair": "WTI",
-        "note": "WTI price not available from free APIs. The editorial phase should fetch it via web_search.",
+        "note": "Precio WTI no disponible en APIs gratuitas. La fase editorial debe buscarlo vía web_search.",
     }
 
 
 def fetch_daily_data(run_date: str, runs_dir: Path = DEFAULT_RUNS_DIR) -> dict[str, Any]:
-    """Fetch all daily data and write to runs/YYYY-MM-DD/daily-data.json."""
+    """Recolecta todos los datos diarios y los escribe en runs/YYYY-MM-DD/daily-data.json."""
     run_dir = runs_dir / run_date
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Fetching daily data for {run_date}...")
+    print(f"Obteniendo datos diarios para {run_date}...")
 
     weather = fetch_weather()
-    print(f"  Weather: {weather['status']}")
+    print(f"  Clima: {weather['status']}")
 
     usd_mxn = fetch_usd_mxn()
     print(f"  USD/MXN: {usd_mxn['status']}")
@@ -207,19 +208,19 @@ def fetch_daily_data(run_date: str, runs_dir: Path = DEFAULT_RUNS_DIR) -> dict[s
 
     output_path = run_dir / "daily-data.json"
     output_path.write_text(json.dumps(artifact, indent=2, ensure_ascii=False) + "\n")
-    print(f"  Written: {output_path}")
+    print(f"  Escrito: {output_path}")
 
     return artifact
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Fetch daily contextual data for Signal Deck.")
+    parser = argparse.ArgumentParser(description="Recolecta datos diarios contextuales para Signal Deck.")
     parser.add_argument(
         "--run-date",
         default=datetime.now().strftime("%Y-%m-%d"),
-        help="Target edition date, YYYY-MM-DD (default: today).",
+        help="Fecha objetivo, YYYY-MM-DD (por defecto: hoy).",
     )
-    parser.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR, help="Runs directory.")
+    parser.add_argument("--runs-dir", type=Path, default=DEFAULT_RUNS_DIR, help="Directorio de runs.")
     return parser.parse_args(argv)
 
 

@@ -555,11 +555,11 @@ def transform_ingestion_package(package: dict[str, Any]) -> dict[str, Any]:
 
 
 def deduplicate_briefing_fields(briefing: dict[str, Any]) -> dict[str, Any]:
-    """Guard against the same string appearing in multiple briefing fields.
+    """Protege contra que el mismo texto aparezca en múltiples campos del briefing.
 
-    If hero.thesis, hero.signal, topLine.title, or radar items share the same
-    text, replace the duplicates with distinct fallback content so the reader
-    never sees the same sentence repeated across sections.
+    Si hero.thesis, hero.signal, topLine.title o items del radar comparten el
+    mismo texto, reemplaza los duplicados con contenido distinto para que el
+    lector nunca vea la misma frase repetida entre secciones.
     """
     hero = briefing.get("hero", {})
     thesis = hero.get("thesis", "")
