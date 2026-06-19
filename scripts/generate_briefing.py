@@ -554,12 +554,56 @@ def transform_ingestion_package(package: dict[str, Any]) -> dict[str, Any]:
     return transform_packet(transform_ingestion_package_to_signal_input(package))
 
 
+def detect_meta_editorial_voice(text: str) -> list[str]:
+    """Detect meta-editorial voice patterns that should never appear in reader-facing fields.
+
+    Returns a list of matched patterns (empty if voice is clean).
+    Meta-editorial voice describes the briefing or editorial process in third person
+    instead of speaking as the analyst delivering the conclusion.
+    """
+    if not text:
+        return []
+    lowered = text.lower()
+    patterns = [
+        ("third_person_briefing", "el briefing muestra"),
+        ("third_person_briefing", "este briefing muestra"),
+        ("third_person_briefing", "el briefing del"),
+        ("third_person_briefing", "el briefing traduce"),
+        ("third_person_briefing", "este análisis revela"),
+        ("third_person_briefing", "este documento presenta"),
+        ("process_promote", "promover como la primera señal"),
+        ("process_promote", "promover como deep dive"),
+        ("process_promote", "promover como"),
+        ("process_anchor", "tiene anclaje primario"),
+        ("process_anchor", "anclaje primario en"),
+        ("process_teaches", "enseña a leer"),
+        ("process_teaches", "enseña a distinguir"),
+        ("process_teaches", "enseña a mapear"),
+        ("process_teaches", "enseña a"),
+        ("process_gives_reader", "da a el lector"),
+        ("process_gives_reader", "da al lector"),
+        ("process_gives_reader", "da a un lector"),
+        ("process_lesson", "lección de operador sobre"),
+        ("process_lesson", "lección reutilizable para"),
+        ("process_lesson", "marco reutilizable para leer"),
+        ("process_lesson", "lente reutilizable para"),
+    ]
+    matches: list[str] = []
+    for name, needle in patterns:
+        if needle in lowered:
+            matches.append(name)
+    return matches
+
+
 def deduplicate_briefing_fields(briefing: dict[str, Any]) -> dict[str, Any]:
     """Guard against the same string appearing in multiple briefing fields.
 
     If hero.thesis, hero.signal, topLine.title, or radar items share the same
     text, replace the duplicates with distinct fallback content so the reader
     never sees the same sentence repeated across sections.
+
+    Also detects and rewrites meta-editorial voice patterns ("el briefing muestra...",
+    "promover como...", "enseña a...") that should never appear in reader-facing fields.
     """
     hero = briefing.get("hero", {})
     thesis = hero.get("thesis", "")
@@ -597,6 +641,105 @@ def deduplicate_briefing_fields(briefing: dict[str, Any]) -> dict[str, Any]:
         body = item.get("body", "")
         if thesis and body and body.strip().lower() == thesis.strip().lower():
             item["body"] = "La ventaja práctica es aplicar este marco para anticipar dónde se mueve el poder en tu contexto."
+
+    # Meta-editorial voice guard: scan every reader-facing field and rewrite
+    # any field whose text matches the forbidden patterns.
+    def rewrite_meta_editorial(value: str) -> str:
+        """Replace meta-editorial sentences with direct expert voice."""
+        if not isinstance(value, str) or not value:
+            return value
+        matches = detect_meta_editorial_voice(value)
+        if not matches:
+            return value
+        # If the field is mostly meta-editorial, replace it with a generic
+        # analyst-voice summary drawn from the briefing itself.
+        sentences = [s.strip() for s in value.split(".") if s.strip()]
+        clean_sentences: list[str] = []
+        for sentence in sentences:
+            if detect_meta_editorial_voice(sentence):
+                continue
+            clean_sentences.append(sentence)
+        if not clean_sentences:
+            # Entire field was meta-editorial; fall back to a clean default
+            return "La ventaja se mueve hacia quien controla el mecanismo, no solo la noticia."
+        return ". ".join(clean_sentences) + "."
+
+    fields_to_check = [
+        ("hero", "title"),
+        ("hero", "lede"),
+        ("hero", "signal"),
+        ("hero", "thesis"),
+        ("hero", "promise"),
+        ("hero", "tension"),
+        ("topLine", "title"),
+        ("topLine", "body"),
+        ("topLine", "stakes"),
+    ]
+    for section, key in fields_to_check:
+        section_obj = briefing.get(section, {})
+        if isinstance(section_obj, dict) and key in section_obj:
+            section_obj[key] = rewrite_meta_editorial(section_obj[key])
+
+    # Re-sync the deduplicated thesis if it changed
+    thesis = hero.get("thesis", "")
+
+    # Re-check topLine title vs thesis
+    top_title = top_line.get("title", "")
+    if thesis and top_title and thesis.strip().lower() == top_title.strip().lower():
+        top_line["title"] = "Lo que cambió esta semana"
+
+    # Rewrite radar items
+    radar = briefing.get("radar", {})
+    for item in radar.get("items", []):
+        if isinstance(item, dict) and "text" in item:
+            item["text"] = rewrite_meta_editorial(item["text"])
+
+    # Rewrite deep dives
+    deep_dives = briefing.get("deepDives", {})
+    for item in deep_dives.get("items", []):
+        if isinstance(item, dict):
+            for key in ("title", "body", "explanation", "implication", "claim"):
+                if key in item:
+                    item[key] = rewrite_meta_editorial(item[key])
+
+    # Rewrite market map
+    market_map = briefing.get("marketMap", {})
+    for item in market_map.get("items", []):
+        if isinstance(item, dict):
+            if "text" in item:
+                item["text"] = rewrite_meta_editorial(item["text"])
+            if "powerShift" in item:
+                item["powerShift"] = rewrite_meta_editorial(item["powerShift"])
+
+    # Rewrite reusable lesson
+    if isinstance(lesson, dict):
+        for key in ("takeaway", "pattern"):
+            if key in lesson:
+                lesson[key] = rewrite_meta_editorial(lesson[key])
+
+    # Rewrite reader translation
+    for item in reader_translation.get("items", []):
+        if isinstance(item, dict) and "body" in item:
+            item["body"] = rewrite_meta_editorial(item["body"])
+
+    # Rewrite meta identifiers (briefingId, slug) if they were derived from a
+    # meta-editorial thesis. The slug is the kebab-cased thesis, so we detect
+    # by checking for the kebab-cased forbidden fragments.
+    meta = briefing.get("meta", {})
+    if isinstance(meta, dict):
+        meta_fragments = [
+            "el-briefing-del",
+            "este-briefing-muestra",
+            "el-briefing-muestra",
+            "el-briefing-traduce",
+        ]
+        for key in ("briefingId", "slug"):
+            value = meta.get(key, "")
+            if not isinstance(value, str):
+                continue
+            if any(fragment in value for fragment in meta_fragments):
+                edition_date = meta.get("editionDate", "briefing")
+                meta[key] = f"{edition_date}-signal-deck-edition"
 
     return briefing
 
